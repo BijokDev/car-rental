@@ -6,8 +6,14 @@ import { GoogleGenAI } from "@google/genai";
  */
 export const getGeminiResponse = async (userMessage: string): Promise<string> => {
   try {
+    const apiKey = import.meta.env.VITE_GEMINI_API_KEY || import.meta.env.GEMINI_API_KEY;
+    if (!apiKey) {
+      console.error("Gemini API key is missing. Set VITE_GEMINI_API_KEY in your env.");
+      return "I couldn't reach the assistant right now. Please use WhatsApp for a fast reply.";
+    }
+
     // Always use a new GoogleGenAI instance right before the call with the environment variable directly.
-    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+    const ai = new GoogleGenAI({ apiKey });
     const model = 'gemini-3-flash-preview';
     
     // Context aware system instruction

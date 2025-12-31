@@ -1,7 +1,5 @@
 {
   "name": "AJ Taxi KL",
   "description": "Professional Airport Transfer (KLIA/KLIA2), Genting Highlands Taxi, and Kereta Sewa services in Kuala Lumpur. 24/7 Reliable Transport.",
-  "requestFramePermissions": [
-    "geolocation"
-  ]
+  "requestFramePermissions": []
 }

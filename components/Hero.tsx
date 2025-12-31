@@ -18,26 +18,28 @@ const Hero: React.FC = () => {
   }, []);
 
   return (
-    <div id="home" className="relative min-h-[90vh] lg:h-screen w-full overflow-hidden flex flex-col">
+    <div id="home" className="relative min-h-screen w-full flex flex-col overflow-hidden">
       {/* Background Slider */}
-      {BACKGROUND_IMAGES.map((img, index) => (
-        <div 
-          key={index}
-          className={`absolute inset-0 transition-opacity duration-1500 ease-in-out ${
-            index === currentImageIndex ? 'opacity-100' : 'opacity-0'
-          }`}
-        >
-          <img 
-            src={img} 
-            alt={`Slide ${index + 1}`} 
-            className="w-full h-full object-cover scale-105"
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-brand-900/80 via-brand-900/40 to-brand-900/90"></div>
-        </div>
-      ))}
+      <div className="absolute inset-0 z-0">
+        {BACKGROUND_IMAGES.map((img, index) => (
+          <div 
+            key={index}
+            className={`absolute inset-0 transition-opacity duration-1500 ease-in-out ${
+              index === currentImageIndex ? 'opacity-100' : 'opacity-0'
+            }`}
+          >
+            <img 
+              src={img} 
+              alt={`Slide ${index + 1}`} 
+              className="w-full h-full object-cover scale-105"
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-brand-900/80 via-brand-900/40 to-brand-900/95"></div>
+          </div>
+        ))}
+      </div>
 
       {/* Content Container */}
-      <div className="relative h-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col justify-center pt-28 pb-32 md:pt-32 md:pb-40">
+      <div className="relative z-10 flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col justify-center pt-32 pb-24 md:pt-40 md:pb-32">
         <div className="max-w-4xl text-white">
           <div className="flex flex-wrap items-center gap-2 md:gap-3 mb-6 animate-fade-in">
              <span className="px-3 py-1 bg-green-500 text-white text-[10px] font-black uppercase tracking-widest rounded flex items-center shadow-lg">
@@ -60,11 +62,11 @@ const Hero: React.FC = () => {
             </span>
           </h1>
           
-          <p className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-200 mb-8 lg:mb-12 leading-relaxed max-w-2xl animate-slide-up animate-delay-100 font-medium">
+          <p className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-200 mb-6 lg:mb-8 leading-relaxed max-w-2xl animate-slide-up animate-delay-100 font-medium">
             Professional <b>Kereta Sewa</b> and private transfer services across Malaysia. Comfortable, safe, and punctual rides to KLIA, Genting, and beyond.
           </p>
           
-          <div className="grid grid-cols-1 xs:grid-cols-2 gap-3 md:gap-4 mb-10 max-w-lg animate-slide-up animate-delay-200">
+          <div className="grid grid-cols-1 xs:grid-cols-2 gap-3 md:gap-4 mb-8 lg:mb-10 max-w-lg animate-slide-up animate-delay-200">
              {[
                 "Punctual & Reliable", 
                 "Well Maintained Fleet", 
@@ -97,7 +99,7 @@ const Hero: React.FC = () => {
       </div>
       
       {/* Scroll Down Hint */}
-      <div className="hidden lg:flex absolute bottom-10 left-1/2 -translate-x-1/2 flex-col items-center animate-bounce text-white/50">
+      <div className="hidden lg:flex relative pb-10 flex-col items-center animate-bounce text-white/50 pointer-events-none">
           <span className="text-[10px] uppercase font-bold tracking-widest mb-2">Scroll</span>
           <div className="w-px h-10 bg-gradient-to-b from-white to-transparent"></div>
       </div>

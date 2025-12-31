@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { MapPin, Calendar, Clock, Car, Phone, Loader2 } from 'lucide-react';
+import { MapPin, Calendar, Clock, Car, Phone, Loader2, ArrowRightLeft } from 'lucide-react';
 import { BookingDetails } from '../types';
 
 interface BookingFormProps {
@@ -74,8 +74,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ onSearch }) => {
       
       if (data && Array.isArray(data)) {
         const places = data.map((item: any) => item.display_name);
-        const uniquePlaces = Array.from(new Set(places));
-        setSuggestions(uniquePlaces);
+        setSuggestions(Array.from(new Set(places)));
       } else {
         setSuggestions([]);
       }
@@ -93,10 +92,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ onSearch }) => {
 
     if (name === 'pickupLocation' || name === 'dropoffLocation') {
       if (debounceTimer.current) clearTimeout(debounceTimer.current);
-      
-      debounceTimer.current = setTimeout(() => {
-        fetchLocations(value);
-      }, 500);
+      debounceTimer.current = setTimeout(() => fetchLocations(value), 500);
     }
   };
 
@@ -117,32 +113,30 @@ const BookingForm: React.FC<BookingFormProps> = ({ onSearch }) => {
   };
 
   const isReturn = details.tripType === 'return';
-  const colSpanClass = isReturn ? "lg:col-span-3" : "lg:col-span-4";
 
   return (
-    <div className="bg-white rounded-xl shadow-2xl p-5 md:p-8 -mt-16 md:-mt-24 relative z-20 mx-4 md:mx-auto max-w-5xl border-t-4 border-gold-500 font-sans">
+    <div className="bg-white rounded-2xl shadow-2xl p-6 md:p-10 -mt-20 md:-mt-24 relative z-20 mx-4 lg:mx-auto max-w-6xl border-t-4 border-gold-500 font-sans">
       
       {/* Header & Trip Type */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 md:mb-8 gap-4">
-        <h3 className="text-xl font-bold text-gray-800 flex items-center">
-          <span className="bg-brand-900 text-white p-2 rounded-lg mr-3 shadow-md hidden sm:block">
-              <Car className="w-5 h-5 md:w-6 md:h-6" />
-          </span>
-          <div>
-            <span className="block text-[10px] md:text-xs text-gray-500 font-bold uppercase tracking-wider">Online Booking</span>
-            <span className="text-base md:text-lg">Get Instant Quote</span>
+      <div className="flex flex-col sm:flex-row justify-between items-center mb-8 gap-6">
+        <div className="flex items-center w-full sm:w-auto">
+          <div className="bg-brand-900 text-white p-2.5 rounded-xl mr-4 shadow-lg hidden sm:flex">
+              <Car className="w-6 h-6" />
           </div>
-        </h3>
+          <div>
+            <span className="block text-[10px] text-gray-400 font-black uppercase tracking-[0.2em] mb-0.5">Reservation</span>
+            <span className="text-xl font-bold text-brand-900">Get Instant Quote</span>
+          </div>
+        </div>
         
-        {/* Tab Style Trip Type Selector */}
-        <div className="flex w-full sm:w-auto bg-gray-100 p-1 rounded-lg shadow-inner">
+        <div className="flex w-full sm:w-auto bg-gray-50 p-1.5 rounded-xl border border-gray-100">
           <button 
             type="button"
             onClick={() => setDetails(prev => ({...prev, tripType: 'one-way'}))}
-            className={`flex-1 sm:flex-none px-4 md:px-6 py-2 text-xs md:text-sm font-bold rounded-md transition-all duration-200 ${
+            className={`flex-1 sm:flex-none px-6 py-2.5 text-xs font-black uppercase tracking-widest rounded-lg transition-all ${
               details.tripType === 'one-way' 
-                ? 'bg-white text-brand-900 shadow-sm' 
-                : 'text-gray-500 hover:text-gray-700'
+                ? 'bg-white text-brand-900 shadow-md' 
+                : 'text-gray-400 hover:text-gray-600'
             }`}
           >
             One Way
@@ -150,10 +144,10 @@ const BookingForm: React.FC<BookingFormProps> = ({ onSearch }) => {
           <button 
             type="button"
             onClick={() => setDetails(prev => ({...prev, tripType: 'return'}))}
-            className={`flex-1 sm:flex-none px-4 md:px-6 py-2 text-xs md:text-sm font-bold rounded-md transition-all duration-200 ${
+            className={`flex-1 sm:flex-none px-6 py-2.5 text-xs font-black uppercase tracking-widest rounded-lg transition-all ${
               details.tripType === 'return' 
-                ? 'bg-white text-brand-900 shadow-sm' 
-                : 'text-gray-500 hover:text-gray-700'
+                ? 'bg-white text-brand-900 shadow-md' 
+                : 'text-gray-400 hover:text-gray-600'
             }`}
           >
             Return
@@ -161,167 +155,165 @@ const BookingForm: React.FC<BookingFormProps> = ({ onSearch }) => {
         </div>
       </div>
       
-      <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-4 md:gap-6" ref={dropdownRef}>
-        
-        {/* Pickup Location */}
-        <div className={`${colSpanClass} space-y-1 md:space-y-2 relative`}>
-          <label className="text-[10px] md:text-xs font-bold text-gray-500 uppercase tracking-wider ml-1">From</label>
-          <div className="relative group">
-            <MapPin className="absolute left-3 md:left-4 top-3 md:top-3.5 h-4 w-4 md:h-5 md:w-5 text-brand-500 z-10" />
-            <input
-              type="text"
-              name="pickupLocation"
-              placeholder="Search location..."
-              className="w-full pl-10 md:pl-12 pr-10 py-3 md:py-3.5 bg-white border-2 border-gray-200 rounded-xl focus:border-brand-500 focus:ring-0 transition-all outline-none text-sm md:text-base font-medium text-gray-800"
-              value={details.pickupLocation}
-              onChange={handleChange}
-              onFocus={() => handleFocus('pickup')}
-              required
-              autoComplete="off"
-            />
-            {isLoadingLocation && activeDropdown === 'pickup' && (
-              <Loader2 className="absolute right-3 top-3 md:top-3.5 h-4 w-4 md:h-5 md:w-5 text-brand-500 animate-spin z-10" />
-            )}
-          </div>
-          {activeDropdown === 'pickup' && suggestions.length > 0 && (
-             <div className="absolute top-full left-0 w-full mt-1 bg-white rounded-xl shadow-xl border border-gray-100 z-50 max-h-48 md:max-h-60 overflow-y-auto">
-               {suggestions.map((loc, idx) => (
-                 <button
-                   key={idx}
-                   type="button"
-                   className="w-full text-left px-3 md:px-4 py-2.5 md:py-3 hover:bg-brand-50 text-xs md:text-sm font-medium text-gray-700 transition-colors flex items-center border-b border-gray-50 last:border-0"
-                   onClick={() => handleLocationSelect('pickupLocation', loc)}
-                 >
-                   <MapPin className="w-3.5 h-3.5 mr-2 md:mr-3 text-gray-400 flex-shrink-0" />
-                   <span className="truncate">{loc}</span>
-                 </button>
-               ))}
-             </div>
-          )}
-        </div>
-
-        {/* Dropoff Location */}
-        <div className={`${colSpanClass} space-y-1 md:space-y-2 relative`}>
-          <label className="text-[10px] md:text-xs font-bold text-gray-500 uppercase tracking-wider ml-1">To</label>
-          <div className="relative group">
-            <MapPin className="absolute left-3 md:left-4 top-3 md:top-3.5 h-4 w-4 md:h-5 md:w-5 text-gray-400 group-focus-within:text-brand-500 transition-colors z-10" />
-            <input
-              type="text"
-              name="dropoffLocation"
-              placeholder="Search destination..."
-              className="w-full pl-10 md:pl-12 pr-10 py-3 md:py-3.5 bg-white border-2 border-gray-200 rounded-xl focus:border-brand-500 focus:ring-0 transition-all outline-none text-sm md:text-base font-medium text-gray-800"
-              value={details.dropoffLocation}
-              onChange={handleChange}
-              onFocus={() => handleFocus('dropoff')}
-              required
-              autoComplete="off"
-            />
-             {isLoadingLocation && activeDropdown === 'dropoff' && (
-              <Loader2 className="absolute right-3 top-3 md:top-3.5 h-4 w-4 md:h-5 md:w-5 text-brand-500 animate-spin z-10" />
-            )}
-          </div>
-          {activeDropdown === 'dropoff' && suggestions.length > 0 && (
-             <div className="absolute top-full left-0 w-full mt-1 bg-white rounded-xl shadow-xl border border-gray-100 z-50 max-h-48 md:max-h-60 overflow-y-auto">
-               {suggestions.map((loc, idx) => (
-                 <button
-                   key={idx}
-                   type="button"
-                   className="w-full text-left px-3 md:px-4 py-2.5 md:py-3 hover:bg-brand-50 text-xs md:text-sm font-medium text-gray-700 transition-colors flex items-center border-b border-gray-50 last:border-0"
-                   onClick={() => handleLocationSelect('dropoffLocation', loc)}
-                 >
-                   <MapPin className="w-3.5 h-3.5 mr-2 md:mr-3 text-gray-400 flex-shrink-0" />
-                   <span className="truncate">{loc}</span>
-                 </button>
-               ))}
-             </div>
-          )}
-        </div>
-
-        {/* Pickup Date & Time */}
-        <div className={`${colSpanClass} space-y-1 md:space-y-2`}>
-          <label className="text-[10px] md:text-xs font-bold text-gray-500 uppercase tracking-wider ml-1">Pickup Date</label>
-          <div className="flex gap-2">
-            <div className="relative flex-grow">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none z-10">
-                <Calendar className="h-4 w-4 md:h-5 md:w-5 text-gray-400" />
-              </div>
-              <input
-                type="date"
-                name="pickupDate"
-                min={today}
-                className="w-full pl-9 md:pl-10 pr-2 md:pr-3 py-3 md:py-3.5 bg-white border-2 border-gray-200 rounded-xl focus:border-brand-500 focus:ring-0 outline-none text-sm md:text-base font-medium text-gray-800 appearance-none"
-                value={details.pickupDate}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div className="relative w-28 md:w-32">
-               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none z-10">
-                <Clock className="h-4 w-4 md:h-5 md:w-5 text-gray-400" />
-              </div>
-               <input
-                type="time"
-                name="pickupTime"
-                className="w-full pl-9 md:pl-10 pr-2 py-3 md:py-3.5 bg-white border-2 border-gray-200 rounded-xl focus:border-brand-500 focus:ring-0 outline-none text-sm md:text-base font-medium text-gray-800 appearance-none"
-                value={details.pickupTime}
-                onChange={handleChange}
-                required
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* Return Date & Time */}
-        {isReturn && (
-            <div className={`${colSpanClass} space-y-1 md:space-y-2 animate-fade-in`}>
-            <label className="text-[10px] md:text-xs font-bold text-brand-600 uppercase tracking-wider ml-1">Return Date</label>
-            <div className="flex gap-2">
-                <div className="relative flex-grow">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none z-10">
-                    <Calendar className="h-4 w-4 md:h-5 md:w-5 text-brand-500" />
-                </div>
+      <form onSubmit={handleSubmit} className="space-y-6" ref={dropdownRef}>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          
+          {/* Pickup & Dropoff Row */}
+          <div className="grid grid-cols-1 sm:grid-cols-11 gap-4 items-center">
+            <div className="sm:col-span-5 relative">
+              <label className="text-[10px] font-black text-brand-900/50 uppercase tracking-widest mb-2 block ml-1">From</label>
+              <div className="relative group">
+                <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-brand-500 z-10" />
                 <input
-                    type="date"
-                    name="returnDate"
-                    min={details.pickupDate || today}
-                    className="w-full pl-9 md:pl-10 pr-2 md:pr-3 py-3 md:py-3.5 bg-brand-50 border-2 border-brand-200 rounded-xl focus:border-brand-500 focus:ring-0 outline-none text-sm md:text-base font-medium text-gray-800 appearance-none"
-                    value={details.returnDate}
-                    onChange={handleChange}
-                    required={isReturn}
+                  type="text"
+                  name="pickupLocation"
+                  placeholder="Pickup location..."
+                  className="w-full pl-12 pr-10 py-4 bg-gray-50/50 border-2 border-gray-100 rounded-xl focus:border-brand-500 focus:bg-white focus:ring-0 transition-all outline-none text-sm font-bold text-brand-900"
+                  value={details.pickupLocation}
+                  onChange={handleChange}
+                  onFocus={() => handleFocus('pickup')}
+                  required
+                  autoComplete="off"
                 />
+                {isLoadingLocation && activeDropdown === 'pickup' && (
+                  <Loader2 className="absolute right-4 top-1/2 -translate-y-1/2 h-5 w-5 text-brand-500 animate-spin z-10" />
+                )}
+              </div>
+              {activeDropdown === 'pickup' && suggestions.length > 0 && (
+                 <div className="absolute top-full left-0 w-full mt-2 bg-white rounded-xl shadow-2xl border border-gray-100 z-[60] max-h-60 overflow-y-auto overflow-x-hidden">
+                   {suggestions.map((loc, idx) => (
+                     <button
+                       key={idx}
+                       type="button"
+                       className="w-full text-left px-4 py-3.5 hover:bg-brand-50 text-xs font-bold text-brand-900 transition-colors flex items-center border-b border-gray-50 last:border-0"
+                       onClick={() => handleLocationSelect('pickupLocation', loc)}
+                     >
+                       <MapPin className="w-4 h-4 mr-3 text-brand-300 flex-shrink-0" />
+                       <span className="truncate">{loc}</span>
+                     </button>
+                   ))}
+                 </div>
+              )}
+            </div>
+
+            <div className="hidden sm:flex sm:col-span-1 justify-center pt-6">
+                <ArrowRightLeft className="w-5 h-5 text-gray-300" />
+            </div>
+
+            <div className="sm:col-span-5 relative">
+              <label className="text-[10px] font-black text-brand-900/50 uppercase tracking-widest mb-2 block ml-1">To</label>
+              <div className="relative group">
+                <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 group-focus-within:text-brand-500 transition-colors z-10" />
+                <input
+                  type="text"
+                  name="dropoffLocation"
+                  placeholder="Destination..."
+                  className="w-full pl-12 pr-10 py-4 bg-gray-50/50 border-2 border-gray-100 rounded-xl focus:border-brand-500 focus:bg-white focus:ring-0 transition-all outline-none text-sm font-bold text-brand-900"
+                  value={details.dropoffLocation}
+                  onChange={handleChange}
+                  onFocus={() => handleFocus('dropoff')}
+                  required
+                  autoComplete="off"
+                />
+                 {isLoadingLocation && activeDropdown === 'dropoff' && (
+                  <Loader2 className="absolute right-4 top-1/2 -translate-y-1/2 h-5 w-5 text-brand-500 animate-spin z-10" />
+                )}
+              </div>
+              {activeDropdown === 'dropoff' && suggestions.length > 0 && (
+                 <div className="absolute top-full left-0 w-full mt-2 bg-white rounded-xl shadow-2xl border border-gray-100 z-[60] max-h-60 overflow-y-auto overflow-x-hidden">
+                   {suggestions.map((loc, idx) => (
+                     <button
+                       key={idx}
+                       type="button"
+                       className="w-full text-left px-4 py-3.5 hover:bg-brand-50 text-xs font-bold text-brand-900 transition-colors flex items-center border-b border-gray-50 last:border-0"
+                       onClick={() => handleLocationSelect('dropoffLocation', loc)}
+                     >
+                       <MapPin className="w-4 h-4 mr-3 text-brand-300 flex-shrink-0" />
+                       <span className="truncate">{loc}</span>
+                     </button>
+                   ))}
+                 </div>
+              )}
+            </div>
+          </div>
+
+          {/* Dates & Times Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <label className="text-[10px] font-black text-brand-900/50 uppercase tracking-widest mb-2 block ml-1">Departure</label>
+              <div className="flex gap-2">
+                <div className="relative flex-grow">
+                  <Calendar className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 z-10 pointer-events-none" />
+                  <input
+                    type="date"
+                    name="pickupDate"
+                    min={today}
+                    className="w-full pl-10 pr-2 py-4 bg-gray-50 border-2 border-gray-100 rounded-xl focus:border-brand-500 focus:bg-white focus:ring-0 outline-none text-xs font-bold text-brand-900 appearance-none"
+                    value={details.pickupDate}
+                    onChange={handleChange}
+                    required
+                  />
                 </div>
                 <div className="relative w-28 md:w-32">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none z-10">
-                    <Clock className="h-4 w-4 md:h-5 md:w-5 text-brand-500" />
-                </div>
-                <input
+                  <Clock className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 z-10 pointer-events-none" />
+                  <input
                     type="time"
-                    name="returnTime"
-                    className="w-full pl-9 md:pl-10 pr-2 py-3 md:py-3.5 bg-brand-50 border-2 border-brand-200 rounded-xl focus:border-brand-500 focus:ring-0 outline-none text-sm md:text-base font-medium text-gray-800 appearance-none"
-                    value={details.returnTime}
+                    name="pickupTime"
+                    className="w-full pl-10 pr-2 py-4 bg-gray-50 border-2 border-gray-100 rounded-xl focus:border-brand-500 focus:bg-white focus:ring-0 outline-none text-xs font-bold text-brand-900 appearance-none"
+                    value={details.pickupTime}
                     onChange={handleChange}
-                    required={isReturn}
-                />
+                    required
+                  />
                 </div>
+              </div>
             </div>
-            </div>
-        )}
 
-        <div className="lg:col-span-12 mt-2 md:mt-4">
-          <button
-            type="submit"
-            className="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3.5 md:py-4 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-0.5 flex items-center justify-center gap-2 text-base md:text-lg"
-          >
-            <Phone className="w-5 h-5 md:w-6 md:h-6" />
-            <span>Request Quote on WhatsApp</span>
-          </button>
+            {isReturn && (
+                <div className="space-y-2 animate-fade-in">
+                <label className="text-[10px] font-black text-brand-500 uppercase tracking-widest mb-2 block ml-1">Return Trip</label>
+                <div className="flex gap-2">
+                    <div className="relative flex-grow">
+                    <Calendar className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-brand-500 z-10 pointer-events-none" />
+                    <input
+                        type="date"
+                        name="returnDate"
+                        min={details.pickupDate || today}
+                        className="w-full pl-10 pr-2 py-4 bg-brand-50/50 border-2 border-brand-200 rounded-xl focus:border-brand-500 focus:bg-white focus:ring-0 outline-none text-xs font-bold text-brand-900 appearance-none"
+                        value={details.returnDate}
+                        onChange={handleChange}
+                        required={isReturn}
+                    />
+                    </div>
+                    <div className="relative w-28 md:w-32">
+                    <Clock className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-brand-500 z-10 pointer-events-none" />
+                    <input
+                        type="time"
+                        name="returnTime"
+                        className="w-full pl-10 pr-2 py-4 bg-brand-50/50 border-2 border-brand-200 rounded-xl focus:border-brand-500 focus:bg-white focus:ring-0 outline-none text-xs font-bold text-brand-900 appearance-none"
+                        value={details.returnTime}
+                        onChange={handleChange}
+                        required={isReturn}
+                    />
+                    </div>
+                </div>
+                </div>
+            )}
+          </div>
         </div>
+
+        <button
+          type="submit"
+          className="w-full bg-green-500 hover:bg-green-600 text-white font-black py-5 px-8 rounded-2xl shadow-xl hover:shadow-green-500/20 transition-all transform hover:-translate-y-1 flex items-center justify-center gap-3 text-sm uppercase tracking-[0.2em]"
+        >
+          <Phone className="w-5 h-5" />
+          <span>Request Quote via WhatsApp</span>
+        </button>
       </form>
       
-      <div className="mt-6 flex flex-wrap justify-center gap-4 text-[10px] md:text-sm text-gray-500">
-         <span className="flex items-center"><span className="w-2 h-2 bg-green-500 rounded-full mr-1.5"></span>Instant Quote</span>
-         <span className="flex items-center"><span className="w-2 h-2 bg-green-500 rounded-full mr-1.5"></span>Professional Drivers</span>
-         <span className="flex items-center"><span className="w-2 h-2 bg-green-500 rounded-full mr-1.5"></span>24/7 Service</span>
+      <div className="mt-8 flex flex-wrap justify-center gap-x-8 gap-y-3 text-[10px] font-black uppercase tracking-widest text-gray-400">
+         <span className="flex items-center"><span className="w-1.5 h-1.5 bg-green-500 rounded-full mr-2"></span>Fixed Price</span>
+         <span className="flex items-center"><span className="w-1.5 h-1.5 bg-green-500 rounded-full mr-2"></span>Verified Drivers</span>
+         <span className="flex items-center"><span className="w-1.5 h-1.5 bg-green-500 rounded-full mr-2"></span>24/7 Dispatch</span>
       </div>
     </div>
   );

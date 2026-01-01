@@ -82,7 +82,7 @@ const Hero: React.FC = () => {
 
           <div className="flex flex-col sm:flex-row gap-4 animate-slide-up animate-delay-300">
             <a 
-              href="https://wa.me/60182335796" 
+              href="https://wa.me/601128829143" 
               className="group px-8 py-4 bg-gold-500 text-brand-900 font-black rounded-xl hover:bg-gold-400 transition-all shadow-xl hover:-translate-y-1 flex items-center justify-center text-sm uppercase tracking-widest"
             >
               Book via WhatsApp

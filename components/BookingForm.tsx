@@ -7,18 +7,18 @@ interface BookingFormProps {
 }
 
 const POPULAR_LOCATIONS = [
-  "KLIA (Kuala Lumpur International Airport)",
-  "KLIA 2",
-  "Kuala Lumpur City Centre",
-  "Genting Highlands",
-  "Cameron Highlands",
-  "Malacca (Melaka)",
-  "Johor Bahru",
-  "Ipoh",
-  "Penang",
-  "Legoland Malaysia",
-  "Port Dickson",
-  "Subang Airport"
+  "KLIA (Kuala Lumpur International Airport)"
+  // "KLIA 2",
+  // "Kuala Lumpur City Centre",
+  // "Genting Highlands",
+  // "Cameron Highlands",
+  // "Malacca (Melaka)",
+  // "Johor Bahru",
+  // "Ipoh",
+  // "Penang",
+  // "Legoland Malaysia",
+  // "Port Dickson",
+  // "Subang Airport"
 ];
 
 const BookingForm: React.FC<BookingFormProps> = ({ onSearch }) => {

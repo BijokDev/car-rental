@@ -8,7 +8,7 @@ import Pricing from './components/Pricing';
 import Features from './components/Features';
 import Testimonials from './components/Testimonials';
 import Footer from './components/Footer';
-import AIAssistant from './components/AIAssistant';
+// import AIAssistant from './components/AIAssistant';
 import { BookingDetails } from './types';
 
 const App: React.FC = () => {
@@ -16,25 +16,26 @@ const App: React.FC = () => {
   const handleBookingSearch = useCallback((details: BookingDetails) => {
     // Construct WhatsApp message for Booking/Quote
     let message = `Hi AJ Taxi KL, I would like a quote for a transfer:%0A%0A` +
-      `🚘 *Trip Type:* ${details.tripType === 'return' ? 'Return Trip' : 'One Way'}%0A` +
-      `📍 *From:* ${details.pickupLocation}%0A` +
-      `📍 *To:* ${details.dropoffLocation}%0A` +
-      `📅 *Date:* ${details.pickupDate}%0A` +
-      `⏰ *Time:* ${details.pickupTime}%0A`;
+      `*Trip Type:* ${details.tripType === 'return' ? 'Return Trip' : 'One Way'}%0A` +
+      `*From:* ${details.pickupLocation}%0A` +
+      `*To:* ${details.dropoffLocation}%0A` +
+      `*Date:* ${details.pickupDate}%0A` +
+      `*Time:* ${details.pickupTime}%0A`;
 
     // Append Return details if applicable
     if (details.tripType === 'return') {
-        message += `🔙 *Return Date:* ${details.returnDate || 'Not specified'}%0A` +
-                   `⏰ *Return Time:* ${details.returnTime || 'Not specified'}%0A`;
+        message += `*Return Date:* ${details.returnDate || 'Not specified'}%0A` +
+                   `*Return Time:* ${details.returnTime || 'Not specified'}%0A`;
     }
     
     // Open WhatsApp Web/App
-    window.open(`https://wa.me/60182335796?text=${message}`, '_blank');
+    // window.open(`https://wa.me/60182335796?text=${message}`, '_blank');
+    window.open(`https://wa.me/601128829143?text=${message}`, '_blank');
   }, []);
 
   const handleCarSelect = useCallback((carName: string) => {
     const message = `Hi AJ Taxi KL, I am interested in booking the *${carName}*. Is it available for my trip?`;
-    window.open(`https://wa.me/60182335796?text=${message}`, '_blank');
+    window.open(`https://wa.me/601128829143?text=${message}`, '_blank');
   }, []);
 
   return (
@@ -48,7 +49,7 @@ const App: React.FC = () => {
       <Pricing />
       <Testimonials />
       <Footer />
-      <AIAssistant />
+      {/* <AIAssistant /> */}
     </div>
   );
 };

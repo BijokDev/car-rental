@@ -91,7 +91,7 @@ const Pricing: React.FC = () => {
              <div className="text-center lg:text-right">
                 <p className="text-lg text-brand-200 mb-8 italic">"Best rates for outstation trips and group bookings. Book today and save!"</p>
                 <a 
-                  href="https://wa.me/60182335796" 
+                  href="https://wa.me/601128829143" 
                   className="inline-flex items-center px-10 py-5 bg-gold-500 text-brand-900 font-black rounded-2xl shadow-2xl hover:bg-gold-400 transition transform hover:-translate-y-1 uppercase tracking-widest text-xs"
                 >
                   Request A Custom Quote

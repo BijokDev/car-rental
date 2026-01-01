@@ -52,7 +52,7 @@ const Footer: React.FC = () => {
               </li>
               <li className="flex items-center">
                 <Phone className="w-5 h-5 mr-2 flex-shrink-0" />
-                <a href="https://wa.me/60182335796" className="hover:text-white transition">
+                <a href="https://wa.me/601128829143" className="hover:text-white transition">
                   +60 18-233 5796 (WhatsApp)
                 </a>
               </li>
@@ -70,7 +70,7 @@ const Footer: React.FC = () => {
             <h3 className="text-lg font-bold mb-4 text-gold-500">Book via WhatsApp</h3>
             <p className="text-sm text-brand-100 mb-4">Fastest way to get a quote and confirm your ride.</p>
             <a 
-              href="https://wa.me/60182335796"
+              href="https://wa.me/601128829143"
               className="inline-flex items-center justify-center w-full bg-green-500 text-white font-bold py-3 rounded hover:bg-green-600 transition"
             >
               <Phone className="w-4 h-4 mr-2" />

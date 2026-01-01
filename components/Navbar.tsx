@@ -70,7 +70,7 @@ const Navbar: React.FC = () => {
             ))}
             
             <a 
-              href="https://wa.me/60182335796" 
+              href="https://wa.me/601128829143" 
               className={`flex items-center px-6 py-2.5 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all transform hover:scale-105 shadow-md ${
                 isScrolled ? 'bg-brand-900 text-white hover:bg-brand-800' : 'bg-gold-500 text-brand-900 hover:bg-gold-400'
               }`}
@@ -82,7 +82,7 @@ const Navbar: React.FC = () => {
 
           {/* Mobile Menu Button */}
           <div className="lg:hidden flex items-center space-x-4">
-             <a href="https://wa.me/60182335796" className={`p-2 rounded-full ${isScrolled ? 'bg-green-500 text-white' : 'bg-white text-green-500'}`}>
+             <a href="https://wa.me/601128829143" className={`p-2 rounded-full ${isScrolled ? 'bg-green-500 text-white' : 'bg-white text-green-500'}`}>
                 <Phone className="w-5 h-5" />
              </a>
              <button 
@@ -119,7 +119,7 @@ const Navbar: React.FC = () => {
                     <Phone className="w-5 h-5 mr-3" />
                     Call Direct
                  </a>
-                 <a href="https://wa.me/60182335796" className="flex items-center justify-center w-full py-4 bg-green-500 text-white rounded-xl font-black uppercase tracking-widest">
+                 <a href="https://wa.me/601128829143" className="flex items-center justify-center w-full py-4 bg-green-500 text-white rounded-xl font-black uppercase tracking-widest">
                     <MessageCircle className="w-5 h-5 mr-3" />
                     WhatsApp Support
                  </a>

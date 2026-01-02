@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { CheckCircle, ArrowRight } from 'lucide-react';
 
 const BACKGROUND_IMAGES = [
-  "https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?auto=format&fit=crop&q=80&w=2000",
-  "https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&q=80&w=2000",
-  "https://images.unsplash.com/photo-1622185135505-2d79504399d9?auto=format&fit=crop&q=80&w=2000",
+  "https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?auto=format&fit=crop&q=80&w=2000", // Luxury sedan front view (original - keeping this one)
+  "https://images.unsplash.com/photo-1555215695-3004980ad54e?auto=format&fit=crop&q=80&w=2000", // Black luxury SUV
+  "https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?auto=format&fit=crop&q=80&w=2000", // Premium MPV/Van
+  "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&q=80&w=2000", // Luxury car interior/exterior
 ];
 
 const Hero: React.FC = () => {

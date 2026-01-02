@@ -1,100 +1,348 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
-    <meta name="description" content="AJ Taxi KL - Professional Airport Transfers (KLIA/KLIA2), Genting Highlands, and Private Chauffeur services. Reliable 24/7 transport in Kuala Lumpur." />
-    <meta name="theme-color" content="#001a3d" />
-    
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://ajtaxikl.com/" />
-    <meta property="og:title" content="AJ Taxi KL - Premium Airport Transfer & Chauffeur" />
-    <meta property="og:description" content="Book reliable 24/7 private transfers and airport pickups in KL. Professional drivers and premium fleet." />
-    <meta property="og:image" content="https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?auto=format&fit=crop&q=80&w=1200" />
 
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:title" content="AJ Taxi KL - Premium Airport Transfer" />
-    <meta property="twitter:description" content="Reliable 24/7 private transfers in Kuala Lumpur. Book your KLIA transfer now." />
-    <meta property="twitter:image" content="https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?auto=format&fit=crop&q=80&w=1200" />
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+  <meta name="description"
+    content="Car rental & private chauffeur in KL. Self-drive or with driver. Toyota Alphard, Innova, Perodua Axia. Airport transfers & long trips. Book 24/7 now." />
+  <meta name="theme-color" content="#001a3d" />
 
-    <title>AJ Taxi KL - Premium Airport Transfer & Chauffeur</title>
-    
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
-    
-    <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            fontFamily: {
-              sans: ['Plus Jakarta Sans', 'sans-serif'],
-              serif: ['Playfair Display', 'serif'],
-            },
-            colors: {
-              brand: {
-                50: '#f0f5fa',
-                100: '#e1ebf5',
-                200: '#c3d7eb',
-                300: '#95b7db',
-                400: '#5f8fc6',
-                500: '#004a99',
-                600: '#003a7a',
-                700: '#002e61',
-                800: '#00244d',
-                900: '#001a3d',
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://ajtaxikl.com/" />
+  <meta property="og:title" content="AJ Taxi KL - Premium Airport Transfer & Chauffeur" />
+  <meta property="og:description"
+    content="Book reliable 24/7 private transfers and airport pickups in KL. Professional drivers and premium fleet." />
+  <meta property="og:image"
+    content="https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?auto=format&fit=crop&q=80&w=1200" />
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image" />
+  <meta property="twitter:title" content="AJ Taxi KL - Premium Airport Transfer" />
+  <meta property="twitter:description"
+    content="Reliable 24/7 private transfers in Kuala Lumpur. Book your KLIA transfer now." />
+  <meta property="twitter:image"
+    content="https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?auto=format&fit=crop&q=80&w=1200" />
+
+  <title>Car Rental & Chauffeur Service KL | AJ Taxi | MPV & Alphard</title>
+
+  <!-- JSON-LD Structured Data -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "LocalBusiness",
+          "@id": "https://harrastransfer.com/#organization",
+          "name": "AJ Taxi KL",
+          "alternateName": "Harra Transfer",
+          "url": "https://harrastransfer.com",
+          "description": "Premium car rental and private chauffeur service in Kuala Lumpur. Self-drive or with driver. Specializing in airport transfers, long-distance trips, and hourly bookings.",
+          "priceRange": "$$",
+          "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Kuala Lumpur",
+            "addressRegion": "Federal Territory of Kuala Lumpur",
+            "addressCountry": "MY"
+          },
+          "geo": {
+            "@type": "GeoCoordinates",
+            "latitude": "3.139003",
+            "longitude": "101.686855"
+          },
+          "areaServed": [
+            {"@type": "City", "name": "Kuala Lumpur"},
+            {"@type": "State", "name": "Selangor"},
+            {"@type": "Place", "name": "Genting Highlands"},
+            {"@type": "Place", "name": "KLIA"},
+            {"@type": "Place", "name": "KLIA2"},
+            {"@type": "Place", "name": "Cameron Highlands"}
+          ],
+          "openingHoursSpecification": {
+            "@type": "OpeningHoursSpecification",
+            "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+            "opens": "00:00",
+            "closes": "23:59"
+          }
+        },
+        {
+          "@type": "TaxiService",
+          "@id": "https://harrastransfer.com/#taxiservice",
+          "serviceType": "Private Chauffeur Service",
+          "provider": {"@id": "https://harrastransfer.com/#organization"},
+          "areaServed": [
+            {"@type": "City", "name": "Kuala Lumpur"},
+            {"@type": "State", "name": "Selangor"}
+          ]
+        },
+        {
+          "@type": "AutoRental",
+          "@id": "https://harrastransfer.com/#carrental",
+          "name": "AJ Taxi KL Car Rental",
+          "provider": {"@id": "https://harrastransfer.com/#organization"},
+          "areaServed": [
+            {"@type": "City", "name": "Kuala Lumpur"},
+            {"@type": "State", "name": "Selangor"}
+          ],
+          "hasOfferCatalog": {
+            "@type": "OfferCatalog",
+            "name": "Car Rental Fleet",
+            "itemListElement": [
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Car",
+                  "name": "Toyota Alphard",
+                  "vehicleSeatingCapacity": 6,
+                  "vehicleTransmission": "Automatic",
+                  "fuelType": "Petrol"
+                },
+                "priceSpecification": {
+                  "@type": "UnitPriceSpecification",
+                  "price": "950",
+                  "priceCurrency": "MYR",
+                  "unitText": "DAY"
+                }
               },
-              gold: {
-                400: '#ffdb4d',
-                500: '#fec200',
-                600: '#e5af00',
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Car",
+                  "name": "Hyundai Staria",
+                  "vehicleSeatingCapacity": 7,
+                  "vehicleTransmission": "Automatic",
+                  "fuelType": "Diesel"
+                },
+                "priceSpecification": {
+                  "@type": "UnitPriceSpecification",
+                  "price": "850",
+                  "priceCurrency": "MYR",
+                  "unitText": "DAY"
+                }
+              },
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Car",
+                  "name": "Toyota Innova",
+                  "vehicleSeatingCapacity": 7,
+                  "vehicleTransmission": "Automatic",
+                  "fuelType": "Diesel"
+                },
+                "priceSpecification": {
+                  "@type": "UnitPriceSpecification",
+                  "price": "450",
+                  "priceCurrency": "MYR",
+                  "unitText": "DAY"
+                }
+              },
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Car",
+                  "name": "Perodua Alza",
+                  "vehicleSeatingCapacity": 7,
+                  "vehicleTransmission": "Automatic",
+                  "fuelType": "Petrol"
+                },
+                "priceSpecification": {
+                  "@type": "UnitPriceSpecification",
+                  "price": "250",
+                  "priceCurrency": "MYR",
+                  "unitText": "DAY"
+                }
+              },
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Car",
+                  "name": "Perodua Bezza",
+                  "vehicleSeatingCapacity": 4,
+                  "vehicleTransmission": "Automatic",
+                  "fuelType": "Petrol"
+                },
+                "priceSpecification": {
+                  "@type": "UnitPriceSpecification",
+                  "price": "150",
+                  "priceCurrency": "MYR",
+                  "unitText": "DAY"
+                }
+              },
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Car",
+                  "name": "Perodua Axia",
+                  "vehicleSeatingCapacity": 4,
+                  "vehicleTransmission": "Automatic",
+                  "fuelType": "Petrol"
+                },
+                "priceSpecification": {
+                  "@type": "UnitPriceSpecification",
+                  "price": "120",
+                  "priceCurrency": "MYR",
+                  "unitText": "DAY"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "How much does it cost to rent a car in Kuala Lumpur?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Car rental prices in KL range from RM120/day for economy cars (Perodua Axia) to RM950/day for luxury MPVs (Toyota Alphard). Mid-range options like Toyota Innova start from RM450/day."
               }
             },
-            animation: {
-              'fade-in': 'fadeIn 0.5s ease-out',
-              'slide-up': 'slideUp 0.6s ease-out forwards',
-            },
-            keyframes: {
-              fadeIn: {
-                '0%': { opacity: '0' },
-                '100%': { opacity: '1' },
-              },
-              slideUp: {
-                '0%': { transform: 'translateY(20px)', opacity: '0' },
-                '100%': { transform: 'translateY(0)', opacity: '1' },
+            {
+              "@type": "Question",
+              "name": "Can I rent a car with a driver in Kuala Lumpur?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes, AJ Taxi KL offers both self-drive car rental and chauffeur service. You can book any vehicle from our fleet with a professional driver for airport transfers, long-distance trips, or hourly bookings."
               }
+            },
+            {
+              "@type": "Question",
+              "name": "What is the best 7-seater MPV to rent in KL?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Popular 7-seater MPVs include Toyota Alphard (luxury, RM950/day), Hyundai Staria (premium, RM850/day), Toyota Innova (family-friendly, RM450/day), and Perodua Alza (budget, RM250/day)."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Do you provide airport pickup for car rental?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes, we offer free vehicle delivery to KLIA and KLIA2 airports. You can pick up your rental car directly at the airport arrival hall or book a chauffeur service for door-to-door transfer."
+              }
+            }
+          ]
+        }
+      ]
+    }
+    </script>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Playfair+Display:wght@700&display=swap"
+    rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Plus Jakarta Sans', 'sans-serif'],
+            serif: ['Playfair Display', 'serif'],
+          },
+          colors: {
+            brand: {
+              50: '#f0f5fa',
+              100: '#e1ebf5',
+              200: '#c3d7eb',
+              300: '#95b7db',
+              400: '#5f8fc6',
+              500: '#004a99',
+              600: '#003a7a',
+              700: '#002e61',
+              800: '#00244d',
+              900: '#001a3d',
+            },
+            gold: {
+              400: '#ffdb4d',
+              500: '#fec200',
+              600: '#e5af00',
+            }
+          },
+          animation: {
+            'fade-in': 'fadeIn 0.5s ease-out',
+            'slide-up': 'slideUp 0.6s ease-out forwards',
+          },
+          keyframes: {
+            fadeIn: {
+              '0%': { opacity: '0' },
+              '100%': { opacity: '1' },
+            },
+            slideUp: {
+              '0%': { transform: 'translateY(20px)', opacity: '0' },
+              '100%': { transform: 'translateY(0)', opacity: '1' },
             }
           }
         }
       }
-    </script>
-    <style>
-      html {
-        scroll-behavior: smooth;
-        scroll-padding-top: 90px;
-      }
-      /* Custom Scrollbar */
-      ::-webkit-scrollbar {
-        width: 8px;
-      }
-      ::-webkit-scrollbar-track {
-        background: #f1f1f1;
-      }
-      ::-webkit-scrollbar-thumb {
-        background: #001a3d;
-        border-radius: 10px;
-      }
-      ::-webkit-scrollbar-thumb:hover {
-        background: #fec200;
-      }
-      .animate-delay-100 { animation-delay: 0.1s; }
-      .animate-delay-200 { animation-delay: 0.2s; }
-      .animate-delay-300 { animation-delay: 0.3s; }
-      
-      /* Smooth transitions for interactive elements */
-      .transition-all { transition-duration: 300ms; }
-    </style>
+    }
+  </script>
+  <style>
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 90px;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #001a3d;
+      border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #fec200;
+    }
+
+    .animate-delay-100 {
+      animation-delay: 0.1s;
+    }
+
+    .animate-delay-200 {
+      animation-delay: 0.2s;
+    }
+
+    .animate-delay-300 {
+      animation-delay: 0.3s;
+    }
+
+    /* Smooth transitions for interactive elements */
+    .transition-all {
+      transition-duration: 300ms;
+    }
+
+    /* Hide default date/time picker icons to prevent overlap */
+    input[type="date"]::-webkit-calendar-picker-indicator,
+    input[type="time"]::-webkit-calendar-picker-indicator {
+      background: transparent;
+      bottom: 0;
+      color: transparent;
+      cursor: pointer;
+      height: auto;
+      left: 0;
+      position: absolute;
+      right: 0;
+      top: 0;
+      width: auto;
+      opacity: 0;
+      z-index: 20;
+    }
+
+    /* Ensure inputs have relative positioning for the icon hack */
+    input[type="date"],
+    input[type="time"] {
+      position: relative;
+    }
+  </style>
   <script type="importmap">
 {
   "imports": {
@@ -109,9 +357,11 @@
 }
 </script>
 </head>
-  <body class="bg-gray-50 text-slate-900 antialiased font-sans">
-    <div id="root"></div>
-    <!-- Vite handles TSX transformation automatically when linked this way -->
-    <script type="module" src="/index.tsx"></script>
-  </body>
+
+<body class="bg-gray-50 text-slate-900 antialiased font-sans">
+  <div id="root"></div>
+  <!-- Vite handles TSX transformation automatically when linked this way -->
+  <script type="module" src="/index.tsx"></script>
+</body>
+
 </html>

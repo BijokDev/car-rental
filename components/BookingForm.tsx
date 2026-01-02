@@ -7,18 +7,40 @@ interface BookingFormProps {
 }
 
 const POPULAR_LOCATIONS = [
-  "KLIA (Kuala Lumpur International Airport)",
-  "KLIA 2",
-  "Kuala Lumpur City Centre",
-  "Genting Highlands",
-  "Cameron Highlands",
-  "Malacca (Melaka)",
-  "Johor Bahru",
-  "Ipoh",
-  "Penang",
-  "Legoland Malaysia",
-  "Port Dickson",
-  "Subang Airport"
+  // Airports & Transport Hubs
+  "KLIA (Terminal 1) - Main Terminal",
+  "KLIA 2 (Terminal 2) - AirAsia/Budget",
+  "Subang Airport (SZB)",
+  "KL Sentral Station",
+
+  // KL City Center & Landmarks
+  "Kuala Lumpur City Centre (KLCC)",
+  "Petronas Twin Towers",
+  "Bukit Bintang / Pavilion KL",
+  "Berjaya Times Square",
+  "Chinatown / Petaling Street",
+  "Batu Caves",
+
+  // Popular Highlands
+  "Genting Highlands (First World Hotel/SkyAvenue)",
+  "Awana Skyway Station (Genting)",
+  "Cameron Highlands (Tanah Rata/Brinchang)",
+  "Fraser's Hill",
+
+  // Theme Parks & Attractions
+  "Sunway Lagoon Theme Park",
+  "Legoland Malaysia (Johor)",
+  "Genting SkyWorlds Theme Park",
+  "I-City Shah Alam",
+
+  // Major Tourist Cities/Towns
+  "Malacca City (Melaka) - Jonker Street",
+  "Johor Bahru (JB City)",
+  "Ipoh (Old Town)",
+  "Penang (Georgetown/Batu Ferringhi)",
+  "Port Dickson (Avillion/Thistle)",
+  "Putrajaya (Pink Mosque)",
+  "Kuantan / Cherating"
 ];
 
 const BookingForm: React.FC<BookingFormProps> = ({ onSearch }) => {
@@ -71,7 +93,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ onSearch }) => {
         `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&countrycodes=my&limit=5&addressdetails=1`
       );
       const data = await response.json();
-      
+
       if (data && Array.isArray(data)) {
         const places = data.map((item: any) => item.display_name);
         setSuggestions(Array.from(new Set(places)));
@@ -116,48 +138,46 @@ const BookingForm: React.FC<BookingFormProps> = ({ onSearch }) => {
 
   return (
     <div className="bg-white rounded-2xl shadow-2xl p-6 md:p-10 -mt-20 md:-mt-24 relative z-20 mx-4 lg:mx-auto max-w-6xl border-t-4 border-gold-500 font-sans">
-      
+
       {/* Header & Trip Type */}
       <div className="flex flex-col sm:flex-row justify-between items-center mb-8 gap-6">
         <div className="flex items-center w-full sm:w-auto">
           <div className="bg-brand-900 text-white p-2.5 rounded-xl mr-4 shadow-lg hidden sm:flex">
-              <Car className="w-6 h-6" />
+            <Car className="w-6 h-6" />
           </div>
           <div>
             <span className="block text-[10px] text-gray-400 font-black uppercase tracking-[0.2em] mb-0.5">Reservation</span>
             <span className="text-xl font-bold text-brand-900">Get Instant Quote</span>
           </div>
         </div>
-        
+
         <div className="flex w-full sm:w-auto bg-gray-50 p-1.5 rounded-xl border border-gray-100">
-          <button 
+          <button
             type="button"
-            onClick={() => setDetails(prev => ({...prev, tripType: 'one-way'}))}
-            className={`flex-1 sm:flex-none px-6 py-2.5 text-xs font-black uppercase tracking-widest rounded-lg transition-all ${
-              details.tripType === 'one-way' 
-                ? 'bg-white text-brand-900 shadow-md' 
+            onClick={() => setDetails(prev => ({ ...prev, tripType: 'one-way' }))}
+            className={`flex-1 sm:flex-none px-6 py-2.5 text-xs font-black uppercase tracking-widest rounded-lg transition-all ${details.tripType === 'one-way'
+                ? 'bg-white text-brand-900 shadow-md'
                 : 'text-gray-400 hover:text-gray-600'
-            }`}
+              }`}
           >
             One Way
           </button>
-          <button 
+          <button
             type="button"
-            onClick={() => setDetails(prev => ({...prev, tripType: 'return'}))}
-            className={`flex-1 sm:flex-none px-6 py-2.5 text-xs font-black uppercase tracking-widest rounded-lg transition-all ${
-              details.tripType === 'return' 
-                ? 'bg-white text-brand-900 shadow-md' 
+            onClick={() => setDetails(prev => ({ ...prev, tripType: 'return' }))}
+            className={`flex-1 sm:flex-none px-6 py-2.5 text-xs font-black uppercase tracking-widest rounded-lg transition-all ${details.tripType === 'return'
+                ? 'bg-white text-brand-900 shadow-md'
                 : 'text-gray-400 hover:text-gray-600'
-            }`}
+              }`}
           >
             Return
           </button>
         </div>
       </div>
-      
+
       <form onSubmit={handleSubmit} className="space-y-6" ref={dropdownRef}>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          
+
           {/* Pickup & Dropoff Row */}
           <div className="grid grid-cols-1 sm:grid-cols-11 gap-4 items-center">
             <div className="sm:col-span-5 relative">
@@ -180,24 +200,24 @@ const BookingForm: React.FC<BookingFormProps> = ({ onSearch }) => {
                 )}
               </div>
               {activeDropdown === 'pickup' && suggestions.length > 0 && (
-                 <div className="absolute top-full left-0 w-full mt-2 bg-white rounded-xl shadow-2xl border border-gray-100 z-[60] max-h-60 overflow-y-auto overflow-x-hidden">
-                   {suggestions.map((loc, idx) => (
-                     <button
-                       key={idx}
-                       type="button"
-                       className="w-full text-left px-4 py-3.5 hover:bg-brand-50 text-xs font-bold text-brand-900 transition-colors flex items-center border-b border-gray-50 last:border-0"
-                       onClick={() => handleLocationSelect('pickupLocation', loc)}
-                     >
-                       <MapPin className="w-4 h-4 mr-3 text-brand-300 flex-shrink-0" />
-                       <span className="truncate">{loc}</span>
-                     </button>
-                   ))}
-                 </div>
+                <div className="absolute top-full left-0 w-full mt-2 bg-white rounded-xl shadow-2xl border border-gray-100 z-[60] max-h-60 overflow-y-auto overflow-x-hidden">
+                  {suggestions.map((loc, idx) => (
+                    <button
+                      key={idx}
+                      type="button"
+                      className="w-full text-left px-4 py-3.5 hover:bg-brand-50 text-xs font-bold text-brand-900 transition-colors flex items-center border-b border-gray-50 last:border-0"
+                      onClick={() => handleLocationSelect('pickupLocation', loc)}
+                    >
+                      <MapPin className="w-4 h-4 mr-3 text-brand-300 flex-shrink-0" />
+                      <span className="truncate">{loc}</span>
+                    </button>
+                  ))}
+                </div>
               )}
             </div>
 
             <div className="hidden sm:flex sm:col-span-1 justify-center pt-6">
-                <ArrowRightLeft className="w-5 h-5 text-gray-300" />
+              <ArrowRightLeft className="w-5 h-5 text-gray-300" />
             </div>
 
             <div className="sm:col-span-5 relative">
@@ -215,24 +235,24 @@ const BookingForm: React.FC<BookingFormProps> = ({ onSearch }) => {
                   required
                   autoComplete="off"
                 />
-                 {isLoadingLocation && activeDropdown === 'dropoff' && (
+                {isLoadingLocation && activeDropdown === 'dropoff' && (
                   <Loader2 className="absolute right-4 top-1/2 -translate-y-1/2 h-5 w-5 text-brand-500 animate-spin z-10" />
                 )}
               </div>
               {activeDropdown === 'dropoff' && suggestions.length > 0 && (
-                 <div className="absolute top-full left-0 w-full mt-2 bg-white rounded-xl shadow-2xl border border-gray-100 z-[60] max-h-60 overflow-y-auto overflow-x-hidden">
-                   {suggestions.map((loc, idx) => (
-                     <button
-                       key={idx}
-                       type="button"
-                       className="w-full text-left px-4 py-3.5 hover:bg-brand-50 text-xs font-bold text-brand-900 transition-colors flex items-center border-b border-gray-50 last:border-0"
-                       onClick={() => handleLocationSelect('dropoffLocation', loc)}
-                     >
-                       <MapPin className="w-4 h-4 mr-3 text-brand-300 flex-shrink-0" />
-                       <span className="truncate">{loc}</span>
-                     </button>
-                   ))}
-                 </div>
+                <div className="absolute top-full left-0 w-full mt-2 bg-white rounded-xl shadow-2xl border border-gray-100 z-[60] max-h-60 overflow-y-auto overflow-x-hidden">
+                  {suggestions.map((loc, idx) => (
+                    <button
+                      key={idx}
+                      type="button"
+                      className="w-full text-left px-4 py-3.5 hover:bg-brand-50 text-xs font-bold text-brand-900 transition-colors flex items-center border-b border-gray-50 last:border-0"
+                      onClick={() => handleLocationSelect('dropoffLocation', loc)}
+                    >
+                      <MapPin className="w-4 h-4 mr-3 text-brand-300 flex-shrink-0" />
+                      <span className="truncate">{loc}</span>
+                    </button>
+                  ))}
+                </div>
               )}
             </div>
           </div>
@@ -269,34 +289,34 @@ const BookingForm: React.FC<BookingFormProps> = ({ onSearch }) => {
             </div>
 
             {isReturn && (
-                <div className="space-y-2 animate-fade-in">
+              <div className="space-y-2 animate-fade-in">
                 <label className="text-[10px] font-black text-brand-500 uppercase tracking-widest mb-2 block ml-1">Return Trip</label>
-                <div className="flex gap-2">
-                    <div className="relative flex-grow">
+                <div className="flex gap-2 ml-6">
+                  <div className="relative flex-grow">
                     <Calendar className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-brand-500 z-10 pointer-events-none" />
                     <input
-                        type="date"
-                        name="returnDate"
-                        min={details.pickupDate || today}
-                        className="w-full pl-10 pr-2 py-4 bg-brand-50/50 border-2 border-brand-200 rounded-xl focus:border-brand-500 focus:bg-white focus:ring-0 outline-none text-xs font-bold text-brand-900 appearance-none"
-                        value={details.returnDate}
-                        onChange={handleChange}
-                        required={isReturn}
+                      type="date"
+                      name="returnDate"
+                      min={details.pickupDate || today}
+                      className="w-full pl-10 pr-2 py-4 bg-brand-50/50 border-2 border-brand-200 rounded-xl focus:border-brand-500 focus:bg-white focus:ring-0 outline-none text-xs font-bold text-brand-900 appearance-none"
+                      value={details.returnDate}
+                      onChange={handleChange}
+                      required={isReturn}
                     />
-                    </div>
-                    <div className="relative w-28 md:w-32">
+                  </div>
+                  <div className="relative w-28 md:w-32">
                     <Clock className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-brand-500 z-10 pointer-events-none" />
                     <input
-                        type="time"
-                        name="returnTime"
-                        className="w-full pl-10 pr-2 py-4 bg-brand-50/50 border-2 border-brand-200 rounded-xl focus:border-brand-500 focus:bg-white focus:ring-0 outline-none text-xs font-bold text-brand-900 appearance-none"
-                        value={details.returnTime}
-                        onChange={handleChange}
-                        required={isReturn}
+                      type="time"
+                      name="returnTime"
+                      className="w-full pl-10 pr-2 py-4 bg-brand-50/50 border-2 border-brand-200 rounded-xl focus:border-brand-500 focus:bg-white focus:ring-0 outline-none text-xs font-bold text-brand-900 appearance-none"
+                      value={details.returnTime}
+                      onChange={handleChange}
+                      required={isReturn}
                     />
-                    </div>
+                  </div>
                 </div>
-                </div>
+              </div>
             )}
           </div>
         </div>
@@ -309,11 +329,11 @@ const BookingForm: React.FC<BookingFormProps> = ({ onSearch }) => {
           <span>Request Quote via WhatsApp</span>
         </button>
       </form>
-      
+
       <div className="mt-8 flex flex-wrap justify-center gap-x-8 gap-y-3 text-[10px] font-black uppercase tracking-widest text-gray-400">
-         <span className="flex items-center"><span className="w-1.5 h-1.5 bg-green-500 rounded-full mr-2"></span>Fixed Price</span>
-         <span className="flex items-center"><span className="w-1.5 h-1.5 bg-green-500 rounded-full mr-2"></span>Verified Drivers</span>
-         <span className="flex items-center"><span className="w-1.5 h-1.5 bg-green-500 rounded-full mr-2"></span>24/7 Dispatch</span>
+        <span className="flex items-center"><span className="w-1.5 h-1.5 bg-green-500 rounded-full mr-2"></span>Fixed Price</span>
+        <span className="flex items-center"><span className="w-1.5 h-1.5 bg-green-500 rounded-full mr-2"></span>Verified Drivers</span>
+        <span className="flex items-center"><span className="w-1.5 h-1.5 bg-green-500 rounded-full mr-2"></span>24/7 Dispatch</span>
       </div>
     </div>
   );

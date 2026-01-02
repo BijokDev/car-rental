@@ -52,8 +52,8 @@ const Footer: React.FC = () => {
               </li>
               <li className="flex items-center">
                 <Phone className="w-5 h-5 mr-2 flex-shrink-0" />
-                <a href="https://wa.me/60182335796" className="hover:text-white transition">
-                  +60 18-233 5796 (WhatsApp)
+                <a href="https://wa.me/0107198186" className="hover:text-white transition">
+                  +60107198186 (Call & WhatsApp)
                 </a>
               </li>
               <li className="flex items-center">

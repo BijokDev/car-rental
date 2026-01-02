@@ -15,26 +15,26 @@ const App: React.FC = () => {
 
   const handleBookingSearch = useCallback((details: BookingDetails) => {
     // Construct WhatsApp message for Booking/Quote
-    let message = `Hi AJ Taxi KL, I would like a quote for a transfer:%0A%0A` +
-      `🚘 *Trip Type:* ${details.tripType === 'return' ? 'Return Trip' : 'One Way'}%0A` +
-      `📍 *From:* ${details.pickupLocation}%0A` +
-      `📍 *To:* ${details.dropoffLocation}%0A` +
-      `📅 *Date:* ${details.pickupDate}%0A` +
-      `⏰ *Time:* ${details.pickupTime}%0A`;
+    let message = `Hi AJ Taxi KL, I would like a quote for a transfer:\n\n` +
+      `*Trip Type:* ${details.tripType === 'return' ? 'Return Trip' : 'One Way'}\n` +
+      `*From:* ${details.pickupLocation}\n` +
+      `*To:* ${details.dropoffLocation}\n` +
+      `*Date:* ${details.pickupDate}\n` +
+      `*Time:* ${details.pickupTime}\n`;
 
     // Append Return details if applicable
     if (details.tripType === 'return') {
-        message += `🔙 *Return Date:* ${details.returnDate || 'Not specified'}%0A` +
-                   `⏰ *Return Time:* ${details.returnTime || 'Not specified'}%0A`;
+      message += `*Return Date:* ${details.returnDate || 'Not specified'}\n` +
+        `*Return Time:* ${details.returnTime || 'Not specified'}\n`;
     }
-    
-    // Open WhatsApp Web/App
-    window.open(`https://wa.me/60182335796?text=${message}`, '_blank');
+
+    // Open WhatsApp Web/App with proper encoding
+    window.open(`https://wa.me/+601161309460?text=${encodeURIComponent(message)}`, '_blank');
   }, []);
 
   const handleCarSelect = useCallback((carName: string) => {
     const message = `Hi AJ Taxi KL, I am interested in booking the *${carName}*. Is it available for my trip?`;
-    window.open(`https://wa.me/60182335796?text=${message}`, '_blank');
+    window.open(`https://wa.me/+601161309460?text=${encodeURIComponent(message)}`, '_blank');
   }, []);
 
   return (

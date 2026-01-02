@@ -41,7 +41,7 @@ const routes = [
             price: 'From RM550',
             duration: '3-4 hours',
             // Cameron Highlands Tea Plantation
-            image: "https://images.unsplash.com/photo-1510925758641-869d353cecc7?auto=format&fit=crop&q=80&w=800"
+            image: "https://images.unsplash.com/photo-1646977860771-beafae0cd4a1?auto=format&fit=crop&q=80&w=800"
         },
         {
             from: 'KLIA',
@@ -49,7 +49,7 @@ const routes = [
             price: 'From RM850',
             duration: '4-5 hours',
             // Penang Bridge at night
-            image: "https://images.unsplash.com/photo-1560969854-3e9e3e78f657?auto=format&fit=crop&q=80&w=800"
+            image: "https://images.unsplash.com/photo-1581480455040-6ce38da95d95?auto=format&fit=crop&q=80&w=800"
         }
     ];
 

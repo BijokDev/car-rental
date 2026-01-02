@@ -44,21 +44,19 @@ const Navbar: React.FC = () => {
         <div className="flex justify-between items-center">
           {/* Logo */}
           <div className="flex items-center gap-3 cursor-pointer group" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
-            {/* Modern AJ Monogram */}
-            <div className={`relative w-10 h-10 flex items-center justify-center rounded-xl shadow-lg transition-all transform group-hover:scale-105 duration-300 ${isScrolled ? 'bg-brand-900' : 'bg-white'}`}>
-              <div className={`text-sm font-black tracking-tighter leading-none ${isScrolled ? 'text-gold-500' : 'text-brand-900'}`}>
-                <span className="block -mb-1">A</span>
-                <span className="block ml-2">J</span>
-              </div>
-              <div className={`absolute inset-0 rounded-xl border-2 opacity-20 ${isScrolled ? 'border-gold-500' : 'border-brand-900'}`}></div>
+            {/* Modern Car Icon Mark */}
+            <div className={`relative p-2.5 rounded-xl transition-all duration-300 transform group-hover:scale-105 shadow-lg ${isScrolled ? 'bg-gradient-to-br from-brand-900 to-brand-800' : 'bg-white'}`}>
+              <Car className={`h-5 w-5 ${isScrolled ? 'text-gold-500' : 'text-brand-900'}`} strokeWidth={1.5} />
+              {/* Decorative dot */}
+              <div className={`absolute top-2 right-2 w-1.5 h-1.5 rounded-full ${isScrolled ? 'bg-white' : 'bg-gold-500'}`}></div>
             </div>
 
             <div className="flex flex-col">
               <span className={`font-serif text-xl font-black tracking-tight leading-none ${isScrolled ? 'text-brand-900' : 'text-white'}`}>
-                TAXI <span className="text-gold-500">KL</span>
+                AJ<span className="text-gold-500">TAXI</span>
               </span>
-              <span className={`text-[0.55rem] font-bold uppercase tracking-[0.3em] ml-0.5 ${isScrolled ? 'text-gray-400' : 'text-white/60'}`}>
-                Premium Transport
+              <span className={`text-[0.6rem] font-bold uppercase tracking-[0.35em] ${isScrolled ? 'text-gray-400' : 'text-white/70'}`}>
+                Kuala Lumpur
               </span>
             </div>
           </div>

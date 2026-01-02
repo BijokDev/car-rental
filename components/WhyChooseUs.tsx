@@ -5,44 +5,45 @@ const WhyChooseUs: React.FC = () => {
     const features = [
         {
             icon: Clock,
-            title: '24/7 Availability',
-            description: 'Round-the-clock service for all your transportation needs, anytime, anywhere.'
+            title: 'Always Available',
+            description: '24/7 service for early flights & late arrivals. We are always ready when you are.'
         },
         {
             icon: Shield,
-            title: 'Licensed & Insured',
-            description: 'All drivers are professionally licensed with comprehensive insurance coverage.'
+            title: 'Fully Insured',
+            description: 'Professional licensed drivers & comprehensive coverage for your peace of mind.'
         },
         {
             icon: DollarSign,
-            title: 'Fixed Pricing',
-            description: 'No surge pricing or hidden fees. What you see is what you pay.'
+            title: 'Fixed Rates',
+            description: 'Transparent all-inclusive pricing. No hidden surges or unexpected fees.'
         },
         {
             icon: Sparkles,
-            title: 'Clean Vehicles',
-            description: 'Well-maintained, sanitized fleet for your comfort and safety.'
+            title: 'Immaculate Fleet',
+            description: 'Sanitized, smoke-free, and luxury vehicles maintained to the highest standards.'
         },
         {
             icon: MapPin,
-            title: 'GPS Tracking',
-            description: 'Real-time tracking for peace of mind and accurate ETAs.'
+            title: 'Real-Time Tracking',
+            description: 'Share your live ride status with loved ones for added safety and coordination.'
         },
         {
             icon: CreditCard,
-            title: 'Flexible Payment',
-            description: 'Cash, card, or online transfer - pay your way.'
+            title: 'Easy Payments',
+            description: 'Flexible payment options including cash, credit card, or instant online transfer.'
         }
     ];
 
     return (
         <section className="py-20 lg:py-32 bg-brand-900 relative overflow-hidden">
-            {/* Background Pattern */}
-            <div className="absolute inset-0 opacity-5">
-                <div className="absolute inset-0" style={{
-                    backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)',
-                    backgroundSize: '40px 40px'
-                }}></div>
+            {/* Background Image Overlay */}
+            <div className="absolute inset-0 z-0 opacity-10">
+                <img
+                    src="https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&q=80&w=2000"
+                    alt="Luxury background"
+                    className="w-full h-full object-cover"
+                />
             </div>
 
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -56,18 +57,18 @@ const WhyChooseUs: React.FC = () => {
                     </h2>
                     <div className="h-1.5 w-24 bg-gold-500 mx-auto rounded-full"></div>
                     <p className="mt-8 text-gray-300 max-w-2xl mx-auto font-medium text-sm sm:text-base leading-relaxed">
-                        Experience the difference with Malaysia's most trusted chauffeur service.
+                        Experience the difference with Malaysia's most trusted premium chauffeur service.
                     </p>
                 </div>
 
                 {/* Features Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10">
                     {features.map((feature, index) => {
                         const Icon = feature.icon;
                         return (
                             <div
                                 key={index}
-                                className="group bg-white/5 backdrop-blur-sm border border-white/10 rounded-3xl p-8 lg:p-10 hover:bg-white/10 transition-all duration-500 hover:-translate-y-2 flex flex-col"
+                                className="group bg-white/5 backdrop-blur-md border border-white/10 rounded-3xl p-8 lg:p-10 hover:bg-white/10 transition-all duration-500 hover:-translate-y-2 flex flex-col"
                             >
                                 {/* Icon */}
                                 <div className="mb-8 inline-flex">

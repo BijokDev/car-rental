@@ -157,7 +157,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ onSearch }) => {
   const isReturn = details.tripType === 'return';
 
   return (
-    <div className="bg-white/95 backdrop-blur-xl rounded-2xl shadow-2xl p-6 md:p-10 -mt-20 md:-mt-24 relative z-20 mx-4 lg:mx-auto max-w-6xl border-t-4 border-gold-500 font-sans border border-white/20">
+    <div className="bg-white/95 backdrop-blur-xl rounded-2xl shadow-2xl p-6 md:p-10 mt-8 md:-mt-24 relative z-20 mx-4 lg:mx-auto max-w-6xl border-t-4 border-gold-500 font-sans border border-white/20">
 
       {/* Header & Trip Type */}
       <div className="flex flex-col sm:flex-row justify-between items-center mb-8 gap-6">
@@ -208,7 +208,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ onSearch }) => {
                   type="text"
                   name="pickupLocation"
                   placeholder="Pickup location..."
-                  className="w-full pl-12 pr-10 py-4 bg-gray-50/50 border-2 border-gray-100 rounded-xl focus:border-brand-500 focus:bg-white focus:ring-0 transition-all outline-none text-sm font-bold text-brand-900"
+                  className="w-full pl-12 pr-10 py-4 bg-gray-50/50 border-2 border-gray-100 rounded-xl focus:border-brand-500 focus:bg-white focus:ring-0 transition-all outline-none text-base md:text-sm font-bold text-brand-900"
                   value={details.pickupLocation}
                   onChange={handleChange}
                   onFocus={() => handleFocus('pickup')}
@@ -225,7 +225,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ onSearch }) => {
                     <button
                       key={idx}
                       type="button"
-                      className="w-full text-left px-4 py-3.5 hover:bg-brand-50 text-xs font-bold text-brand-900 transition-colors flex items-center border-b border-gray-50 last:border-0"
+                      className="w-full text-left px-4 py-3.5 hover:bg-brand-50 text-sm md:text-xs font-bold text-brand-900 transition-colors flex items-center border-b border-gray-50 last:border-0"
                       onClick={() => handleLocationSelect('pickupLocation', loc)}
                     >
                       <MapPin className="w-4 h-4 mr-3 text-brand-300 flex-shrink-0" />
@@ -248,7 +248,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ onSearch }) => {
                   type="text"
                   name="dropoffLocation"
                   placeholder="Destination..."
-                  className="w-full pl-12 pr-10 py-4 bg-gray-50/50 border-2 border-gray-100 rounded-xl focus:border-brand-500 focus:bg-white focus:ring-0 transition-all outline-none text-sm font-bold text-brand-900"
+                  className="w-full pl-12 pr-10 py-4 bg-gray-50/50 border-2 border-gray-100 rounded-xl focus:border-brand-500 focus:bg-white focus:ring-0 transition-all outline-none text-base md:text-sm font-bold text-brand-900"
                   value={details.dropoffLocation}
                   onChange={handleChange}
                   onFocus={() => handleFocus('dropoff')}
@@ -265,7 +265,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ onSearch }) => {
                     <button
                       key={idx}
                       type="button"
-                      className="w-full text-left px-4 py-3.5 hover:bg-brand-50 text-xs font-bold text-brand-900 transition-colors flex items-center border-b border-gray-50 last:border-0"
+                      className="w-full text-left px-4 py-3.5 hover:bg-brand-50 text-sm md:text-xs font-bold text-brand-900 transition-colors flex items-center border-b border-gray-50 last:border-0"
                       onClick={() => handleLocationSelect('dropoffLocation', loc)}
                     >
                       <MapPin className="w-4 h-4 mr-3 text-brand-300 flex-shrink-0" />
@@ -288,7 +288,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ onSearch }) => {
                     type="date"
                     name="pickupDate"
                     min={today}
-                    className="w-full pl-10 pr-2 py-4 bg-gray-50 border-2 border-gray-100 rounded-xl focus:border-brand-500 focus:bg-white focus:ring-0 outline-none text-xs font-bold text-brand-900 appearance-none"
+                    className="w-full pl-10 pr-2 py-4 bg-gray-50 border-2 border-gray-100 rounded-xl focus:border-brand-500 focus:bg-white focus:ring-0 outline-none text-base md:text-xs font-bold text-brand-900 appearance-none"
                     value={details.pickupDate}
                     onChange={handleChange}
                     required
@@ -299,7 +299,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ onSearch }) => {
                   <input
                     type="time"
                     name="pickupTime"
-                    className="w-full pl-10 pr-2 py-4 bg-gray-50 border-2 border-gray-100 rounded-xl focus:border-brand-500 focus:bg-white focus:ring-0 outline-none text-xs font-bold text-brand-900 appearance-none"
+                    className="w-full pl-10 pr-2 py-4 bg-gray-50 border-2 border-gray-100 rounded-xl focus:border-brand-500 focus:bg-white focus:ring-0 outline-none text-base md:text-xs font-bold text-brand-900 appearance-none"
                     value={details.pickupTime}
                     onChange={handleChange}
                     required
@@ -318,7 +318,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ onSearch }) => {
                       type="date"
                       name="returnDate"
                       min={details.pickupDate || today}
-                      className="w-full pl-10 pr-2 py-4 bg-brand-50/50 border-2 border-brand-200 rounded-xl focus:border-brand-500 focus:bg-white focus:ring-0 outline-none text-xs font-bold text-brand-900 appearance-none"
+                      className="w-full pl-10 pr-2 py-4 bg-brand-50/50 border-2 border-brand-200 rounded-xl focus:border-brand-500 focus:bg-white focus:ring-0 outline-none text-base md:text-xs font-bold text-brand-900 appearance-none"
                       value={details.returnDate}
                       onChange={handleChange}
                       required={isReturn}
@@ -329,7 +329,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ onSearch }) => {
                     <input
                       type="time"
                       name="returnTime"
-                      className="w-full pl-10 pr-2 py-4 bg-brand-50/50 border-2 border-brand-200 rounded-xl focus:border-brand-500 focus:bg-white focus:ring-0 outline-none text-xs font-bold text-brand-900 appearance-none"
+                      className="w-full pl-10 pr-2 py-4 bg-brand-50/50 border-2 border-brand-200 rounded-xl focus:border-brand-500 focus:bg-white focus:ring-0 outline-none text-base md:text-xs font-bold text-brand-900 appearance-none"
                       value={details.returnTime}
                       onChange={handleChange}
                       required={isReturn}

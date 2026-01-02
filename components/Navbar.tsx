@@ -107,7 +107,7 @@ const Navbar: React.FC = () => {
       </div>
 
       {/* Mobile Menu Overlay */}
-      <div className={`lg:hidden fixed inset-0 z-40 bg-white transition-all duration-500 transform ${mobileMenuOpen ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'}`}>
+      <div className={`lg:hidden fixed inset-0 z-40 bg-white transition-all duration-500 transform ${mobileMenuOpen ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0 pointer-events-none'}`}>
         <div className="pt-24 px-6 space-y-4">
           {navLinks.map((item) => (
             <a

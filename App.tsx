@@ -1,5 +1,6 @@
 import React, { useCallback } from 'react';
 import Navbar from './components/Navbar';
+import RebrandBanner from './components/RebrandBanner';
 import Hero from './components/Hero';
 import BookingForm from './components/BookingForm';
 import HowItWorks from './components/HowItWorks';
@@ -20,7 +21,7 @@ const App: React.FC = () => {
 
   const handleBookingSearch = useCallback((details: BookingDetails) => {
     // Construct WhatsApp message for Booking/Quote
-    let message = `Hi AJ Taxi KL, I would like a quote for a transfer:\n\n` +
+    let message = `Hi TravThru, I would like a quote for a transfer:\n\n` +
       `*Trip Type:* ${details.tripType === 'return' ? 'Return Trip' : 'One Way'}\n` +
       `*From:* ${details.pickupLocation}\n` +
       `*To:* ${details.dropoffLocation}\n` +
@@ -38,12 +39,13 @@ const App: React.FC = () => {
   }, []);
 
   const handleCarSelect = useCallback((carName: string) => {
-    const message = `Hi AJ Taxi KL, I am interested in booking the *${carName}*. Is it available for my trip?`;
+    const message = `Hi TravThru, I am interested in booking the *${carName}*. Is it available for my trip?`;
     window.open(`https://wa.me/+60107198186?text=${encodeURIComponent(message)}`, '_blank');
   }, []);
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <RebrandBanner />
       <Navbar />
       <Hero />
       <BookingForm onSearch={handleBookingSearch} />

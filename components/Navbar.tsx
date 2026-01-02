@@ -53,10 +53,10 @@ const Navbar: React.FC = () => {
 
             <div className="flex flex-col">
               <span className={`font-serif text-xl font-black tracking-tight leading-none ${isScrolled ? 'text-brand-900' : 'text-white'}`}>
-                AJ<span className="text-gold-500">TAXI</span>
+                <span className="text-gold-500">Trav</span>thru
               </span>
               <span className={`text-[0.6rem] font-bold uppercase tracking-[0.35em] ${isScrolled ? 'text-gray-400' : 'text-white/70'}`}>
-                Kuala Lumpur
+                Premium Transport
               </span>
             </div>
           </div>

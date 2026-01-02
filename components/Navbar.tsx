@@ -43,13 +43,24 @@ const Navbar: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center">
           {/* Logo */}
-          <div className="flex items-center space-x-2 cursor-pointer group" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
-            <div className={`p-1.5 rounded-lg transition-colors ${isScrolled ? 'bg-brand-900' : 'bg-white'}`}>
-              <Car className={`h-6 w-6 ${isScrolled ? 'text-white' : 'text-brand-900'}`} />
+          <div className="flex items-center gap-3 cursor-pointer group" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
+            {/* Modern AJ Monogram */}
+            <div className={`relative w-10 h-10 flex items-center justify-center rounded-xl shadow-lg transition-all transform group-hover:scale-105 duration-300 ${isScrolled ? 'bg-brand-900' : 'bg-white'}`}>
+              <div className={`text-sm font-black tracking-tighter leading-none ${isScrolled ? 'text-gold-500' : 'text-brand-900'}`}>
+                <span className="block -mb-1">A</span>
+                <span className="block ml-2">J</span>
+              </div>
+              <div className={`absolute inset-0 rounded-xl border-2 opacity-20 ${isScrolled ? 'border-gold-500' : 'border-brand-900'}`}></div>
             </div>
-            <span className={`font-serif text-2xl font-black tracking-tight ${isScrolled ? 'text-brand-900' : 'text-white'}`}>
-              AJ<span className="text-gold-500">TAXI KL</span>
-            </span>
+
+            <div className="flex flex-col">
+              <span className={`font-serif text-xl font-black tracking-tight leading-none ${isScrolled ? 'text-brand-900' : 'text-white'}`}>
+                TAXI <span className="text-gold-500">KL</span>
+              </span>
+              <span className={`text-[0.55rem] font-bold uppercase tracking-[0.3em] ml-0.5 ${isScrolled ? 'text-gray-400' : 'text-white/60'}`}>
+                Premium Transport
+              </span>
+            </div>
           </div>
 
           {/* Desktop Menu */}

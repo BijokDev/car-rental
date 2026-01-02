@@ -2,11 +2,16 @@ import React, { useCallback } from 'react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import BookingForm from './components/BookingForm';
+import HowItWorks from './components/HowItWorks';
 import Fleet from './components/Fleet';
 import Services from './components/Services';
+import WhyChooseUs from './components/WhyChooseUs';
+import CTABanner from './components/CTABanner';
 import Pricing from './components/Pricing';
+import PopularRoutes from './components/PopularRoutes';
 import Features from './components/Features';
 import Testimonials from './components/Testimonials';
+import FAQ from './components/FAQ';
 import Footer from './components/Footer';
 import WhatsAppButton from './components/WhatsAppButton';
 import { BookingDetails } from './types';
@@ -42,11 +47,16 @@ const App: React.FC = () => {
       <Navbar />
       <Hero />
       <BookingForm onSearch={handleBookingSearch} />
+      <HowItWorks />
+      <Services />
+      <WhyChooseUs />
       <Features />
       <Fleet onSelectCar={handleCarSelect} />
-      <Services />
+      <CTABanner />
       <Pricing />
+      <PopularRoutes />
       <Testimonials />
+      <FAQ />
       <Footer />
       <WhatsAppButton />
     </div>

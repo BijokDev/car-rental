@@ -40,7 +40,7 @@ const Hero: React.FC = () => {
       {/* Content Container */}
       <div className="relative z-10 flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col justify-center pt-32 pb-32 md:pt-40 md:pb-40">
         <div className="max-w-4xl text-white">
-          <div className="flex flex-wrap items-center gap-2 md:gap-3 mb-6 animate-fade-in">
+          <div className="flex flex-wrap items-center gap-2 md:gap-3 mb-6 animate-slide-up" style={{ animationDelay: '0.1s' }}>
             <span className="px-3 py-1 bg-green-500 text-white text-[10px] font-black uppercase tracking-widest rounded flex items-center shadow-lg">
               <div className="w-1.5 h-1.5 bg-white rounded-full animate-pulse mr-2"></div>
               24/7 Available
@@ -50,7 +50,7 @@ const Hero: React.FC = () => {
             </span>
           </div>
 
-          <h1 className="text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-serif font-bold leading-[1.1] mb-6 animate-slide-up">
+          <h1 className="text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-serif font-bold leading-[1.1] mb-6 animate-slide-up" style={{ animationDelay: '0.3s' }}>
             Reliable Private <br className="hidden sm:block" />
             <span className="text-gold-500">Chauffeur</span> & <br className="hidden sm:block" />
             <span className="relative">
@@ -61,11 +61,11 @@ const Hero: React.FC = () => {
             </span>
           </h1>
 
-          <p className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-200 mb-6 lg:mb-8 leading-relaxed max-w-2xl animate-slide-up animate-delay-100 font-medium">
+          <p className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-200 mb-6 lg:mb-8 leading-relaxed max-w-2xl font-medium animate-slide-up" style={{ animationDelay: '0.5s' }}>
             Professional <b>Kereta Sewa</b> and private transfer services across Malaysia. Comfortable, safe, and punctual rides to KLIA, Genting, and beyond.
           </p>
 
-          <div className="grid grid-cols-1 xs:grid-cols-2 gap-3 md:gap-4 mb-8 lg:mb-10 max-w-lg animate-slide-up animate-delay-200">
+          <div className="grid grid-cols-1 xs:grid-cols-2 gap-3 md:gap-4 mb-8 lg:mb-10 max-w-lg animate-slide-up" style={{ animationDelay: '0.7s' }}>
             {[
               "Punctual & Reliable",
               "Well Maintained Fleet",
@@ -79,9 +79,9 @@ const Hero: React.FC = () => {
             ))}
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-4 animate-slide-up animate-delay-300">
+          <div className="flex flex-col sm:flex-row gap-4 animate-slide-up" style={{ animationDelay: '0.9s' }}>
             <a
-              href="https://wa.me/60182335796"
+              href="https://wa.me/60107198186"
               className="group px-8 py-4 bg-gold-500 text-brand-900 font-black rounded-xl hover:bg-gold-400 transition-all shadow-xl hover:-translate-y-1 flex items-center justify-center text-sm uppercase tracking-widest"
             >
               Book via WhatsApp

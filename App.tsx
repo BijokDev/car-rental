@@ -8,7 +8,7 @@ import Pricing from './components/Pricing';
 import Features from './components/Features';
 import Testimonials from './components/Testimonials';
 import Footer from './components/Footer';
-import AIAssistant from './components/AIAssistant';
+import WhatsAppButton from './components/WhatsAppButton';
 import { BookingDetails } from './types';
 
 const App: React.FC = () => {
@@ -48,7 +48,7 @@ const App: React.FC = () => {
       <Pricing />
       <Testimonials />
       <Footer />
-      <AIAssistant />
+      <WhatsAppButton />
     </div>
   );
 };

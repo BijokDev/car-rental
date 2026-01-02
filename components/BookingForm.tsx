@@ -129,15 +129,35 @@ const BookingForm: React.FC<BookingFormProps> = ({ onSearch }) => {
     setActiveDropdown(null);
   };
 
+  // Clear return fields when switching to one way
+  useEffect(() => {
+    if (details.tripType === 'one-way') {
+      setDetails(prev => ({ ...prev, returnDate: '', returnTime: '' }));
+    }
+  }, [details.tripType]);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Basic validation
+    if (details.tripType === 'return' && (!details.returnDate || !details.returnTime)) {
+      alert('Please select a return date and time');
+      return;
+    }
+
+    // Date validation
+    if (details.tripType === 'return' && details.returnDate < details.pickupDate) {
+      alert('Return date cannot be before pickup date');
+      return;
+    }
+
     onSearch(details);
   };
 
   const isReturn = details.tripType === 'return';
 
   return (
-    <div className="bg-white rounded-2xl shadow-2xl p-6 md:p-10 -mt-20 md:-mt-24 relative z-20 mx-4 lg:mx-auto max-w-6xl border-t-4 border-gold-500 font-sans">
+    <div className="bg-white/95 backdrop-blur-xl rounded-2xl shadow-2xl p-6 md:p-10 -mt-20 md:-mt-24 relative z-20 mx-4 lg:mx-auto max-w-6xl border-t-4 border-gold-500 font-sans border border-white/20">
 
       {/* Header & Trip Type */}
       <div className="flex flex-col sm:flex-row justify-between items-center mb-8 gap-6">
@@ -156,8 +176,8 @@ const BookingForm: React.FC<BookingFormProps> = ({ onSearch }) => {
             type="button"
             onClick={() => setDetails(prev => ({ ...prev, tripType: 'one-way' }))}
             className={`flex-1 sm:flex-none px-6 py-2.5 text-xs font-black uppercase tracking-widest rounded-lg transition-all ${details.tripType === 'one-way'
-                ? 'bg-white text-brand-900 shadow-md'
-                : 'text-gray-400 hover:text-gray-600'
+              ? 'bg-white text-brand-900 shadow-md'
+              : 'text-gray-400 hover:text-gray-600'
               }`}
           >
             One Way
@@ -166,8 +186,8 @@ const BookingForm: React.FC<BookingFormProps> = ({ onSearch }) => {
             type="button"
             onClick={() => setDetails(prev => ({ ...prev, tripType: 'return' }))}
             className={`flex-1 sm:flex-none px-6 py-2.5 text-xs font-black uppercase tracking-widest rounded-lg transition-all ${details.tripType === 'return'
-                ? 'bg-white text-brand-900 shadow-md'
-                : 'text-gray-400 hover:text-gray-600'
+              ? 'bg-white text-brand-900 shadow-md'
+              : 'text-gray-400 hover:text-gray-600'
               }`}
           >
             Return

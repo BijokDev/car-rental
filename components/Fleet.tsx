@@ -66,7 +66,7 @@ const Fleet: React.FC<FleetProps> = ({ onSelectCar }) => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 lg:gap-12">
           {CAR_FLEET.map((car) => (
-            <div key={car.id} className="group bg-white rounded-3xl shadow-sm hover:shadow-2xl transition-all duration-500 overflow-hidden border border-gray-100 flex flex-col">
+            <div key={car.id} className="group bg-white rounded-3xl shadow-sm hover:shadow-2xl transition-all duration-500 overflow-hidden border border-gray-100 flex flex-col transform hover:-translate-y-2">
               <div
                 className="relative h-64 lg:h-72 overflow-hidden bg-gray-100 cursor-pointer"
                 onClick={() => openGallery(car)}
@@ -77,9 +77,9 @@ const Fleet: React.FC<FleetProps> = ({ onSelectCar }) => {
                   onError={handleImageError}
                   className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-1000"
                 />
-                <div className="absolute inset-0 bg-brand-900/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                  <span className="bg-white text-brand-900 px-6 py-3 rounded-xl font-black uppercase tracking-widest shadow-2xl text-[10px] transform -translate-y-4 group-hover:translate-y-0 transition-all duration-500">
-                    <ZoomIn className="w-4 h-4 mr-2 inline" /> View Gallery
+                <div className="absolute inset-0 bg-brand-900/40 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center backdrop-blur-[2px]">
+                  <span className="bg-white/90 backdrop-blur text-brand-900 px-6 py-3 rounded-xl font-black uppercase tracking-widest shadow-2xl text-[10px] transform translate-y-4 group-hover:translate-y-0 transition-all duration-500 delay-100 flex items-center gap-2">
+                    <ZoomIn className="w-4 h-4" /> View Gallery
                   </span>
                 </div>
                 <div className="absolute top-6 right-6 bg-brand-900/90 backdrop-blur-md px-4 py-2 rounded-xl text-[10px] font-black text-white uppercase tracking-widest shadow-lg border border-white/10">

@@ -39,7 +39,7 @@ const Navbar: React.FC = () => {
   ];
 
   return (
-    <nav className={`fixed w-full z-50 transition-all duration-500 ${isScrolled ? 'bg-white shadow-xl py-3' : 'bg-transparent py-6'}`}>
+    <nav className={`fixed w-full z-50 transition-all duration-500 ${isScrolled ? 'bg-white/80 backdrop-blur-md shadow-xl py-3 border-b border-white/20' : 'bg-transparent py-6'}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center">
           {/* Logo */}
@@ -59,8 +59,8 @@ const Navbar: React.FC = () => {
                 key={item.name}
                 href={`#${item.id}`}
                 className={`text-xs font-black uppercase tracking-widest transition-all duration-200 relative pb-1 group ${activeSection === item.id
-                    ? 'text-gold-500'
-                    : (isScrolled ? 'text-brand-900 hover:text-gold-500' : 'text-white/90 hover:text-white')
+                  ? 'text-gold-500'
+                  : (isScrolled ? 'text-brand-900 hover:text-gold-500' : 'text-white/90 hover:text-white')
                   }`}
               >
                 {item.name}

@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { CheckCircle, ArrowRight } from 'lucide-react';
 
 const BACKGROUND_IMAGES = [
-  "https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?auto=format&fit=crop&q=80&w=2000", // Luxury sedan front view (original - keeping this one)
-  "https://images.unsplash.com/photo-1555215695-3004980ad54e?auto=format&fit=crop&q=80&w=2000", // Black luxury SUV
-  "https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?auto=format&fit=crop&q=80&w=2000", // Premium MPV/Van
-  "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&q=80&w=2000", // Luxury car interior/exterior
+  "https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?auto=format&fit=crop&q=80&w=2000", // Luxury car partial view (original - keeping)
+  "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&q=80&w=2000", // Airport/travel scene with car service
+  "https://images.unsplash.com/photo-1578662996442-48f60103fc96?auto=format&fit=crop&q=80&w=2000", // Professional chauffeur opening car door
+  "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&q=80&w=2000", // City night driving/taxi service
 ];
 
 const Hero: React.FC = () => {

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { collection, query, where, getDocs, limit } from 'firebase/firestore';
 import { db } from '../lib/firebase';
@@ -6,6 +6,20 @@ import { Article } from '../../types';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 import { Calendar, User, ArrowLeft, Share2 } from 'lucide-react';
+import { marked } from 'marked';
+import DOMPurify from 'dompurify';
+
+// Configure marked options
+marked.setOptions({
+  breaks: true,
+  gfm: true,
+});
+
+// Configure DOMPurify
+const sanitizeOptions = {
+  ADD_TAGS: ['img', 'iframe', 'pre', 'code', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'ul', 'ol', 'li', 'blockquote', 'table', 'thead', 'tbody', 'tr', 'th', 'td', 'strong', 'em', 'a', 'p', 'br', 'div', 'hr'],
+  ADD_ATTR: ['src', 'alt', 'title', 'class', 'width', 'height', 'target', 'href', 'rel', 'allow', 'allowfullscreen', 'frameborder', 'scrolling', 'data-code']
+};
 
 const ArticlePage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -13,6 +27,43 @@ const ArticlePage: React.FC = () => {
   const [relatedArticles, setRelatedArticles] = useState<Article[]>([]);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
+
+  // Parse markdown content
+  const renderedContent = useMemo(() => {
+    if (!article?.content) return '';
+    
+    try {
+      // Parse markdown to HTML
+      let html = marked.parse(article.content) as string;
+      
+      // Add copy button to code blocks
+      html = html.replace(
+        /<pre><code(.*?)>([\s\S]*?)<\/code><\/pre>/g,
+        (match, attrs, code) => {
+          const encodedCode = encodeURIComponent(code.replace(/<[^>]*>/g, ''));
+          return `
+            <div style="position: relative; margin: 1.5rem 0;">
+              <button 
+                class="copy-code-btn" 
+                data-code="${encodedCode}"
+                style="position: absolute; right: 12px; top: 12px; background: rgba(255,255,255,0.15); color: #fff; border: 1px solid rgba(255,255,255,0.3); padding: 6px 12px; border-radius: 6px; font-size: 12px; cursor: pointer; opacity: 0.8; transition: all 0.2s; font-weight: 500;"
+                onmouseover="this.style.opacity='1'; this.style.background='rgba(255,255,255,0.25)'" 
+                onmouseout="this.style.opacity='0.8'; this.style.background='rgba(255,255,255,0.15)'"
+              >
+                Copy
+              </button>
+              <pre style="background: #1e293b; color: #e2e8f0; padding: 1.5rem; border-radius: 12px; overflow-x: auto; margin: 0; font-size: 14px; line-height: 1.6;"><code${attrs}>${code}</code></pre>
+            </div>
+          `;
+        }
+      );
+
+      return DOMPurify.sanitize(html, sanitizeOptions);
+    } catch (error) {
+      console.error('Markdown parsing error:', error);
+      return '<p>Error rendering content</p>';
+    }
+  }, [article?.content]);
 
   useEffect(() => {
     const fetchArticle = async () => {
@@ -71,6 +122,35 @@ const ArticlePage: React.FC = () => {
     window.scrollTo(0, 0);
   }, [slug]);
 
+  // Copy code button event listener
+  useEffect(() => {
+    const handleCopy = async (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (target.classList.contains('copy-code-btn')) {
+        e.preventDefault();
+        e.stopPropagation();
+        const code = decodeURIComponent(target.getAttribute('data-code') || '');
+        if (code) {
+          try {
+            await navigator.clipboard.writeText(code);
+            const originalText = target.innerText;
+            target.innerText = 'Copied!';
+            target.style.color = '#4ade80';
+            setTimeout(() => {
+              target.innerText = originalText;
+              target.style.color = '#fff';
+            }, 2000);
+          } catch (err) {
+            console.error('Failed to copy:', err);
+          }
+        }
+      }
+    };
+
+    document.addEventListener('click', handleCopy);
+    return () => document.removeEventListener('click', handleCopy);
+  }, []);
+
   const handleShare = async () => {
     if (navigator.share) {
       await navigator.share({
@@ -83,6 +163,32 @@ const ArticlePage: React.FC = () => {
       alert('Link copied to clipboard!');
     }
   };
+
+  // Custom styles for article content
+  const articleStyles = `
+    .article-content h1 { font-size: 2.25rem; font-weight: 700; margin-bottom: 1rem; margin-top: 2rem; color: #111827; line-height: 1.2; font-family: serif; }
+    .article-content h2 { font-size: 1.75rem; font-weight: 600; margin-bottom: 1rem; margin-top: 2rem; color: #1f2937; border-bottom: 3px solid #d4af37; padding-bottom: 0.5rem; font-family: serif; }
+    .article-content h3 { font-size: 1.375rem; font-weight: 600; margin-bottom: 0.75rem; margin-top: 1.5rem; color: #374151; font-family: serif; }
+    .article-content h4 { font-size: 1.125rem; font-weight: 600; margin-bottom: 0.5rem; margin-top: 1rem; color: #4b5563; }
+    .article-content p { margin-bottom: 1.25rem; line-height: 1.8; color: #374151; font-size: 1.125rem; }
+    .article-content ul { list-style-type: disc; margin-left: 1.5rem; margin-bottom: 1.25rem; }
+    .article-content ol { list-style-type: decimal; margin-left: 1.5rem; margin-bottom: 1.25rem; }
+    .article-content li { margin-bottom: 0.5rem; line-height: 1.7; color: #374151; font-size: 1.125rem; }
+    .article-content strong { font-weight: 700; color: #111827; }
+    .article-content em { font-style: italic; }
+    .article-content a { color: #d4af37; text-decoration: underline; transition: color 0.2s; }
+    .article-content a:hover { color: #b8972e; }
+    .article-content blockquote { border-left: 4px solid #d4af37; padding-left: 1.5rem; margin: 1.5rem 0; background: linear-gradient(to right, #fefce8, transparent); padding: 1.25rem 1.5rem; border-radius: 0 12px 12px 0; color: #78716c; font-style: italic; font-size: 1.125rem; }
+    .article-content code { background: #f3f4f6; padding: 0.2rem 0.5rem; border-radius: 4px; font-family: 'Consolas', 'Monaco', monospace; font-size: 0.9rem; color: #dc2626; }
+    .article-content pre code { background: transparent; padding: 0; color: inherit; font-size: 0.875rem; }
+    .article-content img { max-width: 100%; height: auto; border-radius: 16px; margin: 1.5rem 0; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.15); }
+    .article-content table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; border-radius: 12px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+    .article-content th { background: linear-gradient(to right, #1f2937, #374151); color: white; padding: 1rem; text-align: left; font-weight: 600; }
+    .article-content td { border: 1px solid #e5e7eb; padding: 0.875rem 1rem; }
+    .article-content tr:nth-child(even) { background: #f9fafb; }
+    .article-content tr:hover { background: #fefce8; }
+    .article-content hr { border: none; border-top: 2px solid #e5e7eb; margin: 2.5rem 0; }
+  `;
 
   if (loading) {
     return (
@@ -114,6 +220,7 @@ const ArticlePage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <style>{articleStyles}</style>
       <Navbar />
       
       {/* Hero Image */}
@@ -176,10 +283,10 @@ const ArticlePage: React.FC = () => {
             </p>
           </header>
           
-          {/* Article Body */}
+          {/* Article Body - NOW WITH MARKDOWN RENDERING */}
           <div 
-            className="prose prose-lg max-w-none prose-headings:font-serif prose-a:text-gold-600 prose-img:rounded-xl"
-            dangerouslySetInnerHTML={{ __html: article.content }}
+            className="article-content"
+            dangerouslySetInnerHTML={{ __html: renderedContent }}
           />
           
           {/* CTA Section */}

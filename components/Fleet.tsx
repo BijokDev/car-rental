@@ -97,7 +97,7 @@ const Fleet: React.FC<FleetProps> = ({ onSelectCar }) => {
                   </div>
                   <div className="flex items-center">
                     <Briefcase className="w-4 h-4 mr-3 text-gold-500" />
-                    <span>Ample Luggage</span>
+                    <span> Luggage</span>
                   </div>
                 </div>
 

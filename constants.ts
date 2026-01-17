@@ -3,11 +3,12 @@ import { Car, CarCategory } from "./types";
 export const CAR_FLEET: Car[] = [
   {
     id: "1",
-    name: "Toyota Alphard",
+    name: "Toyota Alphard or similar",
     category: CarCategory.LUXURY,
     pricePerDay: 950,
     priceTransfer: 350,
-    seats: 7,
+    seats: 3,
+    luggage: "3 Luggage",
     image: "/car-rental-images/alpharp.jpeg",
     gallery: ["/car-rental-images/alpharp.jpeg"],
     features: [
@@ -19,11 +20,12 @@ export const CAR_FLEET: Car[] = [
   },
   {
     id: "2",
-    name: "Toyota Vellfire",
+    name: "Toyota Vellfire or similar",
     category: CarCategory.LUXURY,
     pricePerDay: 900,
     priceTransfer: 350,
-    seats: 7,
+    seats: 3,
+    luggage: "3 Luggage",
     image: "/car-rental-images/vellfire.jpeg",
     gallery: ["/car-rental-images/vellfire.jpeg"],
     features: [
@@ -35,11 +37,12 @@ export const CAR_FLEET: Car[] = [
   },
   {
     id: "3",
-    name: "Mercedes-Benz",
+    name: "Mercedes Benz E class or similar",
     category: CarCategory.LUXURY,
     pricePerDay: 1200,
     priceTransfer: 500,
-    seats: 5,
+    seats: 3,
+    luggage: "3 Luggage",
     image: "/car-rental-images/merc.jpeg",
     gallery: ["/car-rental-images/merc.jpeg"],
     features: [
@@ -56,6 +59,7 @@ export const CAR_FLEET: Car[] = [
     pricePerDay: 850,
     priceTransfer: 300,
     seats: 6,
+    luggage: "6 Luggage",
     image: "/car-rental-images/hyundai.jpeg",
     gallery: ["/car-rental-images/hyundai.jpeg"],
     features: [
@@ -67,11 +71,12 @@ export const CAR_FLEET: Car[] = [
   },
   {
     id: "5",
-    name: "Toyota Innova",
+    name: "Toyota Innova or similar",
     category: CarCategory.MPV,
     pricePerDay: 450,
     priceTransfer: 180,
-    seats: 7,
+    seats: 4,
+    luggage: "4 Luggage",
     image: "/car-rental-images/Aruz.jpeg",
     gallery: ["/car-rental-images/Aruz.jpeg"],
     features: [
@@ -107,11 +112,12 @@ export const CAR_FLEET: Car[] = [
   // },
   {
     id: "8",
-    name: "Perodua Bezza",
+    name: "Perodua Bezza or similar",
     category: CarCategory.ECONOMY,
     pricePerDay: 150,
     priceTransfer: 90,
-    seats: 4,
+    seats: 2,
+    luggage: "2 Luggage",
     image: "/car-rental-images/bezza.jpeg",
     gallery: ["/car-rental-images/bezza.jpeg"],
     features: [
@@ -123,11 +129,12 @@ export const CAR_FLEET: Car[] = [
   },
   {
     id: "9",
-    name: "Toyota Vios",
+    name: "Toyota Vios or similar",
     category: CarCategory.SEDAN,
     pricePerDay: 200,
     priceTransfer: 120,
-    seats: 5,
+    seats: 3,
+    luggage: "3 Luggage",
     image: "/car-rental-images/vios.jpeg",
     gallery: ["/car-rental-images/vios.jpeg"],
     features: [
@@ -152,22 +159,24 @@ export const CAR_FLEET: Car[] = [
   // },
   {
     id: "11",
-    name: "Toyota Hiace",
+    name: "Toyota commuter hiace or similar",
     category: CarCategory.VAN,
     pricePerDay: 350,
     priceTransfer: 200,
-    seats: 10,
+    seats: 8,
+    luggage: "8 Luggage",
     image: "/car-rental-images/hiace.jpeg",
     gallery: ["/car-rental-images/hiace.jpeg"],
     features: ["High Roof", "10 Seater", "Spacious", "Perfect for Groups"],
   },
   {
     id: "12",
-    name: "Bus",
+    name: "BUS (Travthru)",
     category: CarCategory.BUS,
     pricePerDay: 1500,
     priceTransfer: 600,
-    seats: 44,
+    seats: 35,
+    luggage: "35 Luggage",
     image: "/car-rental-images/bus.jpeg",
     gallery: ["/car-rental-images/bus.jpeg"],
     features: [
@@ -180,16 +189,16 @@ export const CAR_FLEET: Car[] = [
 ];
 
 export const TESTIMONIALS = [
-  {
-    name: "Johnathan Tan",
-    role: "Regular Customer",
-    text: "TRAVTHRU is my go-to for airport transfers. Always punctual and the cars are exceptionally clean. The Toyota Alphard is perfect for business trips.",
-    rating: 5,
-  },
-  {
-    name: "Aisyah Osman",
-    role: "Family Traveler",
-    text: "Booked a Toyota Innova for a trip to Genting. The driver was very careful and professional. Best service in Kuala Lumpur!",
-    rating: 5,
-  },
+  // {
+  //   name: "Johnathan Tan",
+  //   role: "Regular Customer",
+  //   text: "TRAVTHRU is my go-to for airport transfers. Always punctual and the cars are exceptionally clean. The Toyota Alphard is perfect for business trips.",
+  //   rating: 5,
+  // },
+  // {
+  //   name: "Aisyah Osman",
+  //   role: "Family Traveler",
+  //   text: "Booked a Toyota Innova for a trip to Genting. The driver was very careful and professional. Best service in Kuala Lumpur!",
+  //   rating: 5,
+  // },
 ];

@@ -1,11 +1,11 @@
 export enum CarCategory {
-  ECONOMY = 'Economy',
-  SEDAN = 'Sedan',
-  MPV = 'MPV',
-  SUV = 'SUV',
-  LUXURY = 'Luxury',
-  VAN = 'Van',
-  BUS = 'Bus'
+  ECONOMY = "Economy",
+  SEDAN = "Sedan",
+  MPV = "MPV",
+  SUV = "SUV",
+  LUXURY = "Luxury",
+  VAN = "Van",
+  BUS = "Bus",
 }
 
 export interface Car {
@@ -15,6 +15,7 @@ export interface Car {
   pricePerDay: number; // Daily Rental
   priceTransfer: number; // KLIA Transfer approx
   seats: number;
+  luggage?: string; // Luggage capacity description
   image: string;
   gallery: string[]; // New: Array of images for the gallery (Interior, Seats, etc.)
   features: string[];
@@ -27,12 +28,12 @@ export interface BookingDetails {
   pickupTime: string;
   returnDate?: string;
   returnTime?: string;
-  tripType: 'one-way' | 'return';
+  tripType: "one-way" | "return";
   selectedCarId?: string;
 }
 
 export interface ChatMessage {
-  role: 'user' | 'model';
+  role: "user" | "model";
   text: string;
   timestamp: Date;
 }
@@ -43,15 +44,15 @@ export interface Testimonial {
   role: string;
   text: string;
   rating: number;
-  approved: boolean; 
-  createdAt?: any; 
+  approved: boolean;
+  createdAt?: any;
 }
 
 export interface Article {
   id?: string;
   title: string;
   slug: string;
-  content: string; 
+  content: string;
   image: string;
   excerpt: string;
   author: string;

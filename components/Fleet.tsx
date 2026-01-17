@@ -97,7 +97,7 @@ const Fleet: React.FC<FleetProps> = ({ onSelectCar }) => {
                   </div>
                   <div className="flex items-center">
                     <Briefcase className="w-4 h-4 mr-3 text-gold-500" />
-                    <span> Luggage</span>
+                    <span>{car.luggage || 'Luggage'}</span>
                   </div>
                 </div>
 
@@ -188,7 +188,7 @@ const Fleet: React.FC<FleetProps> = ({ onSelectCar }) => {
                 </div>
                 <div className="flex items-center p-5 bg-gray-50 rounded-2xl border border-gray-100">
                   <Briefcase className="w-6 h-6 mr-4 text-gold-500" />
-                  <span className="font-black text-brand-900 text-sm uppercase tracking-widest">Large Bag</span>
+                  <span className="font-black text-brand-900 text-sm uppercase tracking-widest">{selectedCar.luggage || 'Luggage'}</span>
                 </div>
               </div>
 

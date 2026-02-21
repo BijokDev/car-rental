@@ -39,6 +39,11 @@ const Home: React.FC = () => {
   }, []);
 
   const handleCarSelect = useCallback((carName: string) => {
+    // Fire Google Ads Conversion Tracking Event for Contact
+    if (typeof window !== 'undefined' && (window as any).gtag) {
+      (window as any).gtag('event', 'conversion', {'send_to': 'AW-17916725081/hG0jCLyN8fQbENmOrt9C'});
+    }
+
     const message = `Hi TravThru, I am interested in booking the *${carName}*. Is it available for my trip?`;
     window.open(`https://wa.me/+60107198186?text=${encodeURIComponent(message)}`, '_blank');
   }, []);

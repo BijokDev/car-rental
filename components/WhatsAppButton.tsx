@@ -24,6 +24,11 @@ const WhatsAppButton: React.FC = () => {
             rel="noopener noreferrer"
             className={`fixed bottom-6 right-6 z-[100] bg-green-500 hover:bg-green-600 text-white p-4 rounded-full shadow-2xl transition-all duration-500 transform hover:scale-110 flex items-center justify-center group ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-20 opacity-0'
                 }`}
+            onClick={() => {
+                if (typeof window !== 'undefined' && (window as any).gtag) {
+                    (window as any).gtag('event', 'conversion', {'send_to': 'AW-17916725081/hG0jCLyN8fQbENmOrt9C'});
+                }
+            }}
             aria-label="Chat on WhatsApp"
         >
             <MessageCircle className="w-8 h-8" />

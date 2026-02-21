@@ -151,6 +151,11 @@ const BookingForm: React.FC<BookingFormProps> = ({ onSearch }) => {
       return;
     }
 
+    // Fire Google Ads Conversion Tracking Event for Submit Lead
+    if (typeof window !== 'undefined' && (window as any).gtag) {
+      (window as any).gtag('event', 'conversion', {'send_to': 'AW-17916725081/7CJyCLaN8fQbENmOrt9C'});
+    }
+
     onSearch(details);
   };
 

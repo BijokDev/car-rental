@@ -31,7 +31,7 @@ const Hero: React.FC = () => {
             <img
               src={img}
               alt={`Slide ${index + 1}`}
-              className="w-full h-full object-cover scale-105"
+              className="w-full h-full object-cover object-center"
               loading="lazy"
               decoding="async"
             />

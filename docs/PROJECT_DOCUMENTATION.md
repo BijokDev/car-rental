@@ -22,8 +22,14 @@ TRAVTHRU (aj-taxi-kl) is a web application providing premium airport transfer an
 - `src/lib/`: Firebase initialization (`firebase.ts`) and custom storage wrappers (`storage.ts`).
 - `src/pages/`: Main application routes (`Home.tsx`, `ArticleList.tsx`, `ArticlePage.tsx`).
   - `src/pages/admin/`: Admin CMS views (`AdminLogin.tsx`, `Dashboard.tsx`, `ArticleEditor.tsx`).
-- `public/`: Static assets such as `car-rental-images`.
-- `root`: Config files (`vite.config.ts`, `tsconfig.json`, `package.json`).
+- `public/`: Static assets such as `car-rental-images` and `logo.svg`.
+- `root`: Config files (`vite.config.ts`, `tsconfig.json`, `package.json`, `vercel.json`).
+
+## Security & Deployment
+
+- **Hosting:** Vercel
+- **Security Headers:** Strict headers (CSP, COOP, Referrer-Policy, strict CORS) configured via `vercel.json` to defend against XSS, clickjacking, and enforce privacy. Required for Firebase Auth popups in strict environments (`Cross-Origin-Opener-Policy: same-origin-allow-popups`).
+- **SEO Optimization:** `index.html` implements strict metadata requirements including structural dummy DOM tags for static crawlers, multiple standard favicon formats, and keyword-rich titles. `Hero.tsx` prevents aspect ratio distortion using `object-cover`.
 
 ## API Endpoints
 
@@ -48,3 +54,4 @@ Because Firestore is a NoSQL document database, there are no traditional migrati
 ## Recent Update Log
 
 - **2026-02-21T22:05:39+08:00:** Comprehensive documentation dynamically generated across all endpoints and database models based on current codebase snapshot.
+- **2026-03-06T09:08:38+08:00:** Resolved all major SEO scanner warnings (Keywords, Headings, Favicon, Internal Links) and implemented a robust `vercel.json` with comprehensive security headers (CSP, COOP, CORS).

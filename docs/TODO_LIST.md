@@ -7,6 +7,7 @@ _Last updated: 2026-02-21T22:05:39+08:00_
 - **2026-02-21T22:05:39+08:00:** Admin Dashboard fully integrated with `car-rental-users`, `car-rental-articles`, and `car-rental-testimonials`.
 - **2026-02-21T22:05:39+08:00:** Advanced Markdown Article Editor with live preview and AI Prompt integration implemented.
 - **2026-02-21T22:05:39+08:00:** Booking Form WhatsApp integration stabilized with OpenStreetMap location auto-suggestions.
+- **2026-03-06T09:08:38+08:00:** Added advanced Vercel Security Headers (CSP, COOP, CORS) and resolved all major automated SEO scanner issues (tags, headings, favicons, alt text).
 
 ## Phase 1: Must-Fix before Prod
 
@@ -14,7 +15,7 @@ _Last updated: 2026-02-21T22:05:39+08:00_
 - [x] Create responsive Public Home Page components (Hero, Fleet, Pricing).
 - [x] Implement Booking Form with WA routing.
 - [x] Establish Firestore database connection and data contexts.
-- [ ] Fix Firebase Auth COOP (Cross-Origin-Opener-Policy) Header popup closure warnings in strict environments.
+- [x] Fix Firebase Auth COOP (Cross-Origin-Opener-Policy) Header popup closure warnings in strict environments (Resolved via `vercel.json`).
 - [ ] Configure proper Firestore Security Rules (currently implicitly open or undefined based on codebase visibility).
 
 ## Phase 2: Stabilization

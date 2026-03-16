@@ -13,8 +13,8 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
-// Fallback admin email for initial setup
-const BOOTSTRAP_ADMIN_EMAIL = 'hazman5001@gmail.com';
+// Fallback admin emails for initial setup
+const BOOTSTRAP_ADMIN_EMAILS = 'hazman5001@gmail.com';
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
@@ -34,7 +34,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           if (userSnap.exists()) {
             // User exists, check admin status and update last sign-in
             const userData = userSnap.data();
-            setIsAdmin(userData.isAdmin === true);
+            let currentIsAdmin = userData.isAdmin === true;
+
+            // Auto-promote if they are in the bootstrap list but not marked as admin yet
+            if (!currentIsAdmin && currentUser.email && BOOTSTRAP_ADMIN_EMAILS.includes(currentUser.email)) {
+              currentIsAdmin = true;
+              await setDoc(userRef, { isAdmin: true }, { merge: true });
+            }
+            
+            setIsAdmin(currentIsAdmin);
             
             // Update last sign-in
             await setDoc(userRef, {
@@ -42,8 +50,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             }, { merge: true });
           } else {
             // New user - create document
-            // Bootstrap admin check: if this is the bootstrap email, make them admin
-            const isBootstrapAdmin = currentUser.email === BOOTSTRAP_ADMIN_EMAIL;
+            // Bootstrap admin check
+            const isBootstrapAdmin = currentUser.email ? BOOTSTRAP_ADMIN_EMAILS.includes(currentUser.email) : false;
             
             await setDoc(userRef, {
               uid: currentUser.uid,
@@ -60,7 +68,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         } catch (error) {
           console.error('Error checking/creating user document:', error);
           // Fallback to hardcoded check if Firestore fails
-          setIsAdmin(currentUser.email === BOOTSTRAP_ADMIN_EMAIL);
+          setIsAdmin(currentUser.email ? BOOTSTRAP_ADMIN_EMAILS.includes(currentUser.email) : false);
         }
       } else {
         setIsAdmin(false);

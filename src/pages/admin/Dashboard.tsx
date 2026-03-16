@@ -40,22 +40,40 @@ const Dashboard: React.FC = () => {
     useEffect(() => {
         if (!isAdmin) return;
 
-        // Subscribe to Testimonials
-        const qTestimonials = query(collection(db, 'car-rental-testimonials'), orderBy('createdAt', 'desc'));
+        // Subscribe to Testimonials (Sort client-side to include console entries)
+        const qTestimonials = query(collection(db, 'car-rental-testimonials'));
         const unsubTestimonials = onSnapshot(qTestimonials, (snapshot) => {
-            setTestimonials(snapshot.docs.map(d => ({ id: d.id, ...d.data() } as Testimonial)));
+            const data = snapshot.docs.map(d => ({ id: d.id, ...d.data() } as Testimonial));
+            data.sort((a, b) => {
+                const timeA = a.createdAt?.toMillis?.() || 0;
+                const timeB = b.createdAt?.toMillis?.() || 0;
+                return timeB - timeA;
+            });
+            setTestimonials(data);
         });
 
-        // Subscribe to Articles
-        const qArticles = query(collection(db, 'car-rental-articles'), orderBy('createdAt', 'desc'));
+        // Subscribe to Articles (Sort client-side)
+        const qArticles = query(collection(db, 'car-rental-articles'));
         const unsubArticles = onSnapshot(qArticles, (snapshot) => {
-            setArticles(snapshot.docs.map(d => ({ id: d.id, ...d.data() } as Article)));
+            const data = snapshot.docs.map(d => ({ id: d.id, ...d.data() } as Article));
+            data.sort((a, b) => {
+                const timeA = a.createdAt?.toMillis?.() || 0;
+                const timeB = b.createdAt?.toMillis?.() || 0;
+                return timeB - timeA;
+            });
+            setArticles(data);
         });
 
-        // Subscribe to Users
-        const qUsers = query(collection(db, 'car-rental-users'), orderBy('lastSignIn', 'desc'));
+        // Subscribe to Users (Sort client-side)
+        const qUsers = query(collection(db, 'car-rental-users'));
         const unsubUsers = onSnapshot(qUsers, (snapshot) => {
-            setUsers(snapshot.docs.map(d => ({ id: d.id, ...d.data() } as AppUser)));
+            const data = snapshot.docs.map(d => ({ id: d.id, ...d.data() } as AppUser));
+            data.sort((a, b) => {
+                const timeA = a.lastSignIn?.toMillis?.() || 0;
+                const timeB = b.lastSignIn?.toMillis?.() || 0;
+                return timeB - timeA;
+            });
+            setUsers(data);
         });
 
         return () => {

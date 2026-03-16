@@ -15,12 +15,17 @@ const ArticleList: React.FC = () => {
     const fetchArticles = async () => {
       try {
         // Note: We fetch all and filter client-side to avoid Firestore composite index requirement
-        const q = query(
-          collection(db, 'car-rental-articles'),
-          orderBy('createdAt', 'desc')
-        );
+        const q = query(collection(db, 'car-rental-articles'));
         const snapshot = await getDocs(q);
         const allArticles = snapshot.docs.map(d => ({ id: d.id, ...d.data() } as Article));
+        
+        // Sort in memory to preserve articles created directly in Firebase Console without a createdAt field
+        allArticles.sort((a, b) => {
+          const timeA = a.createdAt?.toMillis?.() || 0;
+          const timeB = b.createdAt?.toMillis?.() || 0;
+          return timeB - timeA;
+        });
+
         // Filter for published articles
         const publishedArticles = allArticles.filter(a => a.published === true);
         console.log('Fetched articles:', allArticles.length, 'Published:', publishedArticles.length);

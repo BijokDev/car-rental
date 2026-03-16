@@ -14,7 +14,7 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | null>(null);
 
 // Fallback admin emails for initial setup
-const BOOTSTRAP_ADMIN_EMAILS = 'hazman5001@gmail.com';
+const BOOTSTRAP_ADMIN_EMAILS = ['hazman5001@gmail.com', '', ''];
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);

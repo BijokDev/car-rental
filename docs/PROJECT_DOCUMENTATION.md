@@ -1,10 +1,10 @@
 # Project Documentation
 
-_Last updated: 2026-02-21T22:05:39+08:00_
+_Last updated: 2026-06-23T20:00:00+08:00_
 
 ## Project Overview
 
-TRAVTHRU (aj-taxi-kl) is a web application providing premium airport transfer and chauffeur services in Kuala Lumpur. It functions as an informational website and booking lead generator, directing customer quotes to WhatsApp. It features a React-based frontend with a Firebase backend for an administrator content management system (CMS) to manage users, testimonials, and SEO-optimized articles.
+TRAVTHRU is a web application providing premium airport transfer and chauffeur services in Kuala Lumpur. It functions as an informational website and booking lead generator, directing customer quotes to WhatsApp. It features a React-based frontend with a Firebase backend for an administrator content management system (CMS) to manage users, testimonials, and SEO-optimized articles.
 
 ## Tech Stack
 
@@ -29,7 +29,7 @@ TRAVTHRU (aj-taxi-kl) is a web application providing premium airport transfer an
 
 - **Hosting:** Vercel
 - **Security Headers:** Strict headers (CSP, COOP, Referrer-Policy, strict CORS) configured via `vercel.json` to defend against XSS, clickjacking, and enforce privacy. Required for Firebase Auth popups in strict environments (`Cross-Origin-Opener-Policy: same-origin-allow-popups`).
-- **SEO Optimization:** `index.html` implements strict metadata requirements including structural dummy DOM tags for static crawlers, multiple standard favicon formats, and keyword-rich titles. `Hero.tsx` prevents aspect ratio distortion using `object-cover`.
+- **SEO Optimization:** `index.html` implements strict metadata requirements, 100/100 Lighthouse SEO via dynamically generated sitemaps, `.webp` image conversion, `react-helmet-async` for article tags, and extensive static DOM fallbacks. `Hero.tsx` prevents aspect ratio distortion using `object-cover`.
 
 ## API Endpoints
 
@@ -55,3 +55,4 @@ Because Firestore is a NoSQL document database, there are no traditional migrati
 
 - **2026-02-21T22:05:39+08:00:** Comprehensive documentation dynamically generated across all endpoints and database models based on current codebase snapshot.
 - **2026-03-06T09:08:38+08:00:** Resolved all major SEO scanner warnings (Keywords, Headings, Favicon, Internal Links) and implemented a robust `vercel.json` with comprehensive security headers (CSP, COOP, CORS).
+- **2026-06-23T11:00:00+08:00:** Complete site rebrand to "TRAVTHRU" (from AJ Taxi KL), Address updated to Lot 1222, No. 302 Jalan Tuanku Abdul Rahman. Booking Form restructured to support "Transfer" vs "By the Hour" flows. Perfect 100/100 SEO implemented with automated sitemap generation (`generate-sitemap.js`) and automated `.webp` image optimization.

@@ -8,6 +8,7 @@ _Last updated: 2026-02-21T22:05:39+08:00_
 - **2026-02-21T22:05:39+08:00:** Advanced Markdown Article Editor with live preview and AI Prompt integration implemented.
 - **2026-02-21T22:05:39+08:00:** Booking Form WhatsApp integration stabilized with OpenStreetMap location auto-suggestions.
 - **2026-03-06T09:08:38+08:00:** Added advanced Vercel Security Headers (CSP, COOP, CORS) and resolved all major automated SEO scanner issues (tags, headings, favicons, alt text).
+- **2026-06-23T11:00:00+08:00:** Rebranded to TRAVTHRU. Added Transfer/Hourly booking split. Added automated WebP conversion and Sitemap generation. Passed SEO tests with 100/100 score.
 
 ## Phase 1: Must-Fix before Prod
 

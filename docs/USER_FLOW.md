@@ -28,11 +28,13 @@ flowchart TD
 ### 1. Booking Flow (Public)
 
 1.  User lands on the Home Page and scrolls to the `BookingForm`.
-2.  User inputs "From" (Pickup) and "To" (Dropoff) locations. The form auto-suggests locations using the OpenStreetMap Nominatim API.
-3.  User selects Trip Type ("One Way" or "Return"), Date, and Time.
-4.  User clicks **"Request Quote via WhatsApp"**.
-5.  Data is parsed and formatted into a text message.
-6.  The browser opens a new tab directed to `https://wa.me/` with the pre-filled booking details. _No data is saved to Firestore during this flow._
+2.  User selects the Booking Type: **"Transfer"** (Point A to Point B) or **"By the Hour"** (Chauffeur Service).
+3.  If **Transfer**: User inputs "From" (Pickup) and "To" (Dropoff) locations. The form auto-suggests locations using the OpenStreetMap Nominatim API.
+4.  If **By the Hour**: User inputs "Pickup Location" and selects the "Duration" (4, 8, or 12 hours).
+5.  User selects Vehicle Type, Date, and Time.
+6.  User clicks **"Request Quote via WhatsApp"**.
+7.  Data is parsed and formatted into a structured text message.
+8.  The browser opens a new tab directed to `https://wa.me/` with the pre-filled booking details. _No data is saved to Firestore during this flow._
 
 ### 2. Authentication Flow (Admin)
 

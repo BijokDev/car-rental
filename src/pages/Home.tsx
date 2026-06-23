@@ -21,18 +21,22 @@ const Home: React.FC = () => {
 
   const handleBookingSearch = useCallback((details: BookingDetails) => {
     // Construct WhatsApp message for Booking/Quote
-    let message = `Hi TravThru, I would like a quote for a transfer:\n\n` +
-      `*Trip Type:* ${details.tripType === 'return' ? 'Return Trip' : 'One Way'}\n` +
-      `*From:* ${details.pickupLocation}\n` +
-      `*To:* ${details.dropoffLocation}\n` +
-      `*Date:* ${details.pickupDate}\n` +
-      `*Time:* ${details.pickupTime}\n`;
-
-    // Append Return details if applicable
-    if (details.tripType === 'return') {
-      message += `*Return Date:* ${details.returnDate || 'Not specified'}\n` +
-        `*Return Time:* ${details.returnTime || 'Not specified'}\n`;
+    let message = `Hi TravThru, I would like a quote for a ${details.serviceType === 'hourly' ? 'Hourly Chauffeur' : 'Transfer'}:\n\n` +
+      `*Service:* ${details.serviceType === 'hourly' ? 'By the Hour' : 'Transfer'}\n` +
+      `*From:* ${details.pickupLocation}\n`;
+      
+    if (details.serviceType === 'transfer') {
+      message += `*To:* ${details.dropoffLocation}\n`;
     }
+    
+    message += `*Date:* ${details.pickupDate}\n` +
+      `*Time:* ${details.pickupTime}\n`;
+      
+    if (details.serviceType === 'hourly') {
+      message += `*Duration:* ${details.duration} Hours\n`;
+    }
+    
+    message += `*Passengers:* ${details.passengers} Pax\n`;
 
     // Open WhatsApp Web/App with proper encoding
     window.open(`https://wa.me/+60107198186?text=${encodeURIComponent(message)}`, '_blank');

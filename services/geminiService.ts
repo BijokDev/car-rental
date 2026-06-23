@@ -24,7 +24,7 @@ export const getGeminiResponse = async (userMessage: string): Promise<string> =>
       
       **Contact Details:**
       - Phone: 018-233 5796
-      - Address: A-12-20, DBKL Pekan Kepong Off, Jalan Kepong 52100 Kuala Lumpur.
+      - Address: Lot 1222, No. 302 Jalan Tuanku Abdul Rahman, 50350 Kuala Lumpur, Wilayah Persekutuan Kuala Lumpur.
       - Email: ajtaxikl@gmail.com
       
       **Our Services:**

@@ -22,13 +22,13 @@ export interface Car {
 }
 
 export interface BookingDetails {
+  serviceType: "transfer" | "hourly";
   pickupLocation: string;
-  dropoffLocation: string;
+  dropoffLocation?: string;
   pickupDate: string;
   pickupTime: string;
-  returnDate?: string;
-  returnTime?: string;
-  tripType: "one-way" | "return";
+  duration?: number;
+  passengers: number;
   selectedCarId?: string;
 }
 

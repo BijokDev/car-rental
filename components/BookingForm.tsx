@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { MapPin, Calendar, Clock, Car, Phone, Loader2, ArrowRightLeft } from 'lucide-react';
+import { MapPin, Calendar, Clock, Loader2, Search } from 'lucide-react';
 import { BookingDetails } from '../types';
 
 interface BookingFormProps {
@@ -7,33 +7,24 @@ interface BookingFormProps {
 }
 
 const POPULAR_LOCATIONS = [
-  // Airports & Transport Hubs
   "KLIA (Terminal 1) - Main Terminal",
   "KLIA 2 (Terminal 2) - AirAsia/Budget",
   "Subang Airport (SZB)",
   "KL Sentral Station",
-
-  // KL City Center & Landmarks
   "Kuala Lumpur City Centre (KLCC)",
   "Petronas Twin Towers",
   "Bukit Bintang / Pavilion KL",
   "Berjaya Times Square",
   "Chinatown / Petaling Street",
   "Batu Caves",
-
-  // Popular Highlands
   "Genting Highlands (First World Hotel/SkyAvenue)",
   "Awana Skyway Station (Genting)",
   "Cameron Highlands (Tanah Rata/Brinchang)",
   "Fraser's Hill",
-
-  // Theme Parks & Attractions
   "Sunway Lagoon Theme Park",
   "Legoland Malaysia (Johor)",
   "Genting SkyWorlds Theme Park",
   "I-City Shah Alam",
-
-  // Major Tourist Cities/Towns
   "Malacca City (Melaka) - Jonker Street",
   "Johor Bahru (JB City)",
   "Ipoh (Old Town)",
@@ -45,13 +36,13 @@ const POPULAR_LOCATIONS = [
 
 const BookingForm: React.FC<BookingFormProps> = ({ onSearch }) => {
   const [details, setDetails] = useState<BookingDetails>({
+    serviceType: 'transfer',
     pickupLocation: '',
     dropoffLocation: '',
     pickupDate: '',
     pickupTime: '',
-    returnDate: '',
-    returnTime: '',
-    tripType: 'one-way'
+    duration: 2,
+    passengers: 2
   });
 
   const [activeDropdown, setActiveDropdown] = useState<'pickup' | 'dropoff' | null>(null);
@@ -110,7 +101,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ onSearch }) => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setDetails(prev => ({ ...prev, [name]: value }));
+    setDetails(prev => ({ ...prev, [name]: name === 'duration' ? parseInt(value) : value }));
 
     if (name === 'pickupLocation' || name === 'dropoffLocation') {
       if (debounceTimer.current) clearTimeout(debounceTimer.current);
@@ -121,7 +112,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ onSearch }) => {
   const handleFocus = (field: 'pickup' | 'dropoff') => {
     setActiveDropdown(field);
     const currentValue = field === 'pickup' ? details.pickupLocation : details.dropoffLocation;
-    fetchLocations(currentValue);
+    fetchLocations(currentValue || '');
   };
 
   const handleLocationSelect = (field: 'pickupLocation' | 'dropoffLocation', value: string) => {
@@ -129,29 +120,14 @@ const BookingForm: React.FC<BookingFormProps> = ({ onSearch }) => {
     setActiveDropdown(null);
   };
 
-  // Clear return fields when switching to one way
-  useEffect(() => {
-    if (details.tripType === 'one-way') {
-      setDetails(prev => ({ ...prev, returnDate: '', returnTime: '' }));
-    }
-  }, [details.tripType]);
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Basic validation
-    if (details.tripType === 'return' && (!details.returnDate || !details.returnTime)) {
-      alert('Please select a return date and time');
+    if (details.serviceType === 'transfer' && !details.dropoffLocation) {
+      alert('Please enter a dropoff location');
       return;
     }
 
-    // Date validation
-    if (details.tripType === 'return' && details.returnDate < details.pickupDate) {
-      alert('Return date cannot be before pickup date');
-      return;
-    }
-
-    // Fire Google Ads Conversion Tracking Event for Submit Lead
     if (typeof window !== 'undefined' && (window as any).gtag) {
       (window as any).gtag('event', 'conversion', {'send_to': 'AW-17916725081/7CJyCLaN8fQbENmOrt9C'});
     }
@@ -159,206 +135,195 @@ const BookingForm: React.FC<BookingFormProps> = ({ onSearch }) => {
     onSearch(details);
   };
 
-  const isReturn = details.tripType === 'return';
+  const inputClasses = "w-full pl-10 pr-4 py-4 bg-gray-100 hover:bg-gray-200 focus:bg-gray-200 border-none rounded-xl transition-all outline-none text-base md:text-sm text-brand-900";
+  const labelClasses = "text-sm font-semibold text-gray-800 mb-2 block ml-1";
 
   return (
-    <div className="bg-white/95 backdrop-blur-xl rounded-2xl shadow-2xl p-6 md:p-10 mt-8 md:-mt-24 relative z-20 mx-4 lg:mx-auto max-w-6xl border-t-4 border-gold-500 font-sans border border-white/20">
-
-      {/* Header & Trip Type */}
-      <div className="flex flex-col sm:flex-row justify-between items-center mb-8 gap-6">
-        <div className="flex items-center w-full sm:w-auto">
-          <div className="bg-brand-900 text-white p-2.5 rounded-xl mr-4 shadow-lg hidden sm:flex">
-            <Car className="w-6 h-6" />
-          </div>
-          <div>
-            <span className="block text-[10px] text-gray-400 font-black uppercase tracking-[0.2em] mb-0.5">Reservation</span>
-            <span className="text-xl font-bold text-brand-900">Get Instant Quote</span>
-          </div>
-        </div>
-
-        <div className="flex w-full sm:w-auto bg-gray-50 p-1.5 rounded-xl border border-gray-100">
-          <button
-            type="button"
-            onClick={() => setDetails(prev => ({ ...prev, tripType: 'one-way' }))}
-            className={`flex-1 sm:flex-none px-6 py-2.5 text-xs font-black uppercase tracking-widest rounded-lg transition-all ${details.tripType === 'one-way'
-              ? 'bg-white text-brand-900 shadow-md'
-              : 'text-gray-400 hover:text-gray-600'
-              }`}
-          >
-            One Way
-          </button>
-          <button
-            type="button"
-            onClick={() => setDetails(prev => ({ ...prev, tripType: 'return' }))}
-            className={`flex-1 sm:flex-none px-6 py-2.5 text-xs font-black uppercase tracking-widest rounded-lg transition-all ${details.tripType === 'return'
-              ? 'bg-white text-brand-900 shadow-md'
-              : 'text-gray-400 hover:text-gray-600'
-              }`}
-          >
-            Return
-          </button>
-        </div>
+    <div className="bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.08)] p-6 md:p-10 mt-8 md:-mt-24 relative z-20 mx-4 lg:mx-auto max-w-4xl font-sans">
+      
+      {/* Tabs */}
+      <div className="flex gap-2 mb-8 border-b border-gray-100 pb-2">
+        <button
+          type="button"
+          onClick={() => setDetails(prev => ({ ...prev, serviceType: 'transfer' }))}
+          className={`px-6 py-2.5 text-base font-medium rounded-xl transition-all flex items-center gap-2 ${details.serviceType === 'transfer'
+            ? 'bg-black text-white shadow-md'
+            : 'text-gray-600 hover:bg-gray-100'
+            }`}
+        >
+          Transfer
+        </button>
+        <button
+          type="button"
+          onClick={() => setDetails(prev => ({ ...prev, serviceType: 'hourly' }))}
+          className={`px-6 py-2.5 text-base font-medium rounded-xl transition-all flex items-center gap-2 ${details.serviceType === 'hourly'
+            ? 'bg-black text-white shadow-md'
+            : 'text-gray-600 hover:bg-gray-100'
+            }`}
+        >
+          <Clock className="w-4 h-4" /> By the Hour
+        </button>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-6" ref={dropdownRef}>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-
-          {/* Pickup & Dropoff Row */}
-          <div className="grid grid-cols-1 sm:grid-cols-11 gap-4 items-center">
-            <div className="sm:col-span-5 relative">
-              <label className="text-[10px] font-black text-brand-900/50 uppercase tracking-widest mb-2 block ml-1">From</label>
-              <div className="relative group">
-                <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-brand-500 z-10" />
-                <input
-                  type="text"
-                  name="pickupLocation"
-                  placeholder="Pickup location..."
-                  className="w-full pl-12 pr-10 py-4 bg-gray-50/50 border-2 border-gray-100 rounded-xl focus:border-brand-500 focus:bg-white focus:ring-0 transition-all outline-none text-base md:text-sm font-bold text-brand-900"
-                  value={details.pickupLocation}
-                  onChange={handleChange}
-                  onFocus={() => handleFocus('pickup')}
-                  required
-                  autoComplete="off"
-                />
-                {isLoadingLocation && activeDropdown === 'pickup' && (
-                  <Loader2 className="absolute right-4 top-1/2 -translate-y-1/2 h-5 w-5 text-brand-500 animate-spin z-10" />
-                )}
-              </div>
-              {activeDropdown === 'pickup' && suggestions.length > 0 && (
-                <div className="absolute top-full left-0 w-full mt-2 bg-white rounded-xl shadow-2xl border border-gray-100 z-[60] max-h-60 overflow-y-auto overflow-x-hidden">
-                  {suggestions.map((loc, idx) => (
-                    <button
-                      key={idx}
-                      type="button"
-                      className="w-full text-left px-4 py-3.5 hover:bg-brand-50 text-sm md:text-xs font-bold text-brand-900 transition-colors flex items-center border-b border-gray-50 last:border-0"
-                      onClick={() => handleLocationSelect('pickupLocation', loc)}
-                    >
-                      <MapPin className="w-4 h-4 mr-3 text-brand-300 flex-shrink-0" />
-                      <span className="truncate">{loc}</span>
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            <div className="hidden sm:flex sm:col-span-1 justify-center pt-6">
-              <ArrowRightLeft className="w-5 h-5 text-gray-300" />
-            </div>
-
-            <div className="sm:col-span-5 relative">
-              <label className="text-[10px] font-black text-brand-900/50 uppercase tracking-widest mb-2 block ml-1">To</label>
-              <div className="relative group">
-                <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 group-focus-within:text-brand-500 transition-colors z-10" />
-                <input
-                  type="text"
-                  name="dropoffLocation"
-                  placeholder="Destination..."
-                  className="w-full pl-12 pr-10 py-4 bg-gray-50/50 border-2 border-gray-100 rounded-xl focus:border-brand-500 focus:bg-white focus:ring-0 transition-all outline-none text-base md:text-sm font-bold text-brand-900"
-                  value={details.dropoffLocation}
-                  onChange={handleChange}
-                  onFocus={() => handleFocus('dropoff')}
-                  required
-                  autoComplete="off"
-                />
-                {isLoadingLocation && activeDropdown === 'dropoff' && (
-                  <Loader2 className="absolute right-4 top-1/2 -translate-y-1/2 h-5 w-5 text-brand-500 animate-spin z-10" />
-                )}
-              </div>
-              {activeDropdown === 'dropoff' && suggestions.length > 0 && (
-                <div className="absolute top-full left-0 w-full mt-2 bg-white rounded-xl shadow-2xl border border-gray-100 z-[60] max-h-60 overflow-y-auto overflow-x-hidden">
-                  {suggestions.map((loc, idx) => (
-                    <button
-                      key={idx}
-                      type="button"
-                      className="w-full text-left px-4 py-3.5 hover:bg-brand-50 text-sm md:text-xs font-bold text-brand-900 transition-colors flex items-center border-b border-gray-50 last:border-0"
-                      onClick={() => handleLocationSelect('dropoffLocation', loc)}
-                    >
-                      <MapPin className="w-4 h-4 mr-3 text-brand-300 flex-shrink-0" />
-                      <span className="truncate">{loc}</span>
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
+      <form onSubmit={handleSubmit} className="space-y-4" ref={dropdownRef}>
+        
+        {/* From */}
+        <div className="relative">
+          <label className={labelClasses}>From</label>
+          <div className="relative group">
+            <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 z-10" />
+            <input
+              type="text"
+              name="pickupLocation"
+              placeholder="Address, airport, hotel, ..."
+              className={inputClasses}
+              value={details.pickupLocation}
+              onChange={handleChange}
+              onFocus={() => handleFocus('pickup')}
+              required
+              autoComplete="off"
+            />
           </div>
-
-          {/* Dates & Times Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <label className="text-[10px] font-black text-brand-900/50 uppercase tracking-widest mb-2 block ml-1">Departure</label>
-              <div className="flex gap-2">
-                <div className="relative flex-grow">
-                  <Calendar className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 z-10 pointer-events-none" />
-                  <input
-                    type="date"
-                    name="pickupDate"
-                    min={today}
-                    className="w-full pl-10 pr-2 py-4 bg-gray-50 border-2 border-gray-100 rounded-xl focus:border-brand-500 focus:bg-white focus:ring-0 outline-none text-base md:text-xs font-bold text-brand-900 appearance-none"
-                    value={details.pickupDate}
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
-                <div className="relative w-28 md:w-32">
-                  <Clock className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 z-10 pointer-events-none" />
-                  <input
-                    type="time"
-                    name="pickupTime"
-                    className="w-full pl-10 pr-2 py-4 bg-gray-50 border-2 border-gray-100 rounded-xl focus:border-brand-500 focus:bg-white focus:ring-0 outline-none text-base md:text-xs font-bold text-brand-900 appearance-none"
-                    value={details.pickupTime}
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
-              </div>
+          {activeDropdown === 'pickup' && suggestions.length > 0 && (
+            <div className="absolute top-full left-0 w-full mt-2 bg-white rounded-xl shadow-2xl border border-gray-100 z-[60] max-h-60 overflow-y-auto overflow-x-hidden">
+              {suggestions.map((loc, idx) => (
+                <button
+                  key={idx}
+                  type="button"
+                  className="w-full text-left px-4 py-3.5 hover:bg-gray-50 text-sm font-medium text-gray-800 transition-colors flex items-center border-b border-gray-50 last:border-0"
+                  onClick={() => handleLocationSelect('pickupLocation', loc)}
+                >
+                  <MapPin className="w-4 h-4 mr-3 text-gray-400 flex-shrink-0" />
+                  <span className="truncate">{loc}</span>
+                </button>
+              ))}
             </div>
+          )}
+        </div>
 
-            {isReturn && (
-              <div className="space-y-2 animate-fade-in">
-                <label className="text-[10px] font-black text-brand-500 uppercase tracking-widest mb-2 block ml-1">Return Trip</label>
-                <div className="flex gap-2 ml-6">
-                  <div className="relative flex-grow">
-                    <Calendar className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-brand-500 z-10 pointer-events-none" />
-                    <input
-                      type="date"
-                      name="returnDate"
-                      min={details.pickupDate || today}
-                      className="w-full pl-10 pr-2 py-4 bg-brand-50/50 border-2 border-brand-200 rounded-xl focus:border-brand-500 focus:bg-white focus:ring-0 outline-none text-base md:text-xs font-bold text-brand-900 appearance-none"
-                      value={details.returnDate}
-                      onChange={handleChange}
-                      required={isReturn}
-                    />
-                  </div>
-                  <div className="relative w-28 md:w-32">
-                    <Clock className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-brand-500 z-10 pointer-events-none" />
-                    <input
-                      type="time"
-                      name="returnTime"
-                      className="w-full pl-10 pr-2 py-4 bg-brand-50/50 border-2 border-brand-200 rounded-xl focus:border-brand-500 focus:bg-white focus:ring-0 outline-none text-base md:text-xs font-bold text-brand-900 appearance-none"
-                      value={details.returnTime}
-                      onChange={handleChange}
-                      required={isReturn}
-                    />
-                  </div>
-                </div>
+        {/* To (Only for Transfer) */}
+        {details.serviceType === 'transfer' && (
+          <div className="relative">
+            <label className={labelClasses}>To</label>
+            <div className="relative group">
+              <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 z-10" />
+              <input
+                type="text"
+                name="dropoffLocation"
+                placeholder="Address, airport, hotel, ..."
+                className={inputClasses}
+                value={details.dropoffLocation || ''}
+                onChange={handleChange}
+                onFocus={() => handleFocus('dropoff')}
+                required={details.serviceType === 'transfer'}
+                autoComplete="off"
+              />
+            </div>
+            {activeDropdown === 'dropoff' && suggestions.length > 0 && (
+              <div className="absolute top-full left-0 w-full mt-2 bg-white rounded-xl shadow-2xl border border-gray-100 z-[60] max-h-60 overflow-y-auto overflow-x-hidden">
+                {suggestions.map((loc, idx) => (
+                  <button
+                    key={idx}
+                    type="button"
+                    className="w-full text-left px-4 py-3.5 hover:bg-gray-50 text-sm font-medium text-gray-800 transition-colors flex items-center border-b border-gray-50 last:border-0"
+                    onClick={() => handleLocationSelect('dropoffLocation', loc)}
+                  >
+                    <MapPin className="w-4 h-4 mr-3 text-gray-400 flex-shrink-0" />
+                    <span className="truncate">{loc}</span>
+                  </button>
+                ))}
               </div>
             )}
+          </div>
+        )}
+
+        {/* Date and Time */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="relative">
+            <label className={labelClasses}>Pickup date</label>
+            <div className="relative">
+              <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 z-10 pointer-events-none" />
+              <input
+                type="date"
+                name="pickupDate"
+                min={today}
+                className={inputClasses}
+                value={details.pickupDate}
+                onChange={handleChange}
+                required
+              />
+            </div>
+          </div>
+          <div className="relative">
+            <label className={labelClasses}>Pickup time</label>
+            <div className="relative">
+              <Clock className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 z-10 pointer-events-none" />
+              <input
+                type="time"
+                name="pickupTime"
+                className={inputClasses}
+                value={details.pickupTime}
+                onChange={handleChange}
+                required
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Duration (Only for Hourly) */}
+        {details.serviceType === 'hourly' && (
+          <div className="relative">
+            <label className={labelClasses}>Duration</label>
+            <select
+              name="duration"
+              className="w-full px-4 py-4 bg-gray-100 hover:bg-gray-200 focus:bg-gray-200 border-none rounded-xl transition-all outline-none text-base md:text-sm text-brand-900 appearance-none cursor-pointer"
+              value={details.duration}
+              onChange={handleChange}
+            >
+              {[2,3,4,5,6,7,8,9,10,11,12].map(hours => (
+                <option key={hours} value={hours}>{hours} Hours</option>
+              ))}
+            </select>
+          </div>
+        )}
+
+        {/* Passengers */}
+        <div className="relative bg-gray-100 rounded-xl p-4 flex justify-between items-center mt-2">
+          <div className="flex flex-col">
+            <span className={labelClasses.replace('mb-2', 'mb-1')}>Passengers</span>
+            <span className="text-sm font-medium text-gray-800 ml-1">{details.passengers}</span>
+          </div>
+          <div className="flex gap-3">
+            <button
+              type="button"
+              onClick={() => setDetails(p => ({ ...p, passengers: Math.max(1, p.passengers - 1) }))}
+              className="bg-gray-700 hover:bg-black text-white w-8 h-8 rounded-md flex items-center justify-center font-medium transition-colors"
+            >
+              -
+            </button>
+            <button
+              type="button"
+              onClick={() => setDetails(p => ({ ...p, passengers: p.passengers + 1 }))}
+              className="bg-gray-700 hover:bg-black text-white w-8 h-8 rounded-md flex items-center justify-center font-medium transition-colors"
+            >
+              +
+            </button>
           </div>
         </div>
 
         <button
           type="submit"
-          className="w-full bg-green-500 hover:bg-green-600 text-white font-black py-5 px-8 rounded-2xl shadow-xl hover:shadow-green-500/20 transition-all transform hover:-translate-y-1 flex items-center justify-center gap-3 text-sm uppercase tracking-[0.2em]"
+          className="w-full bg-black hover:bg-gray-900 text-white font-bold py-4 px-8 rounded-xl shadow-xl transition-all flex items-center justify-center gap-2 text-base mt-6"
         >
-          <Phone className="w-5 h-5" />
-          <span>Request Quote via WhatsApp</span>
+          <Search className="w-5 h-5" />
+          <span>See prices</span>
         </button>
       </form>
 
-      <div className="mt-8 flex flex-wrap justify-center gap-x-8 gap-y-3 text-[10px] font-black uppercase tracking-widest text-gray-400">
-        <span className="flex items-center"><span className="w-1.5 h-1.5 bg-green-500 rounded-full mr-2"></span>Fixed Price</span>
-        <span className="flex items-center"><span className="w-1.5 h-1.5 bg-green-500 rounded-full mr-2"></span>Verified Drivers</span>
-        <span className="flex items-center"><span className="w-1.5 h-1.5 bg-green-500 rounded-full mr-2"></span>24/7 Dispatch</span>
+      <div className="mt-8 flex flex-wrap justify-center gap-x-8 gap-y-3 text-[10px] font-bold uppercase tracking-widest text-gray-400">
+        <span className="flex items-center"><span className="w-1.5 h-1.5 bg-black rounded-full mr-2"></span>Fixed Price</span>
+        <span className="flex items-center"><span className="w-1.5 h-1.5 bg-black rounded-full mr-2"></span>Verified Drivers</span>
+        <span className="flex items-center"><span className="w-1.5 h-1.5 bg-black rounded-full mr-2"></span>24/7 Dispatch</span>
       </div>
     </div>
   );

@@ -59,9 +59,9 @@ export const CAR_FLEET: Car[] = [
     pricePerDay: 850,
     priceTransfer: 300,
     seats: 6,
-    luggage: "6 Luggage",
-    image: "/car-rental-images/hyundai.jpeg",
-    gallery: ["/car-rental-images/hyundai.jpeg"],
+    luggage: "8-10 Luggage",
+    image: "/car-rental-images/hyundai2.jpeg",
+    gallery: ["/car-rental-images/hyundai2.jpeg"],
     features: [
       "Futuristic Design",
       "Huge Window Views",

@@ -45,9 +45,9 @@ const Footer: React.FC = () => {
               <li className="flex items-start">
                 <MapPin className="w-5 h-5 mr-2 mt-0.5 flex-shrink-0" />
                 <span>
-                  A-12-20, DBKL Pekan Kepong Off,<br />
-                  Jalan Kepong 52100<br />
-                  Kuala Lumpur, Malaysia
+                  Lot 1222, No. 302 Jalan Tuanku Abdul Rahman,<br />
+                  50350 Kuala Lumpur,<br />
+                  Wilayah Persekutuan Kuala Lumpur
                 </span>
               </li>
               <li className="flex items-center">

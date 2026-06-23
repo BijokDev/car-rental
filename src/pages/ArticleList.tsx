@@ -7,6 +7,8 @@ import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 import { Calendar, User, ArrowRight } from 'lucide-react';
 
+import { Helmet } from 'react-helmet-async';
+
 const ArticleList: React.FC = () => {
   const [articles, setArticles] = useState<Article[]>([]);
   const [loading, setLoading] = useState(true);
@@ -42,6 +44,10 @@ const ArticleList: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <Helmet>
+        <title>Travel Blog | TRAVTHRU</title>
+        <meta name="description" content="Discover tips, guides, and insights about transportation services in Malaysia with TRAVTHRU." />
+      </Helmet>
       <Navbar />
       
       {/* Hero Section */}

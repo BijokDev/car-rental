@@ -42,6 +42,7 @@ const WhyChooseUs: React.FC = () => {
                 <img
                     src="https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&q=80&w=2000"
                     alt="Luxury background"
+                    loading="lazy"
                     className="w-full h-full object-cover"
                 />
             </div>

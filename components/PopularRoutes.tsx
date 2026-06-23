@@ -82,6 +82,7 @@ const routes = [
                                 <img
                                     src={route.image}
                                     alt={`${route.from} to ${route.to}`}
+                                    loading="lazy"
                                     className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-1000"
                                 />
                                 <div className="absolute inset-0 bg-brand-900/60 transition-opacity duration-300"></div>

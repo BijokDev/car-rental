@@ -74,6 +74,7 @@ const Fleet: React.FC<FleetProps> = ({ onSelectCar }) => {
                 <img
                   src={car.image}
                   alt={car.name}
+                  loading="lazy"
                   onError={handleImageError}
                   className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-1000"
                 />
@@ -148,6 +149,7 @@ const Fleet: React.FC<FleetProps> = ({ onSelectCar }) => {
               <img
                 src={selectedCar.gallery[currentImageIndex]}
                 alt={selectedCar.name}
+                loading="lazy"
                 onError={handleImageError}
                 className="max-h-full max-w-full object-contain select-none"
               />
@@ -220,7 +222,7 @@ const Fleet: React.FC<FleetProps> = ({ onSelectCar }) => {
                       onClick={() => setCurrentImageIndex(idx)}
                       className={`relative w-20 h-20 rounded-2xl overflow-hidden flex-shrink-0 border-4 transition-all duration-300 ${currentImageIndex === idx ? 'border-brand-900 scale-105 shadow-xl' : 'border-transparent opacity-40 hover:opacity-100'}`}
                     >
-                      <img src={img} alt="thumb" className="w-full h-full object-cover" onError={handleImageError} />
+                      <img src={img} alt="thumb" loading="lazy" className="w-full h-full object-cover" onError={handleImageError} />
                     </button>
                   ))}
                 </div>

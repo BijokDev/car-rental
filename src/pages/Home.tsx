@@ -1,4 +1,5 @@
 import React, { useCallback } from 'react';
+import { Helmet } from 'react-helmet-async';
 import Navbar from '../../components/Navbar';
 import RebrandBanner from '../../components/RebrandBanner';
 import Hero from '../../components/Hero';
@@ -54,6 +55,10 @@ const Home: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <Helmet>
+        <title>TravThru | Book Reliable Private Chauffeur & Transfer Service</title>
+        <meta name="description" content="Book a reliable private chauffeur and KLIA airport transfer service with TravThru. Premium 6 to 7 seats vehicles for comfortable rides. Get a quote now." />
+      </Helmet>
       <RebrandBanner />
       <Navbar />
       <Hero />

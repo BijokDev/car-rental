@@ -1,18 +1,143 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <!-- Homepage -->
   <url>
     <loc>https://travthru.com/</loc>
-    <lastmod>2026-02-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
-  
-  <!-- Article List Page -->
   <url>
     <loc>https://travthru.com/articles</loc>
-    <lastmod>2026-02-21</lastmod>
-    <changefreq>weekly</changefreq>
+    <changefreq>daily</changefreq>
     <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://travthru.com/articles/toyota-innova-premium-mpv-for-private-chauffeur-service</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://travthru.com/articles/klia-genting-highlands</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://travthru.com/articles/chauffeur-service-malaysia-premium-airport-outstation-transfer-by-travthru</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://travthru.com/articles/chauffeur-service-in-ipoh-premium-private-car-airport-transfer</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://travthru.com/articles/private-transfer-from-kuala-besut-jetty-to-kuala-lumpur-travthru</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://travthru.com/articles/taxi-chauffeur-service-in-kuala-lumpur-premium-private-transfer-by-travthru</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://travthru.com/articles/professional-private-chauffeur-service-in-kuala-lumpur-travthru</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://travthru.com/articles/airport-transfer-from-klia-to-bukit-bintang-reliable-private-chauffeur-service</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://travthru.com/articles/batu-caves-kuala-lumpur</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://travthru.com/articles/private-transfer-to-genting-highlands-comfortable-journey</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://travthru.com/articles/top-attractions-in-terengganu-private-transport-chauffeur-service-by-travthru</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://travthru.com/articles/klia-to-genting-highlands-private-transfer-service</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://travthru.com/articles/kuala-lumpur-chauffeur-service</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://travthru.com/articles/best-private-car-rental-with-driver-malaysia-singapore-travthru-malaysia</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://travthru.com/articles/private-chauffeur-services-in-kuala-lumpur-luxury-airport-transfer-city-tours</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://travthru.com/articles/airport-transfer-from-klia-to-bukit-bintang-premium-chauffeur-by-travthru</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://travthru.com/articles/chauffeur-service-in-desaru-premium-private-transfer-by-travthru</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://travthru.com/articles/chauffeur-service-in-malacca-premium-private-car-airport-transfer</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://travthru.com/articles/cameron-highlands-private-transfer-chauffeur-service</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://travthru.com/articles/teksi-servis-malaysia-by-travthru-perkhidmatan-pengangkutan-profesional-di-seluruh-malaysia</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://travthru.com/articles/book-your-klia-to-bukit-bintang-transfer</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://travthru.com/articles/penang-to-kuala-lumpur-chauffeur-service-premium-private-transfer-by-travthru</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://travthru.com/articles/airport-transfer-from-klia-to-bukit-bintang-travthru</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://travthru.com/articles/selamat-datang-ke-malaysia</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://travthru.com/articles/kl-to-penang-private-car-transfer-service</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://travthru.com/articles/corporate-chauffeur-service-in-kuala-lumpur-professional-business-transport</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
   </url>
 </urlset>

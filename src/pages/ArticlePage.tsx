@@ -8,6 +8,7 @@ import Footer from '../../components/Footer';
 import { Calendar, User, ArrowLeft, Share2 } from 'lucide-react';
 import { marked } from 'marked';
 import DOMPurify from 'dompurify';
+import { Helmet } from 'react-helmet-async';
 
 // Configure marked options
 marked.setOptions({
@@ -205,6 +206,10 @@ const ArticlePage: React.FC = () => {
   if (notFound || !article) {
     return (
       <div className="min-h-screen bg-gray-50">
+        <Helmet>
+          <title>Article Not Found | TRAVTHRU</title>
+          <meta name="robots" content="noindex" />
+        </Helmet>
         <Navbar />
         <div className="pt-32 pb-16 text-center">
           <h1 className="text-4xl font-bold text-gray-900 mb-4">Article Not Found</h1>
@@ -220,6 +225,10 @@ const ArticlePage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <Helmet>
+        <title>{article.title} | TRAVTHRU</title>
+        <meta name="description" content={article.excerpt} />
+      </Helmet>
       <style>{articleStyles}</style>
       <Navbar />
       

@@ -190,11 +190,12 @@ const Navbar: React.FC = () => {
 
           {/* Mobile Menu Button */}
           <div className="lg:hidden flex items-center space-x-4">
-            <a href="https://wa.me/60107198186" className={`p-2 rounded-full ${showSolidNav ? 'bg-green-500 text-white' : 'bg-white text-green-500'}`}>
+            <a href="https://wa.me/60107198186" aria-label="Call Direct" className={`p-2 rounded-full ${showSolidNav ? 'bg-green-500 text-white' : 'bg-white text-green-500'}`}>
               <Phone className="w-5 h-5" />
             </a>
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
               className={`p-2 rounded-lg transition-colors ${showSolidNav ? 'hover:bg-gray-100' : 'hover:bg-white/10'}`}
             >
               {mobileMenuOpen ? (
@@ -220,6 +221,7 @@ const Navbar: React.FC = () => {
             </span>
             <button
               onClick={() => setMobileMenuOpen(false)}
+              aria-label="Close menu"
               className="p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors"
             >
               <X className="h-6 w-6 text-white" />

@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Star, Quote, X, Send } from 'lucide-react';
-import { TESTIMONIALS } from '../constants';
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { TESTIMONIALS as HARDCODED_TESTIMONIALS } from '../constants';
+import { collection, addDoc, serverTimestamp, query, where, onSnapshot } from 'firebase/firestore';
 import { db } from '../src/lib/firebase';
+import { Testimonial } from '../types';
 
 const Testimonials: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
@@ -14,6 +15,32 @@ const Testimonials: React.FC = () => {
     text: '',
     rating: 5,
   });
+  const [testimonials, setTestimonials] = useState<any[]>(HARDCODED_TESTIMONIALS);
+
+  useEffect(() => {
+    const q = query(
+      collection(db, 'car-rental-testimonials'),
+      where('approved', '==', true)
+    );
+    
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const dbTestimonials = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      
+      dbTestimonials.sort((a: any, b: any) => {
+        const timeA = a.createdAt?.toMillis?.() || 0;
+        const timeB = b.createdAt?.toMillis?.() || 0;
+        return timeB - timeA;
+      });
+
+      if (dbTestimonials.length > 0) {
+        setTestimonials([...dbTestimonials, ...HARDCODED_TESTIMONIALS]);
+      } else {
+        setTestimonials(HARDCODED_TESTIMONIALS);
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -55,7 +82,7 @@ const Testimonials: React.FC = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {TESTIMONIALS.map((review, index) => (
+          {testimonials.map((review, index) => (
             <div key={index} className="bg-white p-8 rounded-2xl shadow-md border-b-4 border-gold-500 relative">
               <Quote className="absolute top-6 right-6 w-8 h-8 text-brand-100" />
               

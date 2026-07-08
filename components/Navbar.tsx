@@ -107,7 +107,7 @@ const Navbar: React.FC = () => {
 
             <div className="flex flex-col">
               <span className={`font-serif text-xl font-black tracking-tight leading-none ${showSolidNav ? 'text-brand-900' : 'text-white'}`}>
-                <span className="text-gold-500">Trav</span>ethru
+                <span className="text-gold-500">Trav</span>thru
               </span>
               <span className={`text-[0.6rem] font-bold uppercase tracking-[0.35em] ${showSolidNav ? 'text-gray-400' : 'text-white/70'}`}>
                 Premium Transport

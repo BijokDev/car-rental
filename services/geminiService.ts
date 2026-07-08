@@ -24,8 +24,8 @@ export const getGeminiResponse = async (userMessage: string): Promise<string> =>
       
       **Contact Details:**
       - Phone: +60107198186
-      - Address: Lot 1222, No. 302 Jalan Tuanku Abdul Rahman, 50350 Kuala Lumpur, Wilayah Persekutuan Kuala Lumpur.
-      - Email: Travthru26@gmail.com
+      - Address: Lot 302 Pertama Complex, Jalan Tuanku Abdul Rahman, Chow Kit, 50100 Wilayah Persekutuan, Wilayah Persekutuan Kuala Lumpur.
+      - Email: travethru@gmail.com
       
       **Our Services:**
       1. **KLIA / KLIA2 Airport Transfer:** Meet & Greet service. Flight monitoring included.

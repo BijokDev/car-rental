@@ -16,7 +16,7 @@ const Footer: React.FC = () => {
               </span>
             </div>
             <p className="text-brand-100 text-sm leading-relaxed">
-              TRAVTHRU Private Chauffeur Enterprise.<br />
+              TRAVTHRU Private Chauffeur Enterprise (SSM: 002334361-T).<br />
               Your professional partner for KLIA transfers, Genting Highlands trips, and private chauffeur services in Malaysia.
             </p>
             <div className="flex space-x-4">
@@ -45,8 +45,8 @@ const Footer: React.FC = () => {
               <li className="flex items-start">
                 <MapPin className="w-5 h-5 mr-2 mt-0.5 flex-shrink-0" />
                 <span>
-                  Lot 1222, No. 302 Jalan Tuanku Abdul Rahman,<br />
-                  50350 Kuala Lumpur,<br />
+                  Lot 302 Pertama Complex, Jalan Tuanku Abdul Rahman, Chow Kit,<br />
+                  50100 Wilayah Persekutuan,<br />
                   Wilayah Persekutuan Kuala Lumpur
                 </span>
               </li>
@@ -58,8 +58,8 @@ const Footer: React.FC = () => {
               </li>
               <li className="flex items-center">
                 <Mail className="w-5 h-5 mr-2 flex-shrink-0" />
-                <a href="mailto:Travthru26@gmail.com" className="hover:text-white transition">
-                  Travthru26@gmail.com
+                <a href="mailto:travethru@gmail.com" className="hover:text-white transition">
+                  travethru@gmail.com
                 </a>
               </li>
             </ul>

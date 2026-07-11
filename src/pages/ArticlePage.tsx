@@ -228,6 +228,22 @@ const ArticlePage: React.FC = () => {
       <Helmet>
         <title>{article.title} | TRAVTHRU</title>
         <meta name="description" content={article.excerpt} />
+        <script 
+          type="application/ld+json" 
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Article",
+              headline: article.title,
+              image: article.image || "https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?auto=format&fit=crop&q=80&w=1200",
+              datePublished: article.createdAt?.toDate?.()?.toISOString() || new Date().toISOString(),
+              author: [{
+                "@type": "Person",
+                name: article.author
+              }]
+            })
+          }} 
+        />
       </Helmet>
       <style>{articleStyles}</style>
       <Navbar />

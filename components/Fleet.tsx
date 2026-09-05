@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { CAR_FLEET } from '../constants';
+import { collection, onSnapshot } from 'firebase/firestore';
+import { db } from '../src/lib/firebase';
 import { Users, Briefcase, CheckCircle, Phone, X, ChevronLeft, ChevronRight, ZoomIn } from 'lucide-react';
 import { Car } from '../types';
 
@@ -8,8 +10,20 @@ interface FleetProps {
 }
 
 const Fleet: React.FC<FleetProps> = ({ onSelectCar }) => {
+  const [cars, setCars] = useState<Car[]>(CAR_FLEET);
   const [selectedCar, setSelectedCar] = useState<Car | null>(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  useEffect(() => {
+    const unsubscribe = onSnapshot(collection(db, 'car-rental-cars'), (snapshot) => {
+      const dbCars = snapshot.docs.map((d) => ({ id: d.id, ...d.data() } as Car));
+      setCars(dbCars.length > 0 ? dbCars : CAR_FLEET);
+    }, (error) => {
+      console.error('Failed to load fleet from Firestore, using fallback:', error);
+      setCars(CAR_FLEET);
+    });
+    return () => unsubscribe();
+  }, []);
 
   const openGallery = (car: Car) => {
     setSelectedCar(car);
@@ -65,7 +79,7 @@ const Fleet: React.FC<FleetProps> = ({ onSelectCar }) => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 lg:gap-12">
-          {CAR_FLEET.map((car) => (
+          {cars.map((car) => (
             <div key={car.id} className="group bg-white rounded-3xl shadow-sm hover:shadow-2xl transition-all duration-500 overflow-hidden border border-gray-100 flex flex-col transform hover:-translate-y-2">
               <div
                 className="relative h-64 lg:h-72 overflow-hidden bg-gray-100 cursor-pointer"
@@ -222,7 +236,7 @@ const Fleet: React.FC<FleetProps> = ({ onSelectCar }) => {
                       onClick={() => setCurrentImageIndex(idx)}
                       className={`relative w-20 h-20 rounded-2xl overflow-hidden flex-shrink-0 border-4 transition-all duration-300 ${currentImageIndex === idx ? 'border-brand-900 scale-105 shadow-xl' : 'border-transparent opacity-40 hover:opacity-100'}`}
                     >
-                      <img src={img} alt="thumb" loading="lazy" className="w-full h-full object-cover" onError={handleImageError} />
+                      <img src={img} alt={`${selectedCar.name} photo ${idx + 1}`} loading="lazy" className="w-full h-full object-cover" onError={handleImageError} />
                     </button>
                   ))}
                 </div>

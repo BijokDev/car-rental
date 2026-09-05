@@ -37,9 +37,22 @@
         },
         {
           "key": "Access-Control-Allow-Origin",
-          "value": "https://travthru.com"
+          "value": "https://www.travthru.com"
         }
       ]
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "travthru.com"
+        }
+      ],
+      "destination": "https://www.travthru.com/$1",
+      "permanent": true
     }
   ],
   "rewrites": [

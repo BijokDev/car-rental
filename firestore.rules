@@ -1,0 +1,52 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return isSignedIn() &&
+        exists(/databases/$(database)/documents/car-rental-users/$(request.auth.uid)) &&
+        get(/databases/$(database)/documents/car-rental-users/$(request.auth.uid)).data.isAdmin == true;
+    }
+
+    // Fleet: publicly readable, only admins can create/update/delete.
+    match /car-rental-cars/{carId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Gallery photos: publicly readable, only admins can create/update/delete.
+    match /car-rental-gallery/{photoId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Testimonials: public read, anyone can submit (starts unapproved),
+    // only admins can approve/edit/delete.
+    match /car-rental-testimonials/{testimonialId} {
+      allow read: if true;
+      allow create: if request.resource.data.approved == false;
+      allow update, delete: if isAdmin();
+    }
+
+    // Articles: published articles are public, drafts/admin-only otherwise.
+    match /car-rental-articles/{articleId} {
+      allow read: if resource.data.published == true || isAdmin();
+      allow write: if isAdmin();
+    }
+
+    // Users: a user can create/read their own profile; only admins can
+    // change roles or delete, and a non-admin can never grant themselves admin.
+    match /car-rental-users/{userId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn() && request.auth.uid == userId;
+      allow update: if isAdmin() ||
+        (isSignedIn() && request.auth.uid == userId &&
+          request.resource.data.isAdmin == resource.data.isAdmin);
+      allow delete: if isAdmin();
+    }
+  }
+}

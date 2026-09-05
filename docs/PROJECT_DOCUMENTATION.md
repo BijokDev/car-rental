@@ -22,7 +22,7 @@ TRAVTHRU is a web application providing premium airport transfer and chauffeur s
 - `src/lib/`: Firebase initialization (`firebase.ts`) and custom storage wrappers (`storage.ts`).
 - `src/pages/`: Main application routes (`Home.tsx`, `ArticleList.tsx`, `ArticlePage.tsx`).
   - `src/pages/admin/`: Admin CMS views (`AdminLogin.tsx`, `Dashboard.tsx`, `ArticleEditor.tsx`).
-- `public/`: Static assets such as `car-rental-images` and `logo.svg`.
+- `public/`: Static assets such as `car-rental-images`, `logo.png`, `logo-mark.png`, `logo.svg`, and favicon files.
 - `root`: Config files (`vite.config.ts`, `tsconfig.json`, `package.json`, `vercel.json`).
 
 ## Security & Deployment

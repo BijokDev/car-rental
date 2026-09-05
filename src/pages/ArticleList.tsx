@@ -47,6 +47,7 @@ const ArticleList: React.FC = () => {
       <Helmet>
         <title>Travel Blog | TRAVTHRU</title>
         <meta name="description" content="Discover tips, guides, and insights about transportation services in Malaysia with TRAVTHRU." />
+        <link rel="canonical" href="https://www.travthru.com/articles" />
       </Helmet>
       <Navbar />
       
@@ -85,7 +86,7 @@ const ArticleList: React.FC = () => {
                   {/* Article Image */}
                   <div className="h-48 overflow-hidden">
                     <img
-                      src={article.image || '/placeholder-article.jpg'}
+                      src={article.image || '/car-rental-images/alpharp.webp'}
                       alt={article.title}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />

@@ -8,7 +8,9 @@ const CTABanner: React.FC = () => {
             <div className="absolute inset-0 z-0">
                 <img
                     src="https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?auto=format&fit=crop&q=80&w=2000"
-                    alt="Luxury background"
+                    alt=""
+                    role="presentation"
+                    loading="lazy"
                     className="w-full h-full object-cover opacity-20"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-brand-900 via-brand-900/90 to-brand-900/80"></div>

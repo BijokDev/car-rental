@@ -6,6 +6,7 @@ import Hero from '../../components/Hero';
 import BookingForm from '../../components/BookingForm';
 import HowItWorks from '../../components/HowItWorks';
 import Fleet from '../../components/Fleet';
+import Gallery from '../../components/Gallery';
 import Services from '../../components/Services';
 import WhyChooseUs from '../../components/WhyChooseUs';
 import CTABanner from '../../components/CTABanner';
@@ -17,8 +18,23 @@ import FAQ from '../../components/FAQ';
 import Footer from '../../components/Footer';
 import WhatsAppButton from '../../components/WhatsAppButton';
 import { BookingDetails } from '../../types';
+import { FAQS } from '../data/faqData';
+
+const SITE_URL = 'https://www.travthru.com';
 
 const Home: React.FC = () => {
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: FAQS.map((faq) => ({
+      '@type': 'Question',
+      name: faq.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: faq.answer,
+      },
+    })),
+  };
 
   const handleBookingSearch = useCallback((details: BookingDetails) => {
     // Construct WhatsApp message for Booking/Quote
@@ -58,6 +74,8 @@ const Home: React.FC = () => {
       <Helmet>
         <title>TravThru | Book Reliable Private Chauffeur & Transfer Service</title>
         <meta name="description" content="Book a reliable private chauffeur and KLIA airport transfer service with TravThru. Premium 6 to 7 seats vehicles for comfortable rides. Get a quote now." />
+        <link rel="canonical" href={SITE_URL + '/'} />
+        <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>
       </Helmet>
       <RebrandBanner />
       <Navbar />
@@ -68,6 +86,7 @@ const Home: React.FC = () => {
       <WhyChooseUs />
       <Features />
       <Fleet onSelectCar={handleCarSelect} />
+      <Gallery />
       <CTABanner />
       <Pricing />
       <PopularRoutes />

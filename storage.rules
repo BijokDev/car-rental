@@ -1,0 +1,27 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    function isAdmin() {
+      return request.auth != null &&
+        firestore.get(/databases/(default)/documents/car-rental-users/$(request.auth.uid)).data.isAdmin == true;
+    }
+
+    // Car photos (main image + gallery): public read, admin-only write.
+    match /car-rental-cars/{allPaths=**} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // General site gallery photos: public read, admin-only write.
+    match /car-rental-gallery/{allPaths=**} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Everything else stays denied by default.
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}

@@ -41,7 +41,8 @@ const WhyChooseUs: React.FC = () => {
             <div className="absolute inset-0 z-0 opacity-10">
                 <img
                     src="https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&q=80&w=2000"
-                    alt="Luxury background"
+                    alt=""
+                    role="presentation"
                     loading="lazy"
                     className="w-full h-full object-cover"
                 />

@@ -2,35 +2,48 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { db } from '../../lib/firebase';
-import { collection, query, orderBy, onSnapshot, doc, updateDoc, deleteDoc } from 'firebase/firestore';
-import { Testimonial, Article, AppUser } from '../../../types';
+import { uploadImageToStorage, deleteImageFromStorage } from '../../lib/imageUpload';
+import { collection, query, orderBy, onSnapshot, doc, addDoc, updateDoc, deleteDoc, serverTimestamp } from 'firebase/firestore';
+import { Testimonial, Article, AppUser, Car, GalleryImage } from '../../../types';
+import { CAR_FLEET } from '../../../constants';
 import ArticleEditor from './ArticleEditor';
-import { 
-  LayoutDashboard, 
-  MessageSquare, 
-  FileText, 
-  Users, 
-  LogOut, 
-  Plus, 
-  Trash2, 
-  Check, 
-  X, 
-  Shield, 
+import CarEditor from './CarEditor';
+import {
+  LayoutDashboard,
+  MessageSquare,
+  FileText,
+  Users,
+  LogOut,
+  Plus,
+  Trash2,
+  Check,
+  X,
+  Shield,
   ShieldAlert,
   Search,
   ChevronRight,
-  Star
+  Star,
+  Car as CarIcon,
+  Image as ImageIcon,
+  Upload,
+  Pencil
 } from 'lucide-react';
 
 const Dashboard: React.FC = () => {
     const navigate = useNavigate();
     const { user, isAdmin, logout } = useAuth();
-    const [activeTab, setActiveTab] = useState<'testimonials' | 'articles' | 'users'>('testimonials');
+    const [activeTab, setActiveTab] = useState<'testimonials' | 'articles' | 'users' | 'fleet' | 'gallery'>('fleet');
     const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
     const [articles, setArticles] = useState<Article[]>([]);
     const [users, setUsers] = useState<AppUser[]>([]);
+    const [cars, setCars] = useState<Car[]>([]);
+    const [galleryImages, setGalleryImages] = useState<GalleryImage[]>([]);
     const [showEditor, setShowEditor] = useState(false);
     const [editingArticle, setEditingArticle] = useState<Article | null>(null);
+    const [showCarEditor, setShowCarEditor] = useState(false);
+    const [editingCar, setEditingCar] = useState<Car | null>(null);
+    const [importingFleet, setImportingFleet] = useState(false);
+    const [uploadingGalleryPhotos, setUploadingGalleryPhotos] = useState(false);
 
     const handleLogout = async () => {
         await logout();
@@ -76,12 +89,97 @@ const Dashboard: React.FC = () => {
             setUsers(data);
         });
 
+        // Subscribe to Cars (Sort client-side)
+        const qCars = query(collection(db, 'car-rental-cars'));
+        const unsubCars = onSnapshot(qCars, (snapshot) => {
+            const data = snapshot.docs.map(d => ({ id: d.id, ...d.data() } as Car));
+            data.sort((a, b) => {
+                const timeA = a.createdAt?.toMillis?.() || 0;
+                const timeB = b.createdAt?.toMillis?.() || 0;
+                return timeB - timeA;
+            });
+            setCars(data);
+        });
+
+        // Subscribe to Gallery Photos (Sort client-side)
+        const qGallery = query(collection(db, 'car-rental-gallery'));
+        const unsubGallery = onSnapshot(qGallery, (snapshot) => {
+            const data = snapshot.docs.map(d => ({ id: d.id, ...d.data() } as GalleryImage));
+            data.sort((a, b) => {
+                const timeA = a.createdAt?.toMillis?.() || 0;
+                const timeB = b.createdAt?.toMillis?.() || 0;
+                return timeB - timeA;
+            });
+            setGalleryImages(data);
+        });
+
         return () => {
             unsubTestimonials();
             unsubArticles();
             unsubUsers();
+            unsubCars();
+            unsubGallery();
         };
     }, [isAdmin]);
+
+    const handleDeleteCar = async (car: Car) => {
+        if (!confirm(`Are you sure you want to delete "${car.name}"?`)) return;
+        await deleteDoc(doc(db, 'car-rental-cars', car.id));
+        const imagesToDelete = new Set([car.image, ...(car.gallery || [])]);
+        await Promise.all([...imagesToDelete].map((url) => deleteImageFromStorage(url)));
+    };
+
+    const handleImportFleet = async () => {
+        if (!confirm(`Import ${CAR_FLEET.length} existing cars from the site's built-in fleet into the database?`)) return;
+        setImportingFleet(true);
+        try {
+            for (const car of CAR_FLEET) {
+                const { id, ...carData } = car;
+                await addDoc(collection(db, 'car-rental-cars'), {
+                    ...carData,
+                    createdAt: serverTimestamp(),
+                });
+            }
+            alert('Fleet imported!');
+        } catch (error) {
+            console.error('Error importing fleet:', error);
+            alert('Failed to import fleet');
+        } finally {
+            setImportingFleet(false);
+        }
+    };
+
+    const handleGalleryPhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const files = Array.from(e.target.files || []);
+        if (files.length === 0) return;
+        setUploadingGalleryPhotos(true);
+        try {
+            for (const file of files) {
+                const url = await uploadImageToStorage(file, 'car-rental-gallery');
+                await addDoc(collection(db, 'car-rental-gallery'), {
+                    url,
+                    caption: '',
+                    createdAt: serverTimestamp(),
+                });
+            }
+        } catch (error: any) {
+            console.error('Gallery upload failed:', error);
+            alert(error.message || 'Upload failed');
+        } finally {
+            setUploadingGalleryPhotos(false);
+            e.target.value = '';
+        }
+    };
+
+    const handleDeleteGalleryPhoto = async (photo: GalleryImage) => {
+        if (!confirm('Delete this photo?')) return;
+        await deleteDoc(doc(db, 'car-rental-gallery', photo.id!));
+        await deleteImageFromStorage(photo.url);
+    };
+
+    const handleUpdateGalleryCaption = async (photoId: string, caption: string) => {
+        await updateDoc(doc(db, 'car-rental-gallery', photoId), { caption });
+    };
 
     const handleApproveTestimonial = async (id: string, currentStatus: boolean) => {
         await updateDoc(doc(db, 'car-rental-testimonials', id), { approved: !currentStatus });
@@ -125,8 +223,8 @@ const Dashboard: React.FC = () => {
       {/* Mobile Header */}
       <nav className="bg-white shadow-sm sticky top-0 z-30 lg:hidden">
         <div className="px-4 h-16 flex items-center justify-between">
-           <div className="flex items-center gap-2">
-             <LayoutDashboard className="w-5 h-5 text-brand-900" />
+           <div className="flex items-center gap-2.5">
+             <img src="/logo-mark.png" alt="TravThru" className="w-7 h-7 object-contain rounded-md" />
              <span className="font-bold text-lg text-brand-900">Dashboard</span>
            </div>
            <button onClick={handleLogout} className="p-2 text-gray-500 hover:text-red-600 transition-colors">
@@ -140,7 +238,7 @@ const Dashboard: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between h-16">
                 <div className="flex items-center gap-3">
-                    <LayoutDashboard className="w-6 h-6 text-brand-900" />
+                    <img src="/logo-mark.png" alt="TravThru" className="w-8 h-8 object-contain rounded-md" />
                     <h1 className="text-xl font-bold text-gray-900">Admin Dashboard</h1>
                 </div>
                 <div className="flex items-center gap-4">
@@ -159,6 +257,20 @@ const Dashboard: React.FC = () => {
         {/* Desktop Tabs */}
         <div className="hidden lg:block border-b border-gray-200 mb-8">
             <nav className="-mb-px flex space-x-8">
+                <button
+                    onClick={() => setActiveTab('fleet')}
+                    className={`${activeTab === 'fleet' ? 'border-brand-600 text-brand-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'} whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm flex items-center gap-2`}
+                >
+                    <CarIcon className="w-4 h-4" />
+                    Fleet <span className="ml-1 bg-gray-100 text-gray-600 py-0.5 px-2 rounded-full text-xs">{cars.length}</span>
+                </button>
+                <button
+                    onClick={() => setActiveTab('gallery')}
+                    className={`${activeTab === 'gallery' ? 'border-brand-600 text-brand-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'} whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm flex items-center gap-2`}
+                >
+                    <ImageIcon className="w-4 h-4" />
+                    Gallery <span className="ml-1 bg-gray-100 text-gray-600 py-0.5 px-2 rounded-full text-xs">{galleryImages.length}</span>
+                </button>
                 <button
                     onClick={() => setActiveTab('testimonials')}
                     className={`${activeTab === 'testimonials' ? 'border-brand-600 text-brand-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'} whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm flex items-center gap-2`}
@@ -184,7 +296,125 @@ const Dashboard: React.FC = () => {
         </div>
 
         {/* Tab Content */}
-        
+
+        {/* Fleet Tab */}
+        {activeTab === 'fleet' && (
+            <div className="space-y-4">
+                {!showCarEditor ? (
+                    <>
+                        <div className="flex flex-wrap justify-between items-center gap-3 mb-2">
+                            <h2 className="text-xl font-bold text-gray-800 lg:hidden">Fleet</h2>
+                            <div className="flex gap-2 ml-auto">
+                                {cars.length === 0 && (
+                                    <button
+                                        onClick={handleImportFleet}
+                                        disabled={importingFleet}
+                                        className="bg-gray-100 text-gray-700 px-4 py-2.5 rounded-lg shadow-sm hover:bg-gray-200 flex items-center gap-2 font-medium text-sm transition-all active:scale-95 disabled:opacity-50"
+                                    >
+                                        <Upload className="w-4 h-4" />
+                                        {importingFleet ? 'Importing...' : 'Import Existing Fleet'}
+                                    </button>
+                                )}
+                                <button
+                                    onClick={() => setShowCarEditor(true)}
+                                    className="bg-brand-600 text-white px-4 py-2.5 rounded-lg shadow-sm hover:bg-brand-700 flex items-center gap-2 font-medium text-sm transition-all active:scale-95"
+                                >
+                                    <Plus className="w-4 h-4" />
+                                    Add New Car
+                                </button>
+                            </div>
+                        </div>
+
+                        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                            {cars.map((car) => (
+                                <div key={car.id} className="bg-white shadow-sm hover:shadow-md transition-shadow rounded-xl overflow-hidden border border-gray-100 flex flex-col h-full">
+                                    <div className="h-48 w-full bg-cover bg-center bg-gray-100" style={{ backgroundImage: `url(${car.image})` }} />
+                                    <div className="p-5 flex-1 flex flex-col">
+                                        <div className="flex items-center justify-between mb-2">
+                                            <h3 className="font-bold text-lg text-gray-900 leading-tight">{car.name}</h3>
+                                            <span className="bg-brand-50 text-brand-700 text-[10px] font-bold uppercase px-2 py-1 rounded-full">{car.category}</span>
+                                        </div>
+                                        <p className="text-gray-500 text-sm mb-4">
+                                            {car.seats} Seats &middot; {car.luggage || 'N/A'} &middot; RM{car.pricePerDay}/day
+                                        </p>
+
+                                        <div className="grid grid-cols-2 gap-2 pt-4 border-t border-gray-50 mt-auto">
+                                            <button
+                                                onClick={() => { setEditingCar(car); setShowCarEditor(true); }}
+                                                className="flex items-center justify-center gap-1 py-2 rounded-lg text-sm font-medium bg-blue-50 text-blue-600 hover:bg-blue-100 transition-colors"
+                                            >
+                                                <Pencil className="w-4 h-4" /> Edit
+                                            </button>
+                                            <button
+                                                onClick={() => handleDeleteCar(car)}
+                                                className="flex items-center justify-center gap-1 py-2 rounded-lg text-sm font-medium bg-red-50 text-red-600 hover:bg-red-100 transition-colors"
+                                            >
+                                                <Trash2 className="w-4 h-4" /> Delete
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                            {cars.length === 0 && (
+                                <div className="col-span-full py-12 text-center bg-white rounded-xl border border-dashed border-gray-300">
+                                    <CarIcon className="w-12 h-12 text-gray-300 mx-auto mb-3" />
+                                    <p className="text-gray-500 font-medium">No cars yet &mdash; import the existing fleet or add a new one</p>
+                                </div>
+                            )}
+                        </div>
+                    </>
+                ) : (
+                    <CarEditor
+                        onClose={() => { setShowCarEditor(false); setEditingCar(null); }}
+                        editCar={editingCar}
+                    />
+                )}
+            </div>
+        )}
+
+        {/* Gallery Tab */}
+        {activeTab === 'gallery' && (
+            <div className="space-y-4">
+                <div className="flex flex-wrap justify-between items-center gap-3 mb-2">
+                    <h2 className="text-xl font-bold text-gray-800 lg:hidden">Gallery</h2>
+                    <label className="cursor-pointer ml-auto bg-brand-600 text-white px-4 py-2.5 rounded-lg shadow-sm hover:bg-brand-700 flex items-center gap-2 font-medium text-sm transition-all active:scale-95">
+                        <Upload className="w-4 h-4" />
+                        {uploadingGalleryPhotos ? 'Uploading...' : 'Upload Photos'}
+                        <input type="file" multiple accept="image/*" className="hidden" onChange={handleGalleryPhotoUpload} disabled={uploadingGalleryPhotos} />
+                    </label>
+                </div>
+
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+                    {galleryImages.map((photo) => (
+                        <div key={photo.id} className="relative group rounded-xl overflow-hidden bg-white border border-gray-100 shadow-sm">
+                            <div className="relative aspect-square bg-gray-100">
+                                <img src={photo.url} alt={photo.caption || 'Gallery'} className="w-full h-full object-cover" />
+                                <button
+                                    onClick={() => handleDeleteGalleryPhoto(photo)}
+                                    className="absolute top-2 right-2 bg-red-600/90 text-white rounded-full p-2 opacity-0 group-hover:opacity-100 transition-opacity shadow"
+                                >
+                                    <Trash2 className="w-4 h-4" />
+                                </button>
+                            </div>
+                            <input
+                                type="text"
+                                defaultValue={photo.caption || ''}
+                                onBlur={(e) => handleUpdateGalleryCaption(photo.id!, e.target.value)}
+                                placeholder="Add a caption (used as image alt text)"
+                                className="w-full text-xs px-2 py-1.5 border-t border-gray-100 focus:outline-none focus:bg-gray-50"
+                            />
+                        </div>
+                    ))}
+                    {galleryImages.length === 0 && (
+                        <div className="col-span-full py-12 text-center bg-white rounded-xl border border-dashed border-gray-300">
+                            <ImageIcon className="w-12 h-12 text-gray-300 mx-auto mb-3" />
+                            <p className="text-gray-500 font-medium">No gallery photos yet &mdash; upload some to show them on the public site</p>
+                        </div>
+                    )}
+                </div>
+            </div>
+        )}
+
         {/* Testimonials Tab */}
         {activeTab === 'testimonials' && (
             <div className="space-y-4">
@@ -393,10 +623,28 @@ const Dashboard: React.FC = () => {
       
       {/* Mobile Bottom Navigation */}
       <nav className="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 z-50 lg:hidden pb-safe">
-        <div className="grid grid-cols-3 h-16">
+        <div className="flex overflow-x-auto no-scrollbar h-16">
+            <button
+                onClick={() => setActiveTab('fleet')}
+                className={`flex-1 min-w-[76px] flex flex-col items-center justify-center gap-1 transition-all duration-300 ${activeTab === 'fleet' ? 'text-brand-600' : 'text-gray-400 hover:text-gray-600'}`}
+            >
+                <div className={`p-1.5 rounded-full transition-all ${activeTab === 'fleet' ? 'bg-brand-50 translate-y-[-2px]' : ''}`}>
+                    <CarIcon className="w-6 h-6" />
+                </div>
+                <span className="text-[10px] font-bold tracking-wide">Fleet</span>
+            </button>
+            <button
+                onClick={() => setActiveTab('gallery')}
+                className={`flex-1 min-w-[76px] flex flex-col items-center justify-center gap-1 transition-all duration-300 ${activeTab === 'gallery' ? 'text-brand-600' : 'text-gray-400 hover:text-gray-600'}`}
+            >
+                <div className={`p-1.5 rounded-full transition-all ${activeTab === 'gallery' ? 'bg-brand-50 translate-y-[-2px]' : ''}`}>
+                    <ImageIcon className="w-6 h-6" />
+                </div>
+                <span className="text-[10px] font-bold tracking-wide">Gallery</span>
+            </button>
             <button
                 onClick={() => setActiveTab('testimonials')}
-                className={`flex flex-col items-center justify-center gap-1 transition-all duration-300 ${activeTab === 'testimonials' ? 'text-brand-600' : 'text-gray-400 hover:text-gray-600'}`}
+                className={`flex-1 min-w-[76px] flex flex-col items-center justify-center gap-1 transition-all duration-300 ${activeTab === 'testimonials' ? 'text-brand-600' : 'text-gray-400 hover:text-gray-600'}`}
             >
                 <div className={`p-1.5 rounded-full transition-all ${activeTab === 'testimonials' ? 'bg-brand-50 translate-y-[-2px]' : ''}`}>
                     <MessageSquare className={`w-6 h-6 ${activeTab === 'testimonials' ? 'fill-current' : ''}`} />
@@ -405,7 +653,7 @@ const Dashboard: React.FC = () => {
             </button>
             <button
                 onClick={() => setActiveTab('articles')}
-                className={`flex flex-col items-center justify-center gap-1 transition-all duration-300 ${activeTab === 'articles' ? 'text-brand-600' : 'text-gray-400 hover:text-gray-600'}`}
+                className={`flex-1 min-w-[76px] flex flex-col items-center justify-center gap-1 transition-all duration-300 ${activeTab === 'articles' ? 'text-brand-600' : 'text-gray-400 hover:text-gray-600'}`}
             >
                 <div className={`p-1.5 rounded-full transition-all ${activeTab === 'articles' ? 'bg-brand-50 translate-y-[-2px]' : ''}`}>
                     <FileText className={`w-6 h-6 ${activeTab === 'articles' ? 'fill-current' : ''}`} />
@@ -414,7 +662,7 @@ const Dashboard: React.FC = () => {
             </button>
             <button
                 onClick={() => setActiveTab('users')}
-                className={`flex flex-col items-center justify-center gap-1 transition-all duration-300 ${activeTab === 'users' ? 'text-brand-600' : 'text-gray-400 hover:text-gray-600'}`}
+                className={`flex-1 min-w-[76px] flex flex-col items-center justify-center gap-1 transition-all duration-300 ${activeTab === 'users' ? 'text-brand-600' : 'text-gray-400 hover:text-gray-600'}`}
             >
                 <div className={`p-1.5 rounded-full transition-all ${activeTab === 'users' ? 'bg-brand-50 translate-y-[-2px]' : ''}`}>
                     <Users className={`w-6 h-6 ${activeTab === 'users' ? 'fill-current' : ''}`} />

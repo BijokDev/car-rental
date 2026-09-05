@@ -1,5 +1,14 @@
 import React from 'react';
-import { Car, Phone, Mail, MapPin, Facebook, Instagram, Twitter } from 'lucide-react';
+import { Phone, Mail, MapPin, Facebook, Instagram, Twitter } from 'lucide-react';
+
+// Fill in real profile URLs here to show the icon on the site - until then
+// it stays hidden rather than linking nowhere (a dead "#" link is worse
+// for users and looks bad to search engines than not showing it at all).
+const SOCIAL_LINKS = {
+  facebook: '',
+  instagram: '',
+  twitter: '',
+};
 
 const Footer: React.FC = () => {
   return (
@@ -9,21 +18,36 @@ const Footer: React.FC = () => {
 
           {/* Brand */}
           <div className="space-y-4">
-            <div className="flex items-center space-x-2">
-              <Car className="h-8 w-8 text-white" />
-              <span className="font-serif text-2xl font-bold">
-                TRAVTHRU
-              </span>
+            <div className="flex items-center space-x-3">
+              <div className="p-1.5 rounded-xl bg-white shadow-md flex items-center justify-center">
+                <img src="/logo-mark.png" alt="TravThru Logo" className="h-8 w-8 object-contain rounded-lg" />
+              </div>
+              <div className="flex flex-col">
+                <span className="font-serif text-2xl font-black text-white leading-none">
+                  <span className="text-gold-500">Trav</span>thru
+                </span>
+                <span className="text-[0.6rem] font-bold uppercase tracking-[0.35em] text-brand-200 mt-1">
+                  Premium Transport
+                </span>
+              </div>
             </div>
             <p className="text-brand-100 text-sm leading-relaxed">
               TRAVTHRU Private Chauffeur Enterprise (SSM: 002334361-T).<br />
               Your professional partner for KLIA transfers, Genting Highlands trips, and private chauffeur services in Malaysia.
             </p>
-            <div className="flex space-x-4">
-              <a href="#" className="text-white hover:text-gold-500 transition"><Facebook className="w-5 h-5" /></a>
-              <a href="#" className="text-white hover:text-gold-500 transition"><Instagram className="w-5 h-5" /></a>
-              <a href="#" className="text-white hover:text-gold-500 transition"><Twitter className="w-5 h-5" /></a>
-            </div>
+            {(SOCIAL_LINKS.facebook || SOCIAL_LINKS.instagram || SOCIAL_LINKS.twitter) && (
+              <div className="flex space-x-4">
+                {SOCIAL_LINKS.facebook && (
+                  <a href={SOCIAL_LINKS.facebook} target="_blank" rel="noopener noreferrer" aria-label="TravThru on Facebook" className="text-white hover:text-gold-500 transition"><Facebook className="w-5 h-5" /></a>
+                )}
+                {SOCIAL_LINKS.instagram && (
+                  <a href={SOCIAL_LINKS.instagram} target="_blank" rel="noopener noreferrer" aria-label="TravThru on Instagram" className="text-white hover:text-gold-500 transition"><Instagram className="w-5 h-5" /></a>
+                )}
+                {SOCIAL_LINKS.twitter && (
+                  <a href={SOCIAL_LINKS.twitter} target="_blank" rel="noopener noreferrer" aria-label="TravThru on Twitter" className="text-white hover:text-gold-500 transition"><Twitter className="w-5 h-5" /></a>
+                )}
+              </div>
+            )}
           </div>
 
           {/* Quick Links */}

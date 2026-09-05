@@ -19,6 +19,16 @@ export interface Car {
   image: string;
   gallery: string[]; // New: Array of images for the gallery (Interior, Seats, etc.)
   features: string[];
+  createdAt?: any;
+  updatedAt?: any;
+}
+
+export interface GalleryImage {
+  id?: string;
+  url: string;
+  caption?: string;
+  category?: 'service' | 'fleet' | 'customer' | 'other';
+  createdAt?: any;
 }
 
 export interface BookingDetails {

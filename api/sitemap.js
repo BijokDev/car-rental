@@ -30,20 +30,24 @@ export default async function handler(req, res) {
         const articles = data.filter(item => item.document).map(item => {
             const fields = item.document.fields;
             return {
-                slug: fields.slug?.stringValue || ''
+                slug: fields.slug?.stringValue || '',
+                updatedAt: fields.updatedAt?.timestampValue,
+                createdAt: fields.createdAt?.timestampValue
             };
         });
 
+        const now = new Date().toISOString();
         let xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
-        
+
         // Static URLs
-        xml += `  <url>\n    <loc>https://travthru.com/</loc>\n    <changefreq>weekly</changefreq>\n    <priority>1.0</priority>\n  </url>\n`;
-        xml += `  <url>\n    <loc>https://travthru.com/articles</loc>\n    <changefreq>daily</changefreq>\n    <priority>0.8</priority>\n  </url>\n`;
-        
+        xml += `  <url>\n    <loc>https://www.travthru.com/</loc>\n    <lastmod>${now}</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>1.0</priority>\n  </url>\n`;
+        xml += `  <url>\n    <loc>https://www.travthru.com/articles</loc>\n    <lastmod>${now}</lastmod>\n    <changefreq>daily</changefreq>\n    <priority>0.8</priority>\n  </url>\n`;
+
         // Dynamic Article URLs
         articles.forEach(article => {
             if (article.slug) {
-                xml += `  <url>\n    <loc>https://travthru.com/articles/${article.slug}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.7</priority>\n  </url>\n`;
+                const lastmod = article.updatedAt || article.createdAt || now;
+                xml += `  <url>\n    <loc>https://www.travthru.com/articles/${article.slug}</loc>\n    <lastmod>${lastmod}</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>0.7</priority>\n  </url>\n`;
             }
         });
         

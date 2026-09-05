@@ -42,7 +42,8 @@ export default async function middleware(req) {
     // Extract fields safely
     const title = docData.title?.stringValue || 'Travel Blog | TRAVTHRU';
     const excerpt = docData.excerpt?.stringValue || 'Discover tips, guides, and insights about transportation services in Malaysia with TRAVTHRU.';
-    const image = docData.image?.stringValue || 'https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?auto=format&fit=crop&q=80&w=1200';
+    const image = docData.image?.stringValue || 'https://www.travthru.com/car-rental-images/alpharp.webp';
+    const canonicalUrl = `https://www.travthru.com/articles/${slug}`;
 
     // 2. Fetch the base HTML
     // We rewrite the internal request to /index.html
@@ -52,12 +53,16 @@ export default async function middleware(req) {
     // 3. String replacement for OG Tags and Meta Tags
     html = html.replace(/<title>.*?<\/title>/, `<title>${title} | TRAVTHRU</title>`);
     html = html.replace(/<meta name="description" content=".*?" \/>/, `<meta name="description" content="${excerpt}" />`);
-    
+
+    // Fix canonical - without this every article page inherits the homepage's canonical URL
+    html = html.replace(/<link rel="canonical" href=".*?" \/>/, `<link rel="canonical" href="${canonicalUrl}" />`);
+
     // Replace OG Tags
+    html = html.replace(/<meta property="og:url" content=".*?" \/>/, `<meta property="og:url" content="${canonicalUrl}" />`);
     html = html.replace(/<meta property="og:title" content=".*?" \/>/, `<meta property="og:title" content="${title} | TRAVTHRU" />`);
     html = html.replace(/<meta property="og:description" content=".*?" \/>/, `<meta property="og:description" content="${excerpt}" />`);
     html = html.replace(/<meta property="og:image" content=".*?" \/>/, `<meta property="og:image" content="${image}" />`);
-    
+
     // Replace Twitter Tags
     html = html.replace(/<meta property="twitter:title" content=".*?" \/>/, `<meta property="twitter:title" content="${title} | TRAVTHRU" />`);
     html = html.replace(/<meta property="twitter:description" content=".*?" \/>/, `<meta property="twitter:description" content="${excerpt}" />`);

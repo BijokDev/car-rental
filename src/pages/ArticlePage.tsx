@@ -228,21 +228,23 @@ const ArticlePage: React.FC = () => {
       <Helmet>
         <title>{article.title} | TRAVTHRU</title>
         <meta name="description" content={article.excerpt} />
-        <script 
-          type="application/ld+json" 
+        <link rel="canonical" href={`https://www.travthru.com/articles/${article.slug}`} />
+        <script
+          type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "Article",
               headline: article.title,
-              image: article.image || "https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?auto=format&fit=crop&q=80&w=1200",
+              image: article.image || "https://www.travthru.com/car-rental-images/alpharp.webp",
               datePublished: article.createdAt?.toDate?.()?.toISOString() || new Date().toISOString(),
+              dateModified: article.updatedAt?.toDate?.()?.toISOString() || article.createdAt?.toDate?.()?.toISOString() || new Date().toISOString(),
               author: [{
                 "@type": "Person",
                 name: article.author
               }]
             })
-          }} 
+          }}
         />
       </Helmet>
       <style>{articleStyles}</style>
@@ -252,7 +254,7 @@ const ArticlePage: React.FC = () => {
       <section className="pt-24">
         <div className="h-64 md:h-96 w-full overflow-hidden">
           <img
-            src={article.image || '/placeholder-article.jpg'}
+            src={article.image || '/car-rental-images/alpharp.webp'}
             alt={article.title}
             className="w-full h-full object-cover"
           />
@@ -349,7 +351,7 @@ const ArticlePage: React.FC = () => {
                   className="group flex gap-4 p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors"
                 >
                   <img
-                    src={related.image || '/placeholder-article.jpg'}
+                    src={related.image || '/car-rental-images/alpharp.webp'}
                     alt={related.title}
                     className="w-24 h-24 object-cover rounded-lg"
                   />

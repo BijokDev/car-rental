@@ -18,6 +18,9 @@ const AdminLogin: React.FC = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white p-8 rounded-lg shadow-md w-96">
+        <div className="flex justify-center mb-6">
+          <img src="/logo-cropped.png" alt="TravThru Logo" className="h-16 object-contain" />
+        </div>
         <h1 className="text-2xl font-bold mb-6 text-center text-gray-800">Admin Login</h1>
         
         {user ? (

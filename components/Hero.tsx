@@ -2,10 +2,22 @@ import React, { useState, useEffect } from 'react';
 import { CheckCircle, ArrowRight } from 'lucide-react';
 
 const BACKGROUND_IMAGES = [
-  "https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?auto=format&fit=crop&q=80&w=2000", // Luxury car partial view (original - keeping)
-  "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&q=80&w=2000", // Airport/travel scene with car service
-  "https://images.unsplash.com/photo-1578662996442-48f60103fc96?auto=format&fit=crop&q=80&w=2000", // Professional chauffeur opening car door
-  "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&q=80&w=2000", // City night driving/taxi service
+  {
+    src: "https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?auto=format&fit=crop&q=80&w=2000",
+    alt: "TravThru premium chauffeur vehicle in Kuala Lumpur",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&q=80&w=2000",
+    alt: "KLIA airport transfer and travel service",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?auto=format&fit=crop&q=80&w=2000",
+    alt: "Professional TravThru chauffeur opening the car door for a client",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&q=80&w=2000",
+    alt: "TravThru private driver service at night in Kuala Lumpur",
+  },
 ];
 
 const Hero: React.FC = () => {
@@ -22,17 +34,18 @@ const Hero: React.FC = () => {
     <div id="home" className="relative min-h-screen w-full flex flex-col overflow-hidden">
       {/* Background Slider */}
       <div className="absolute inset-0 z-0">
-        {BACKGROUND_IMAGES.map((img, index) => (
+        {BACKGROUND_IMAGES.map((image, index) => (
           <div
             key={index}
             className={`absolute inset-0 transition-opacity duration-1500 ease-in-out ${index === currentImageIndex ? 'opacity-100' : 'opacity-0'
               }`}
           >
             <img
-              src={img}
-              alt={`Slide ${index + 1}`}
+              src={image.src}
+              alt={image.alt}
               className="w-full h-full object-cover object-center"
-              loading="lazy"
+              loading={index === 0 ? 'eager' : 'lazy'}
+              fetchPriority={index === 0 ? 'high' : 'auto'}
               decoding="async"
             />
             <div className="absolute inset-0 bg-gradient-to-b from-brand-900/80 via-brand-900/40 to-brand-900/95"></div>

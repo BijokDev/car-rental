@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { Menu, X, Car, Phone, MessageCircle, LogIn, LogOut } from 'lucide-react';
+import { Menu, X, Phone, MessageCircle, LogIn, LogOut } from 'lucide-react';
 import { useAuth } from '../src/context/AuthContext';
 
 const Navbar: React.FC = () => {
@@ -60,7 +60,7 @@ const Navbar: React.FC = () => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
 
-      const sections = ['home', 'rates', 'fleet', 'services', 'contact'];
+      const sections = ['home', 'rates', 'fleet', 'gallery', 'services', 'contact'];
       const scrollPosition = window.scrollY + 100;
 
       for (const section of sections) {
@@ -84,6 +84,7 @@ const Navbar: React.FC = () => {
     { name: 'Home', id: 'home' },
     { name: 'Pricing', id: 'rates' },
     { name: 'Fleet', id: 'fleet' },
+    { name: 'Gallery', id: 'gallery' },
     { name: 'Services', id: 'services' },
     { name: 'Contact', id: 'contact' },
     { name: 'Blog', id: 'blog', isRoute: true, path: '/articles' },
@@ -98,11 +99,13 @@ const Navbar: React.FC = () => {
         <div className="flex justify-between items-center">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-3 cursor-pointer group">
-            {/* Modern Car Icon Mark */}
-            <div className={`relative p-2.5 rounded-xl transition-all duration-300 transform group-hover:scale-105 shadow-lg ${showSolidNav ? 'bg-gradient-to-br from-brand-900 to-brand-800' : 'bg-white'}`}>
-              <Car className={`h-5 w-5 ${showSolidNav ? 'text-gold-500' : 'text-brand-900'}`} strokeWidth={1.5} />
-              {/* Decorative dot */}
-              <div className={`absolute top-2 right-2 w-1.5 h-1.5 rounded-full ${showSolidNav ? 'bg-white' : 'bg-gold-500'}`}></div>
+            {/* Brand Logo Emblem */}
+            <div className="relative p-1.5 rounded-xl transition-all duration-300 transform group-hover:scale-105 shadow-md bg-white border border-gray-100/50 flex items-center justify-center">
+              <img 
+                src="/logo-mark.png" 
+                alt="TravThru" 
+                className="h-8 w-8 object-contain rounded-lg" 
+              />
             </div>
 
             <div className="flex flex-col">
@@ -216,9 +219,19 @@ const Navbar: React.FC = () => {
         >
           {/* Header with Logo and Close */}
           <div className="flex justify-between items-center p-6">
-            <span className="font-serif text-xl font-black text-white">
-              <span className="text-gold-500">Trav</span>thru
-            </span>
+            <div className="flex items-center gap-3">
+              <div className="p-1.5 rounded-xl bg-white shadow-md flex items-center justify-center">
+                <img src="/logo-mark.png" alt="TravThru" className="h-7 w-7 object-contain rounded-lg" />
+              </div>
+              <div className="flex flex-col">
+                <span className="font-serif text-xl font-black text-white leading-none">
+                  <span className="text-gold-500">Trav</span>thru
+                </span>
+                <span className="text-[0.6rem] font-bold uppercase tracking-[0.35em] text-white/70 mt-0.5">
+                  Premium Transport
+                </span>
+              </div>
+            </div>
             <button
               onClick={() => setMobileMenuOpen(false)}
               aria-label="Close menu"

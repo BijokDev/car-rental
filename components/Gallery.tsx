@@ -1,22 +1,28 @@
 import React, { useState, useEffect } from 'react';
-import { collection, query, orderBy, onSnapshot } from 'firebase/firestore';
+import { collection, query, orderBy, onSnapshot, limit as fsLimit } from 'firebase/firestore';
 import { db } from '../src/lib/firebase';
 import { GalleryImage } from '../types';
 import { X, ChevronLeft, ChevronRight, Camera } from 'lucide-react';
 
-const Gallery: React.FC = () => {
+interface GalleryProps {
+  /** Only show the latest N photos (used on the homepage). Omit to show everything. */
+  limit?: number;
+}
+
+const Gallery: React.FC<GalleryProps> = ({ limit }) => {
   const [photos, setPhotos] = useState<GalleryImage[]>([]);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
   useEffect(() => {
-    const q = query(collection(db, 'car-rental-gallery'), orderBy('createdAt', 'desc'));
+    const constraints = [orderBy('createdAt', 'desc'), ...(limit ? [fsLimit(limit)] : [])];
+    const q = query(collection(db, 'car-rental-gallery'), ...constraints);
     const unsubscribe = onSnapshot(q, (snapshot) => {
       setPhotos(snapshot.docs.map((d) => ({ id: d.id, ...d.data() } as GalleryImage)));
     }, (error) => {
       console.error('Failed to load gallery:', error);
     });
     return () => unsubscribe();
-  }, []);
+  }, [limit]);
 
   const closeLightbox = () => setActiveIndex(null);
   const nextPhoto = (e?: React.MouseEvent) => {
@@ -69,6 +75,13 @@ const Gallery: React.FC = () => {
               <div className="absolute inset-0 bg-brand-900/0 group-hover:bg-brand-900/30 transition-colors duration-500 flex items-center justify-center">
                 <Camera className="w-6 h-6 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               </div>
+              {photo.caption && (
+                <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-brand-900/90 to-transparent pt-6 pb-2 px-3">
+                  <p className="text-white text-[11px] sm:text-xs font-semibold leading-tight text-left line-clamp-2">
+                    {photo.caption}
+                  </p>
+                </div>
+              )}
             </button>
           ))}
         </div>

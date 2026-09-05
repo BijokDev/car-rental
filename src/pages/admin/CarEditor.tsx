@@ -3,7 +3,7 @@ import { db } from '../../lib/firebase';
 import { uploadImageToStorage, deleteImageFromStorage } from '../../lib/imageUpload';
 import { collection, addDoc, doc, updateDoc, serverTimestamp } from 'firebase/firestore';
 import { Car, CarCategory } from '../../../types';
-import { ImageIcon, X, Plus, Trash2 } from 'lucide-react';
+import { ImageIcon, X, Plus, Trash2, Loader2, AlertCircle } from 'lucide-react';
 
 interface CarEditorProps {
   onClose: () => void;
@@ -23,6 +23,8 @@ const CarEditor: React.FC<CarEditorProps> = ({ onClose, editCar }) => {
   const [gallery, setGallery] = useState<string[]>([]);
   const [uploadingMain, setUploadingMain] = useState(false);
   const [uploadingGallery, setUploadingGallery] = useState(false);
+  const [galleryProgress, setGalleryProgress] = useState<{ current: number; total: number } | null>(null);
+  const [uploadError, setUploadError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
@@ -54,13 +56,14 @@ const CarEditor: React.FC<CarEditorProps> = ({ onClose, editCar }) => {
   const handleMainImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
+    setUploadError(null);
     setUploadingMain(true);
     try {
       const url = await uploadImageToStorage(file, 'car-rental-cars');
       setImage(url);
     } catch (error: any) {
       console.error('Upload failed', error);
-      alert(error.message || 'Image upload failed');
+      setUploadError(error.message || 'Image upload failed. Please try again.');
     } finally {
       setUploadingMain(false);
       e.target.value = '';
@@ -70,19 +73,21 @@ const CarEditor: React.FC<CarEditorProps> = ({ onClose, editCar }) => {
   const handleGalleryUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
     if (files.length === 0) return;
+    setUploadError(null);
     setUploadingGallery(true);
+    setGalleryProgress({ current: 1, total: files.length });
     try {
-      const uploaded: string[] = [];
-      for (const file of files) {
-        const url = await uploadImageToStorage(file, 'car-rental-cars');
-        uploaded.push(url);
+      for (let i = 0; i < files.length; i++) {
+        setGalleryProgress({ current: i + 1, total: files.length });
+        const url = await uploadImageToStorage(files[i], 'car-rental-cars');
+        setGallery((prev) => [...prev, url]);
       }
-      setGallery((prev) => [...prev, ...uploaded]);
     } catch (error: any) {
       console.error('Upload failed', error);
-      alert(error.message || 'Gallery upload failed');
+      setUploadError(error.message || 'Gallery upload failed. Some images may not have uploaded.');
     } finally {
       setUploadingGallery(false);
+      setGalleryProgress(null);
       e.target.value = '';
     }
   };
@@ -239,38 +244,198 @@ const CarEditor: React.FC<CarEditorProps> = ({ onClose, editCar }) => {
           </div>
         </div>
 
+        {/* Error notification */}
+        {uploadError && (
+          <div className="p-3 bg-red-50 border border-red-200 rounded-xl flex items-start justify-between gap-2 text-xs text-red-700">
+            <div className="flex items-center gap-2">
+              <AlertCircle className="w-4 h-4 text-red-500 shrink-0" />
+              <span>{uploadError}</span>
+            </div>
+            <button
+              type="button"
+              onClick={() => setUploadError(null)}
+              className="text-red-400 hover:text-red-600 p-0.5"
+            >
+              <X className="w-3.5 h-3.5" />
+            </button>
+          </div>
+        )}
+
         {/* Main Image */}
         <div>
-          <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Main Image *</label>
-          <label className="cursor-pointer bg-gray-200 px-4 py-2 rounded-lg inline-flex items-center gap-2 hover:bg-gray-300 transition-colors">
-            <ImageIcon size={18} /> Upload
-            <input type="file" className="hidden" accept="image/*" onChange={handleMainImageUpload} />
-          </label>
-          {uploadingMain && <p className="text-sm text-blue-500 mt-1">Converting to WebP & uploading...</p>}
-          {image && <img src={image} alt="Preview" className="mt-2 h-32 w-auto object-cover rounded" />}
+          <label className="block text-xs font-bold text-gray-500 uppercase mb-1.5">Main Image *</label>
+          <div className="flex items-center gap-3">
+            <label
+              className={`px-4 py-2.5 rounded-xl inline-flex items-center gap-2 font-medium text-sm transition-all shadow-sm ${
+                uploadingMain
+                  ? 'bg-gray-100 text-gray-400 cursor-not-allowed pointer-events-none'
+                  : 'bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 hover:border-gray-300 cursor-pointer active:scale-95'
+              }`}
+            >
+              {uploadingMain ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin text-brand-600" />
+                  <span>Uploading...</span>
+                </>
+              ) : (
+                <>
+                  <ImageIcon size={18} className="text-gray-500" />
+                  <span>{image ? 'Change Main Image' : 'Upload Main Image'}</span>
+                </>
+              )}
+              <input
+                type="file"
+                className="hidden"
+                accept="image/*"
+                onChange={handleMainImageUpload}
+                disabled={uploadingMain || uploadingGallery}
+              />
+            </label>
+            {image && !uploadingMain && (
+              <span className="text-xs text-green-600 font-medium flex items-center gap-1">
+                ✓ Image uploaded
+              </span>
+            )}
+          </div>
+
+          {/* Uploading progress indicator for Main Image */}
+          {uploadingMain && (
+            <div className="mt-2.5 p-3 rounded-xl bg-brand-50/80 border border-brand-200/70 max-w-sm">
+              <div className="flex items-center gap-2.5 text-xs font-semibold text-brand-900 mb-1.5">
+                <Loader2 className="w-4 h-4 animate-spin text-brand-600 shrink-0" />
+                <span>Converting to WebP &amp; uploading to storage...</span>
+              </div>
+              <div className="w-full bg-brand-200/60 rounded-full h-1.5 overflow-hidden">
+                <div className="bg-brand-600 h-1.5 rounded-full w-full animate-pulse" />
+              </div>
+            </div>
+          )}
+
+          {/* Main Image Preview / Skeleton */}
+          <div className="mt-3">
+            {uploadingMain ? (
+              <div className="h-36 w-56 rounded-xl border-2 border-dashed border-brand-300 bg-brand-50/50 flex flex-col items-center justify-center text-center p-3 animate-pulse shadow-sm">
+                <Loader2 className="w-7 h-7 animate-spin text-brand-600 mb-2" />
+                <span className="text-xs font-bold text-brand-900">Processing Image</span>
+                <span className="text-[11px] text-brand-600 mt-0.5">Converting to WebP format...</span>
+              </div>
+            ) : image ? (
+              <div className="relative group inline-block">
+                <img
+                  src={image}
+                  alt="Main Preview"
+                  className="h-36 w-56 object-cover rounded-xl border border-gray-200 shadow-sm"
+                />
+                <button
+                  type="button"
+                  onClick={() => setImage('')}
+                  title="Remove main image"
+                  className="absolute -top-2 -right-2 bg-red-600 hover:bg-red-700 text-white rounded-full p-1.5 shadow-md transition-transform hover:scale-110"
+                >
+                  <Trash2 className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            ) : null}
+          </div>
         </div>
 
         {/* Gallery */}
         <div>
-          <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Gallery Photos (interior, seats, etc.)</label>
-          <label className="cursor-pointer bg-gray-200 px-4 py-2 rounded-lg inline-flex items-center gap-2 hover:bg-gray-300 transition-colors">
-            <ImageIcon size={18} /> Upload Photos
-            <input type="file" multiple className="hidden" accept="image/*" onChange={handleGalleryUpload} />
+          <div className="flex items-center justify-between mb-1.5">
+            <label className="block text-xs font-bold text-gray-500 uppercase">
+              Gallery Photos (interior, seats, etc.)
+            </label>
+            {gallery.length > 0 && (
+              <span className="text-xs text-gray-400 font-medium">
+                {gallery.length} photo{gallery.length !== 1 ? 's' : ''} uploaded
+              </span>
+            )}
+          </div>
+
+          <label
+            className={`px-4 py-2.5 rounded-xl inline-flex items-center gap-2 font-medium text-sm transition-all shadow-sm ${
+              uploadingGallery
+                ? 'bg-gray-100 text-gray-400 cursor-not-allowed pointer-events-none'
+                : 'bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 hover:border-gray-300 cursor-pointer active:scale-95'
+            }`}
+          >
+            {uploadingGallery ? (
+              <>
+                <Loader2 className="w-4 h-4 animate-spin text-brand-600" />
+                <span>
+                  Uploading {galleryProgress ? `(${galleryProgress.current}/${galleryProgress.total})` : '...'}
+                </span>
+              </>
+            ) : (
+              <>
+                <ImageIcon size={18} className="text-gray-500" />
+                <span>Upload Photos</span>
+              </>
+            )}
+            <input
+              type="file"
+              multiple
+              className="hidden"
+              accept="image/*"
+              onChange={handleGalleryUpload}
+              disabled={uploadingGallery || uploadingMain}
+            />
           </label>
-          {uploadingGallery && <p className="text-sm text-blue-500 mt-1">Converting to WebP & uploading...</p>}
-          {gallery.length > 0 && (
+
+          {/* Gallery Uploading Progress Banner */}
+          {uploadingGallery && galleryProgress && (
+            <div className="mt-2.5 p-3.5 rounded-xl bg-brand-50/90 border border-brand-200/70 max-w-md shadow-sm">
+              <div className="flex items-center justify-between text-xs font-semibold text-brand-900 mb-1.5">
+                <span className="flex items-center gap-2">
+                  <Loader2 className="w-4 h-4 animate-spin text-brand-600 shrink-0" />
+                  Converting to WebP &amp; uploading photo {galleryProgress.current} of {galleryProgress.total}...
+                </span>
+                <span className="text-brand-600 font-bold">
+                  {Math.round(((galleryProgress.current - 1) / galleryProgress.total) * 100)}%
+                </span>
+              </div>
+              <div className="w-full bg-brand-200/60 rounded-full h-1.5 overflow-hidden">
+                <div
+                  className="bg-brand-600 h-1.5 rounded-full transition-all duration-300 ease-out"
+                  style={{ width: `${Math.max(12, Math.round(((galleryProgress.current - 1) / galleryProgress.total) * 100))}%` }}
+                />
+              </div>
+            </div>
+          )}
+
+          {/* Gallery Thumbnails Grid & Pending Skeletons */}
+          {(gallery.length > 0 || uploadingGallery) && (
             <div className="flex flex-wrap gap-3 mt-3">
               {gallery.map((img, idx) => (
-                <div key={idx} className="relative">
-                  <img src={img} alt={`Gallery ${idx}`} className="h-24 w-24 object-cover rounded-lg" />
+                <div key={idx} className="relative group">
+                  <img
+                    src={img}
+                    alt={`Gallery ${idx}`}
+                    className="h-24 w-24 object-cover rounded-xl border border-gray-200 shadow-sm"
+                  />
                   <button
+                    type="button"
                     onClick={() => removeGalleryImage(idx)}
-                    className="absolute -top-2 -right-2 bg-red-600 text-white rounded-full p-1 shadow"
+                    title="Delete photo"
+                    className="absolute -top-2 -right-2 bg-red-600 hover:bg-red-700 text-white rounded-full p-1.5 shadow-md transition-transform hover:scale-110"
                   >
-                    <Trash2 className="w-3 h-3" />
+                    <Trash2 className="w-3.5 h-3.5" />
                   </button>
                 </div>
               ))}
+
+              {/* In-place Skeleton for currently uploading item */}
+              {uploadingGallery && (
+                <div className="h-24 w-24 rounded-xl border-2 border-dashed border-brand-300 bg-brand-50/60 flex flex-col items-center justify-center text-center p-2 animate-pulse shadow-sm">
+                  <Loader2 className="w-5 h-5 animate-spin text-brand-600 mb-1" />
+                  <span className="text-[10px] font-bold text-brand-900 leading-tight">Uploading</span>
+                  {galleryProgress && (
+                    <span className="text-[9px] text-brand-600 font-medium mt-0.5">
+                      {galleryProgress.current}/{galleryProgress.total}
+                    </span>
+                  )}
+                </div>
+              )}
             </div>
           )}
         </div>

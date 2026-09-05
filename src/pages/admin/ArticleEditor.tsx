@@ -4,7 +4,7 @@ import { uploadFile, getFileUrl } from '../../lib/storage';
 import { collection, addDoc, doc, updateDoc, serverTimestamp } from 'firebase/firestore';
 import { Article } from '../../../types';
 import { useAuth } from '../../context/AuthContext';
-import { FileText, Copy, X, Info, ImageIcon, RefreshCw } from 'lucide-react';
+import { FileText, Copy, X, Info, ImageIcon, RefreshCw, Loader2, AlertCircle, Upload } from 'lucide-react';
 import { marked } from 'marked';
 import DOMPurify from 'dompurify';
 
@@ -132,6 +132,9 @@ const ArticleEditor: React.FC<ArticleEditorProps> = ({ onClose, editArticle }) =
   const [excerpt, setExcerpt] = useState('');
   const [image, setImage] = useState('');
   const [uploading, setUploading] = useState(false);
+  const [uploadingContentImage, setUploadingContentImage] = useState(false);
+  const [imageUploadError, setImageUploadError] = useState<string | null>(null);
+  const [contentImageError, setContentImageError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
   const [showTemplates, setShowTemplates] = useState(false);
 
@@ -216,6 +219,7 @@ const ArticleEditor: React.FC<ArticleEditorProps> = ({ onClose, editArticle }) =
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
+      setImageUploadError(null);
       setUploading(true);
       try {
         const response = await uploadFile(e.target.files[0]);
@@ -224,11 +228,12 @@ const ArticleEditor: React.FC<ArticleEditorProps> = ({ onClose, editArticle }) =
         } else {
           throw new Error(response.error || 'Upload failed');
         }
-      } catch (error) {
+      } catch (error: any) {
         console.error("Upload failed", error);
-        alert("Image upload failed");
+        setImageUploadError(error.message || 'Image upload failed. Please try again.');
       } finally {
         setUploading(false);
+        e.target.value = '';
       }
     }
   };
@@ -237,10 +242,9 @@ const ArticleEditor: React.FC<ArticleEditorProps> = ({ onClose, editArticle }) =
     const file = e.target.files?.[0];
     if (!file) return;
 
+    setContentImageError(null);
+    setUploadingContentImage(true);
     try {
-      const inputElement = e.target;
-      inputElement.disabled = true;
-      
       const response = await uploadFile(file);
       if (response.success && response.url) {
         const finalUrl = getFileUrl(response.url);
@@ -261,12 +265,12 @@ const ArticleEditor: React.FC<ArticleEditorProps> = ({ onClose, editArticle }) =
       } else {
         throw new Error(response.error || 'Upload failed');
       }
-      
-      inputElement.disabled = false;
-      inputElement.value = '';
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
-      alert('Upload failed');
+      setContentImageError(err.message || 'Content image upload failed. Please try again.');
+    } finally {
+      setUploadingContentImage(false);
+      e.target.value = '';
     }
   };
 
@@ -531,24 +535,94 @@ This ensures any inner formatting shows up correctly. Do not render the markdown
 
         {/* Featured Image */}
         <div>
-          <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Featured Image</label>
+          <label className="block text-xs font-bold text-gray-500 uppercase mb-1.5">Featured Image</label>
           <div className="flex gap-2">
             <input 
               type="text" 
               value={image} 
               onChange={e => setImage(e.target.value)} 
-              className="flex-1 bg-gray-50 border border-gray-200 rounded-lg px-4 py-2 text-gray-900" 
-              placeholder="https://..." 
+              className="flex-1 bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500" 
+              placeholder="https://... or upload below" 
+              disabled={uploading}
             />
-            <label className="cursor-pointer bg-gray-200 px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-gray-300 transition-colors">
-              <ImageIcon size={18} /> Upload
-              <input type="file" className="hidden" accept="image/*" onChange={handleImageUpload} />
+            <label
+              className={`px-4 py-2.5 rounded-xl flex items-center gap-2 font-medium text-sm transition-all shadow-sm shrink-0 ${
+                uploading
+                  ? 'bg-gray-100 text-gray-400 cursor-not-allowed pointer-events-none'
+                  : 'bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 hover:border-gray-300 cursor-pointer active:scale-95'
+              }`}
+            >
+              {uploading ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin text-brand-600" />
+                  <span>Uploading...</span>
+                </>
+              ) : (
+                <>
+                  <Upload size={16} className="text-gray-500" />
+                  <span>Upload</span>
+                </>
+              )}
+              <input type="file" className="hidden" accept="image/*" onChange={handleImageUpload} disabled={uploading} />
             </label>
           </div>
-          {uploading && <p className="text-sm text-blue-500 mt-1">Uploading...</p>}
-          {image && (
-            <img src={getFileUrl(image)} alt="Preview" className="mt-2 h-32 w-auto object-cover rounded" />
+
+          {/* Error Banner for Featured Image */}
+          {imageUploadError && (
+            <div className="mt-2 p-3 bg-red-50 border border-red-200 rounded-xl flex items-start justify-between gap-2 text-xs text-red-700">
+              <div className="flex items-center gap-2">
+                <AlertCircle className="w-4 h-4 text-red-500 shrink-0" />
+                <span>{imageUploadError}</span>
+              </div>
+              <button
+                type="button"
+                onClick={() => setImageUploadError(null)}
+                className="text-red-400 hover:text-red-600 p-0.5"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            </div>
           )}
+
+          {/* Uploading progress card */}
+          {uploading && (
+            <div className="mt-2.5 p-3 rounded-xl bg-brand-50/80 border border-brand-200/70 max-w-sm">
+              <div className="flex items-center gap-2 text-xs font-semibold text-brand-900 mb-1.5">
+                <Loader2 className="w-4 h-4 animate-spin text-brand-600 shrink-0" />
+                <span>Uploading featured image...</span>
+              </div>
+              <div className="w-full bg-brand-200/60 rounded-full h-1.5 overflow-hidden">
+                <div className="bg-brand-600 h-1.5 rounded-full w-full animate-pulse" />
+              </div>
+            </div>
+          )}
+
+          {/* Preview / Skeleton */}
+          <div className="mt-3">
+            {uploading ? (
+              <div className="h-32 w-56 rounded-xl border-2 border-dashed border-brand-300 bg-brand-50/50 flex flex-col items-center justify-center text-center p-3 animate-pulse shadow-sm">
+                <Loader2 className="w-6 h-6 animate-spin text-brand-600 mb-1.5" />
+                <span className="text-xs font-bold text-brand-900">Uploading Image</span>
+                <span className="text-[10px] text-brand-500 mt-0.5">Please wait a moment...</span>
+              </div>
+            ) : image ? (
+              <div className="relative group inline-block">
+                <img
+                  src={getFileUrl(image)}
+                  alt="Featured Preview"
+                  className="h-32 w-auto max-w-xs object-cover rounded-xl border border-gray-200 shadow-sm"
+                />
+                <button
+                  type="button"
+                  onClick={() => setImage('')}
+                  title="Remove image"
+                  className="absolute -top-2 -right-2 bg-red-600 hover:bg-red-700 text-white rounded-full p-1.5 shadow-md transition-transform hover:scale-110"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            ) : null}
+          </div>
         </div>
 
         {/* Excerpt */}
@@ -570,16 +644,51 @@ This ensures any inner formatting shows up correctly. Do not render the markdown
             <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Content (Markdown) *</label>
             
             {/* Content Image Helper */}
-            <div className="bg-gray-100 p-3 rounded-lg mb-2 flex items-center gap-4 border border-gray-200">
-              <div className="flex-1">
-                <p className="text-xs text-gray-500 mb-1 font-bold">Content Image Helper</p>
-                <input 
-                  type="file" 
-                  className="text-xs text-gray-500 file:mr-2 file:py-1 file:px-2 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700" 
-                  accept="image/*"
-                  onChange={handleContentImageUpload}
-                />
+            <div className="bg-gray-50 p-3.5 rounded-xl mb-2.5 border border-gray-200/80">
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <div>
+                  <p className="text-xs font-bold text-gray-800">Content Image Helper</p>
+                  <p className="text-[11px] text-gray-500 mt-0.5">Upload and automatically insert markdown image at cursor</p>
+                </div>
+                <label
+                  className={`px-3.5 py-2 rounded-lg inline-flex items-center gap-2 text-xs font-semibold shadow-sm transition-all ${
+                    uploadingContentImage
+                      ? 'bg-blue-100 text-blue-700 cursor-not-allowed pointer-events-none'
+                      : 'bg-blue-600 text-white hover:bg-blue-700 cursor-pointer active:scale-95'
+                  }`}
+                >
+                  {uploadingContentImage ? (
+                    <>
+                      <Loader2 className="w-3.5 h-3.5 animate-spin text-blue-600" />
+                      <span>Inserting Image...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Upload className="w-3.5 h-3.5" />
+                      <span>Insert Image at Cursor</span>
+                    </>
+                  )}
+                  <input
+                    type="file"
+                    className="hidden"
+                    accept="image/*"
+                    onChange={handleContentImageUpload}
+                    disabled={uploadingContentImage}
+                  />
+                </label>
               </div>
+
+              {contentImageError && (
+                <div className="mt-2 p-2 bg-red-50 border border-red-200 rounded-lg flex items-center justify-between text-xs text-red-700">
+                  <div className="flex items-center gap-1.5">
+                    <AlertCircle className="w-3.5 h-3.5 text-red-500 shrink-0" />
+                    <span>{contentImageError}</span>
+                  </div>
+                  <button type="button" onClick={() => setContentImageError(null)} className="text-red-400 hover:text-red-600">
+                    <X className="w-3 h-3" />
+                  </button>
+                </div>
+              )}
             </div>
 
             {/* Toolbar */}

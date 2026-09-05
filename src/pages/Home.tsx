@@ -81,12 +81,12 @@ const Home: React.FC = () => {
       <Navbar />
       <Hero />
       <BookingForm onSearch={handleBookingSearch} />
+      <Gallery limit={8} />
       <HowItWorks />
       <Services />
       <WhyChooseUs />
       <Features />
       <Fleet onSelectCar={handleCarSelect} />
-      <Gallery />
       <CTABanner />
       <Pricing />
       <PopularRoutes />

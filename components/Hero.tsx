@@ -64,10 +64,10 @@ const Hero: React.FC<HeroProps> = ({ children }) => {
         {/* Hero Title & Subtext */}
         <div className="w-full max-w-4xl text-left sm:text-center text-white mb-5 sm:mb-8">
           <p className="text-[11px] sm:text-xs font-bold uppercase tracking-[0.2em] text-gray-300 mb-2">
-            Your Trusted Global Transportation & Travel Partner
+            Your Trusted Transportation & Travel Partner
           </p>
           <h1 className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-serif font-bold leading-tight text-white">
-            Book your premium <span className="text-gold-500">chauffeur service</span>, worldwide
+            Book your premium <span className="text-gold-500">chauffeur service</span>
           </h1>
           <p className="mt-2 text-xs sm:text-sm md:text-base text-gray-300 font-normal max-w-2xl sm:mx-auto hidden xs:block">
             Enjoy reliable, fixed-price private airport transfers & chauffeured rides across Malaysia.

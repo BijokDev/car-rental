@@ -4,7 +4,6 @@ import Navbar from '../../components/Navbar';
 import RebrandBanner from '../../components/RebrandBanner';
 import Hero from '../../components/Hero';
 import BookingForm from '../../components/BookingForm';
-import HowItWorks from '../../components/HowItWorks';
 import Fleet from '../../components/Fleet';
 import Gallery from '../../components/Gallery';
 import Services from '../../components/Services';
@@ -15,6 +14,7 @@ import PopularRoutes from '../../components/PopularRoutes';
 import Features from '../../components/Features';
 import Testimonials from '../../components/Testimonials';
 import FAQ from '../../components/FAQ';
+import ArticlesSection from '../../components/ArticlesSection';
 import Footer from '../../components/Footer';
 import WhatsAppButton from '../../components/WhatsAppButton';
 import { BookingDetails } from '../../types';
@@ -82,7 +82,6 @@ const Home: React.FC = () => {
       <Hero />
       <BookingForm onSearch={handleBookingSearch} />
       <Gallery limit={8} />
-      <HowItWorks />
       <Services />
       <WhyChooseUs />
       <Features />
@@ -91,6 +90,7 @@ const Home: React.FC = () => {
       <Pricing />
       <PopularRoutes />
       <Testimonials />
+      <ArticlesSection />
       <FAQ />
       <Footer />
       <WhatsAppButton />

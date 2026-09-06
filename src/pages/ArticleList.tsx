@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { collection, query, orderBy, getDocs } from 'firebase/firestore';
+import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '../lib/firebase';
 import { Article } from '../../types';
 import Navbar from '../../components/Navbar';
@@ -16,21 +16,22 @@ const ArticleList: React.FC = () => {
   useEffect(() => {
     const fetchArticles = async () => {
       try {
-        // Note: We fetch all and filter client-side to avoid Firestore composite index requirement
-        const q = query(collection(db, 'car-rental-articles'));
+        // Query published articles directly so Firestore security rules permit access
+        const q = query(
+          collection(db, 'car-rental-articles'),
+          where('published', '==', true)
+        );
         const snapshot = await getDocs(q);
-        const allArticles = snapshot.docs.map(d => ({ id: d.id, ...d.data() } as Article));
+        const publishedArticles = snapshot.docs.map(d => ({ id: d.id, ...d.data() } as Article));
         
         // Sort in memory to preserve articles created directly in Firebase Console without a createdAt field
-        allArticles.sort((a, b) => {
+        publishedArticles.sort((a, b) => {
           const timeA = a.createdAt?.toMillis?.() || 0;
           const timeB = b.createdAt?.toMillis?.() || 0;
           return timeB - timeA;
         });
 
-        // Filter for published articles
-        const publishedArticles = allArticles.filter(a => a.published === true);
-        console.log('Fetched articles:', allArticles.length, 'Published:', publishedArticles.length);
+        console.log('Fetched published articles:', publishedArticles.length);
         setArticles(publishedArticles);
       } catch (error) {
         console.error('Error fetching articles:', error);

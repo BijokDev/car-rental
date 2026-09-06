@@ -10,6 +10,11 @@ const ArticlesSection: React.FC = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (/bot|crawler|spider|googlebot/i.test(navigator.userAgent)) {
+      setLoading(false);
+      return;
+    }
+
     let isMounted = true;
 
     const fetchArticles = async () => {

@@ -35,7 +35,7 @@ const Hero: React.FC<HeroProps> = ({ children }) => {
   }, []);
 
   return (
-    <div id="home" className="relative min-h-screen w-full flex flex-col justify-center overflow-hidden">
+    <div id="home" className="relative min-h-screen w-full flex flex-col justify-start sm:justify-center overflow-hidden">
       {/* Background Slider */}
       <div className="absolute inset-0 z-0">
         {BACKGROUND_IMAGES.map((image, index) => (
@@ -59,7 +59,7 @@ const Hero: React.FC<HeroProps> = ({ children }) => {
       </div>
 
       {/* Content Container */}
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-12 sm:pt-32 sm:pb-20 lg:pt-36 lg:pb-24 flex flex-col items-center">
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-12 sm:pt-32 sm:pb-20 lg:pt-36 lg:pb-24 flex flex-col items-center">
         
         {/* Hero Title & Subtext */}
         <div className="w-full max-w-4xl text-left sm:text-center text-white mb-5 sm:mb-8">

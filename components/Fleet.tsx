@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { CAR_FLEET } from '../constants';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../src/lib/firebase';
+import { isSearchBot } from '../src/lib/botDetection';
 import { Users, Briefcase, CheckCircle, Phone, X, ChevronLeft, ChevronRight, ZoomIn } from 'lucide-react';
 import { Car } from '../types';
 
@@ -16,7 +17,7 @@ const Fleet: React.FC<FleetProps> = ({ onSelectCar }) => {
 
   useEffect(() => {
     // Search crawlers render instantly with pre-defined CAR_FLEET constants
-    if (/bot|crawler|spider|googlebot/i.test(navigator.userAgent)) return;
+    if (isSearchBot()) return;
 
     let isMounted = true;
     getDocs(collection(db, 'car-rental-cars'))

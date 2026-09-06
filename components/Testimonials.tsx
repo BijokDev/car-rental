@@ -3,6 +3,7 @@ import { Star, Quote, X, Send } from 'lucide-react';
 import { TESTIMONIALS as HARDCODED_TESTIMONIALS } from '../constants';
 import { collection, addDoc, serverTimestamp, query, where, getDocs } from 'firebase/firestore';
 import { db } from '../src/lib/firebase';
+import { isSearchBot } from '../src/lib/botDetection';
 import { Testimonial } from '../types';
 
 const Testimonials: React.FC = () => {
@@ -18,7 +19,7 @@ const Testimonials: React.FC = () => {
   const [testimonials, setTestimonials] = useState<any[]>(HARDCODED_TESTIMONIALS);
 
   useEffect(() => {
-    if (/bot|crawler|spider|googlebot/i.test(navigator.userAgent)) return;
+    if (isSearchBot()) return;
 
     let isMounted = true;
     const q = query(

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '../src/lib/firebase';
+import { isSearchBot } from '../src/lib/botDetection';
 import { Article } from '../types';
 import { Calendar, User, ArrowRight, BookOpen } from 'lucide-react';
 
@@ -10,7 +11,7 @@ const ArticlesSection: React.FC = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (/bot|crawler|spider|googlebot/i.test(navigator.userAgent)) {
+    if (isSearchBot()) {
       setLoading(false);
       return;
     }

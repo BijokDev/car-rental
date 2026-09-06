@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { collection, query, orderBy, getDocs, limit as fsLimit } from 'firebase/firestore';
 import { db } from '../src/lib/firebase';
+import { isSearchBot } from '../src/lib/botDetection';
 import { GalleryImage } from '../types';
 import { X, ChevronLeft, ChevronRight, Camera } from 'lucide-react';
 
@@ -14,7 +15,7 @@ const Gallery: React.FC<GalleryProps> = ({ limit }) => {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
   useEffect(() => {
-    if (/bot|crawler|spider|googlebot/i.test(navigator.userAgent)) return;
+    if (isSearchBot()) return;
 
     let isMounted = true;
     const constraints = [orderBy('createdAt', 'desc'), ...(limit ? [fsLimit(limit)] : [])];

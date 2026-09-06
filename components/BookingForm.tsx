@@ -68,7 +68,6 @@ const BookingForm: React.FC<BookingFormProps> = ({ onSearch }) => {
   });
 
   const [luggage, setLuggage] = useState(2);
-  const [alsoAccommodation, setAlsoAccommodation] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<'pickup' | 'dropoff' | null>(null);
   const [showDatePopover, setShowDatePopover] = useState(false);
   const [showPaxPopover, setShowPaxPopover] = useState(false);
@@ -178,9 +177,9 @@ const BookingForm: React.FC<BookingFormProps> = ({ onSearch }) => {
   return (
     <div ref={containerRef} className="relative z-30 w-full max-w-xl lg:max-w-5xl mx-auto font-sans">
       
-      {/* Integrated Tab Header (Curved tab connected to the top-left of the card) */}
-      <div className="flex">
-        <div className="inline-flex items-center bg-white rounded-t-2xl px-2 pt-2 pb-1 border-t border-l border-r border-gray-200/90 shadow-[0_-3px_12px_rgba(0,0,0,0.04)]">
+      {/* Integrated Tab Header */}
+      <div className="flex items-end relative z-10 -mb-[1px]">
+        <div className="relative bg-white rounded-tl-2xl sm:rounded-tl-3xl rounded-tr-2xl border-t border-l border-r border-gray-200 px-2 sm:px-3 pt-2 pb-2 inline-flex items-center gap-1">
           <button
             type="button"
             onClick={() => setDetails(prev => ({ ...prev, serviceType: 'transfer' }))}
@@ -203,11 +202,19 @@ const BookingForm: React.FC<BookingFormProps> = ({ onSearch }) => {
           >
             Hourly
           </button>
+
+          {/* Smooth Concave Curve to the right connecting tab to card top */}
+          <div className="absolute -right-5 bottom-0 w-5 h-5 pointer-events-none overflow-hidden">
+            <svg className="w-5 h-5" viewBox="0 0 20 20" fill="none">
+              <path d="M-0.5,-0.5 A20,20 0 0,0 20,20.5 L-0.5,20.5 Z" fill="#ffffff" />
+              <path d="M0,0 A20,20 0 0,0 20,20" fill="none" stroke="#e5e7eb" strokeWidth="1" />
+            </svg>
+          </div>
         </div>
       </div>
 
       {/* Main Booking Card */}
-      <div className="bg-white rounded-b-3xl rounded-tr-3xl sm:rounded-3xl shadow-[0_12px_45px_rgba(0,0,0,0.18)] p-4 sm:p-6 border border-gray-200/90 text-left">
+      <div className="bg-white rounded-tl-none rounded-tr-2xl sm:rounded-tr-3xl rounded-b-2xl sm:rounded-b-3xl shadow-[0_12px_45px_rgba(0,0,0,0.18)] p-4 sm:p-6 border border-gray-200 text-left relative z-0">
         
         {/* ========================================================================= */}
         {/* MOBILE VIEW (< lg) - Matches travelthru.com mobile screenshot             */}
@@ -477,20 +484,6 @@ const BookingForm: React.FC<BookingFormProps> = ({ onSearch }) => {
               <Search className="w-4 h-4 sm:w-5 sm:h-5" />
               <span>Search</span>
             </button>
-
-            {/* Checkbox: Also search for accommodation */}
-            <div className="pt-2">
-              <label className="flex items-center gap-2.5 text-xs sm:text-sm font-medium text-gray-900 cursor-pointer select-none">
-                <input
-                  type="checkbox"
-                  checked={alsoAccommodation}
-                  onChange={(e) => setAlsoAccommodation(e.target.checked)}
-                  className="w-4 h-4 rounded border-gray-300 text-black focus:ring-black accent-black cursor-pointer"
-                />
-                <span>Also search for accommodation</span>
-              </label>
-            </div>
-
           </form>
         </div>
 
@@ -747,20 +740,8 @@ const BookingForm: React.FC<BookingFormProps> = ({ onSearch }) => {
 
             </div>
 
-            {/* Desktop Bottom: Checkbox & Trust Points */}
-            <div className="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between text-xs text-gray-500">
-              <label className="flex items-center gap-2 cursor-pointer select-none group">
-                <input
-                  type="checkbox"
-                  checked={alsoAccommodation}
-                  onChange={(e) => setAlsoAccommodation(e.target.checked)}
-                  className="w-4 h-4 rounded border-gray-300 text-black focus:ring-black accent-black cursor-pointer"
-                />
-                <span className="text-gray-800 font-medium">
-                  Also search for accommodation
-                </span>
-              </label>
-
+            {/* Desktop Bottom: Trust Points */}
+            <div className="mt-4 pt-3 border-t border-gray-100 flex items-center justify-center text-xs text-gray-500">
               <div className="flex items-center gap-6 font-semibold uppercase tracking-wider text-[11px] text-gray-500">
                 <span className="flex items-center gap-1.5">
                   <span className="w-1.5 h-1.5 bg-black rounded-full" />

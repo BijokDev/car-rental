@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { collection, query, orderBy, onSnapshot, limit as fsLimit } from 'firebase/firestore';
+import { collection, query, orderBy, getDocs, limit as fsLimit } from 'firebase/firestore';
 import { db } from '../src/lib/firebase';
 import { GalleryImage } from '../types';
 import { X, ChevronLeft, ChevronRight, Camera } from 'lucide-react';
@@ -14,14 +14,24 @@ const Gallery: React.FC<GalleryProps> = ({ limit }) => {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
   useEffect(() => {
+    if (/bot|crawler|spider|googlebot/i.test(navigator.userAgent)) return;
+
+    let isMounted = true;
     const constraints = [orderBy('createdAt', 'desc'), ...(limit ? [fsLimit(limit)] : [])];
     const q = query(collection(db, 'car-rental-gallery'), ...constraints);
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      setPhotos(snapshot.docs.map((d) => ({ id: d.id, ...d.data() } as GalleryImage)));
-    }, (error) => {
-      console.error('Failed to load gallery:', error);
-    });
-    return () => unsubscribe();
+
+    getDocs(q)
+      .then((snapshot) => {
+        if (!isMounted) return;
+        setPhotos(snapshot.docs.map((d) => ({ id: d.id, ...d.data() } as GalleryImage)));
+      })
+      .catch((error) => {
+        console.error('Failed to load gallery:', error);
+      });
+
+    return () => {
+      isMounted = false;
+    };
   }, [limit]);
 
   const closeLightbox = () => setActiveIndex(null);

@@ -337,17 +337,22 @@
   }
 }
 </script>
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=AW-17916725081"></script>
+  <!-- Google tag (gtag.js) - loaded only for human visitors, bypassed for search bots -->
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'AW-17916725081');
-  </script>
-  <!-- Event snippet for Page view conversion page -->
-  <script>
-    gtag('event', 'conversion', {'send_to': 'AW-17916725081/ouduCLmN8fQbENmOrt9C'});
+
+    var isSearchBot = /bot|crawler|spider|googlebot|bingbot|google-inspectiontool/i.test(navigator.userAgent);
+    if (!isSearchBot) {
+      var gtagScript = document.createElement('script');
+      gtagScript.async = true;
+      gtagScript.src = 'https://www.googletagmanager.com/gtag/js?id=AW-17916725081';
+      document.head.appendChild(gtagScript);
+
+      gtag('js', new Date());
+      gtag('config', 'AW-17916725081');
+      gtag('event', 'conversion', {'send_to': 'AW-17916725081/ouduCLmN8fQbENmOrt9C'});
+    }
   </script>
 </head>
 

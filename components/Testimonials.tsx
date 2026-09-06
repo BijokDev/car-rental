@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Star, Quote, X, Send } from 'lucide-react';
 import { TESTIMONIALS as HARDCODED_TESTIMONIALS } from '../constants';
-import { collection, addDoc, serverTimestamp, query, where, onSnapshot } from 'firebase/firestore';
+import { collection, addDoc, serverTimestamp, query, where, getDocs } from 'firebase/firestore';
 import { db } from '../src/lib/firebase';
 import { Testimonial } from '../types';
 
@@ -18,28 +18,35 @@ const Testimonials: React.FC = () => {
   const [testimonials, setTestimonials] = useState<any[]>(HARDCODED_TESTIMONIALS);
 
   useEffect(() => {
+    if (/bot|crawler|spider|googlebot/i.test(navigator.userAgent)) return;
+
+    let isMounted = true;
     const q = query(
       collection(db, 'car-rental-testimonials'),
       where('approved', '==', true)
     );
     
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      const dbTestimonials = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-      
-      dbTestimonials.sort((a: any, b: any) => {
-        const timeA = a.createdAt?.toMillis?.() || 0;
-        const timeB = b.createdAt?.toMillis?.() || 0;
-        return timeB - timeA;
+    getDocs(q)
+      .then((snapshot) => {
+        if (!isMounted) return;
+        const dbTestimonials = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        dbTestimonials.sort((a: any, b: any) => {
+          const timeA = a.createdAt?.toMillis?.() || 0;
+          const timeB = b.createdAt?.toMillis?.() || 0;
+          return timeB - timeA;
+        });
+
+        if (dbTestimonials.length > 0) {
+          setTestimonials([...dbTestimonials, ...HARDCODED_TESTIMONIALS]);
+        }
+      })
+      .catch((error) => {
+        console.error('Failed to load testimonials:', error);
       });
 
-      if (dbTestimonials.length > 0) {
-        setTestimonials([...dbTestimonials, ...HARDCODED_TESTIMONIALS]);
-      } else {
-        setTestimonials(HARDCODED_TESTIMONIALS);
-      }
-    });
-
-    return () => unsubscribe();
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {

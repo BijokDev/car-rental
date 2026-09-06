@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { CAR_FLEET } from '../constants';
-import { collection, onSnapshot } from 'firebase/firestore';
+import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../src/lib/firebase';
 import { Users, Briefcase, CheckCircle, Phone, X, ChevronLeft, ChevronRight, ZoomIn } from 'lucide-react';
 import { Car } from '../types';
@@ -15,14 +15,23 @@ const Fleet: React.FC<FleetProps> = ({ onSelectCar }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   useEffect(() => {
-    const unsubscribe = onSnapshot(collection(db, 'car-rental-cars'), (snapshot) => {
-      const dbCars = snapshot.docs.map((d) => ({ id: d.id, ...d.data() } as Car));
-      setCars(dbCars.length > 0 ? dbCars : CAR_FLEET);
-    }, (error) => {
-      console.error('Failed to load fleet from Firestore, using fallback:', error);
-      setCars(CAR_FLEET);
-    });
-    return () => unsubscribe();
+    // Search crawlers render instantly with pre-defined CAR_FLEET constants
+    if (/bot|crawler|spider|googlebot/i.test(navigator.userAgent)) return;
+
+    let isMounted = true;
+    getDocs(collection(db, 'car-rental-cars'))
+      .then((snapshot) => {
+        if (!isMounted) return;
+        const dbCars = snapshot.docs.map((d) => ({ id: d.id, ...d.data() } as Car));
+        if (dbCars.length > 0) setCars(dbCars);
+      })
+      .catch((error) => {
+        console.error('Failed to load fleet from Firestore:', error);
+      });
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   const openGallery = (car: Car) => {

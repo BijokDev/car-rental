@@ -20,7 +20,11 @@ const BACKGROUND_IMAGES = [
   },
 ];
 
-const Hero: React.FC = () => {
+interface HeroProps {
+  children?: React.ReactNode;
+}
+
+const Hero: React.FC<HeroProps> = ({ children }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   useEffect(() => {
@@ -31,14 +35,15 @@ const Hero: React.FC = () => {
   }, []);
 
   return (
-    <div id="home" className="relative min-h-screen w-full flex flex-col overflow-hidden">
+    <div id="home" className="relative min-h-screen w-full flex flex-col justify-center overflow-hidden">
       {/* Background Slider */}
       <div className="absolute inset-0 z-0">
         {BACKGROUND_IMAGES.map((image, index) => (
           <div
             key={index}
-            className={`absolute inset-0 transition-opacity duration-1500 ease-in-out ${index === currentImageIndex ? 'opacity-100' : 'opacity-0'
-              }`}
+            className={`absolute inset-0 transition-opacity duration-1500 ease-in-out ${
+              index === currentImageIndex ? 'opacity-100' : 'opacity-0'
+            }`}
           >
             <img
               src={image.src}
@@ -48,72 +53,35 @@ const Hero: React.FC = () => {
               fetchPriority={index === 0 ? 'high' : 'auto'}
               decoding="async"
             />
-            <div className="absolute inset-0 bg-gradient-to-b from-brand-900/80 via-brand-900/40 to-brand-900/95"></div>
+            <div className="absolute inset-0 bg-gradient-to-b from-black/85 via-black/60 to-black/90"></div>
           </div>
         ))}
       </div>
 
       {/* Content Container */}
-      <div className="relative z-10 flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col justify-center pt-32 pb-32 md:pt-40 md:pb-40">
-        <div className="max-w-4xl text-white">
-          <div className="flex flex-wrap items-center gap-2 md:gap-3 mb-6 animate-slide-up" style={{ animationDelay: '0.1s' }}>
-            <span className="px-3 py-1 bg-green-500 text-white text-[10px] font-black uppercase tracking-widest rounded flex items-center shadow-lg">
-              <div className="w-1.5 h-1.5 bg-white rounded-full animate-pulse mr-2"></div>
-              24/7 Available
-            </span>
-            <span className="px-3 py-1 bg-gold-500 text-brand-900 text-[10px] font-black uppercase tracking-widest rounded shadow-lg">
-              Official TRAVTHRU
-            </span>
-          </div>
-
-          <h1 className="text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-serif font-bold leading-[1.1] mb-6 animate-slide-up" style={{ animationDelay: '0.3s' }}>
-            Reliable Private <br className="hidden sm:block" />
-            <span className="text-gold-500">Chauffeur</span> & <br className="hidden sm:block" />
-            <span className="relative">
-              Airport Transfer
-              <svg className="absolute -bottom-2 left-0 w-full h-2 md:h-3 text-gold-500/40" viewBox="0 0 100 10" preserveAspectRatio="none">
-                <path d="M0 5 Q 25 0, 50 5 T 100 5" fill="none" stroke="currentColor" strokeWidth="4" />
-              </svg>
-            </span>
-          </h1>
-
-          <p className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-200 mb-6 lg:mb-8 leading-relaxed max-w-2xl font-medium animate-slide-up" style={{ animationDelay: '0.5s' }}>
-            Professional <b>Kereta Sewa</b> and private transfer services across Malaysia. Comfortable, safe, and punctual rides to KLIA, Genting, and beyond.
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-12 sm:pt-32 sm:pb-20 lg:pt-36 lg:pb-24 flex flex-col items-center">
+        
+        {/* Hero Title & Subtext */}
+        <div className="w-full max-w-4xl text-left sm:text-center text-white mb-5 sm:mb-8">
+          <p className="text-[11px] sm:text-xs font-bold uppercase tracking-[0.2em] text-gray-300 mb-2">
+            Your Trusted Global Transportation & Travel Partner
           </p>
-
-          <div className="grid grid-cols-1 xs:grid-cols-2 gap-3 md:gap-4 mb-8 lg:mb-10 max-w-lg animate-slide-up" style={{ animationDelay: '0.7s' }}>
-            {[
-              "Punctual & Reliable",
-              "Well Maintained Fleet",
-              "Professional Drivers",
-              "No Hidden Fees"
-            ].map((item, i) => (
-              <div key={i} className="flex items-center text-gray-100 font-medium text-sm md:text-base">
-                <CheckCircle className="w-4 h-4 md:w-5 text-gold-500 mr-2 flex-shrink-0" />
-                <span>{item}</span>
-              </div>
-            ))}
-          </div>
-
-          <div className="flex flex-col sm:flex-row gap-4 animate-slide-up" style={{ animationDelay: '0.9s' }}>
-            <a
-              href="https://wa.me/60107198186"
-              className="group px-8 py-4 bg-gold-500 text-brand-900 font-black rounded-xl hover:bg-gold-400 transition-all shadow-xl hover:-translate-y-1 flex items-center justify-center text-sm uppercase tracking-widest"
-            >
-              Book via WhatsApp
-              <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
-            </a>
-            <a
-              href="#fleet"
-              className="px-8 py-4 bg-white/10 backdrop-blur-md border border-white/20 text-white font-black rounded-xl hover:bg-white/20 transition-all hover:-translate-y-1 text-center text-sm uppercase tracking-widest"
-            >
-              Our Fleet
-            </a>
-          </div>
+          <h1 className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-serif font-bold leading-tight text-white">
+            Book your premium <span className="text-gold-500">chauffeur service</span>, worldwide
+          </h1>
+          <p className="mt-2 text-xs sm:text-sm md:text-base text-gray-300 font-normal max-w-2xl sm:mx-auto hidden xs:block">
+            Enjoy reliable, fixed-price private airport transfers & chauffeured rides across Malaysia.
+          </p>
         </div>
-      </div>
 
-      {/* Scroll Down Hint Removed to avoid overlap */}
+        {/* The Booking Widget - Positioned right under the headline */}
+        {children && (
+          <div className="w-full max-w-xl lg:max-w-6xl">
+            {children}
+          </div>
+        )}
+
+      </div>
     </div>
   );
 };

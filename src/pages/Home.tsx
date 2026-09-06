@@ -79,8 +79,9 @@ const Home: React.FC = () => {
       </Helmet>
       <RebrandBanner />
       <Navbar />
-      <Hero />
-      <BookingForm onSearch={handleBookingSearch} />
+      <Hero>
+        <BookingForm onSearch={handleBookingSearch} />
+      </Hero>
       <Gallery limit={8} />
       <Services />
       <WhyChooseUs />
